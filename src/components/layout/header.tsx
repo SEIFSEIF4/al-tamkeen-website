@@ -57,8 +57,8 @@ export function Header() {
 
   const navLinks = [
     { href: "#hero", label: "الرئيسية" },
-    { href: "#stages", label: "مراحل البرنامج" },
     { href: "#benefits", label: "المميزات" },
+    { href: "#stages", label: "مراحل البرنامج" },
     { href: "#outputs", label: "المخرجات" },
     { href: "#contact", label: "تواصل معنا" },
   ];
