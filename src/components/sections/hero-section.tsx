@@ -8,7 +8,7 @@ export function HeroSection() {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-center overflow-hidden bg-[#5A4B9A]"
+      className="relative min-h-screen flex items-center overflow-hidden bg-[#4B3D90]"
     >
       {/* Abstract Geometric Graphic - Left Side */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none hidden lg:block">
@@ -44,10 +44,24 @@ export function HeroSection() {
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                   >
-                    <path d="M212.021 313.085L19 396.423V297.16L152.335 243.217H73.3416V149.144H212.021V313.085Z" fill="#7AD5E7"/>
-                    <path d="M316 149.145H212.017V46H316V149.145Z" fill="#42A2E4"/>
-                    <path d="M193.021 267.085L0 350.423V251.16L133.335 197.217H54.3416V103.144H193.021V267.085Z" fill="#7AD5E7" fillOpacity="0.2"/>
-                    <path d="M297 103.145H193.017V3.05176e-05H297V103.145Z" fill="#42A2E4" fillOpacity="0.2"/>
+                    <path
+                      d="M212.021 313.085L19 396.423V297.16L152.335 243.217H73.3416V149.144H212.021V313.085Z"
+                      fill="#7AD5E7"
+                    />
+                    <path
+                      d="M316 149.145H212.017V46H316V149.145Z"
+                      fill="#42A2E4"
+                    />
+                    <path
+                      d="M193.021 267.085L0 350.423V251.16L133.335 197.217H54.3416V103.144H193.021V267.085Z"
+                      fill="#7AD5E7"
+                      fillOpacity="0.2"
+                    />
+                    <path
+                      d="M297 103.145H193.017V3.05176e-05H297V103.145Z"
+                      fill="#42A2E4"
+                      fillOpacity="0.2"
+                    />
                   </svg>
                 </div>
               </div>

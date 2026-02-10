@@ -51,7 +51,7 @@ export function ProgramStages() {
     >
       {/* Background decoration */}
       <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-20 left-10 w-32 h-32 bg-[#5A4B9A] rounded-full blur-3xl" />
+        <div className="absolute top-20 left-10 w-32 h-32 bg-[#4B3D90] rounded-full blur-3xl" />
         <div className="absolute bottom-20 right-10 w-40 h-40 bg-[#5BC5C4] rounded-full blur-3xl" />
       </div>
 
@@ -61,13 +61,13 @@ export function ProgramStages() {
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1E3A5F] mb-4">
             مراحل البرنامج
           </h2>
-          <div className="w-24 h-1 bg-gradient-to-l from-[#5A4B9A] to-[#5BC5C4] mx-auto rounded-full" />
+          <div className="w-24 h-1 bg-gradient-to-l from-[#4B3D90] to-[#5BC5C4] mx-auto rounded-full" />
         </MotionWrapper>
 
         {/* Timeline */}
         <div className="relative max-w-4xl mx-auto">
           {/* Vertical Line */}
-          <div className="absolute right-1/2 translate-x-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-[#5BC5C4] via-[#5A4B9A] to-[#5BC5C4] hidden md:block" />
+          <div className="absolute right-1/2 translate-x-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-[#5BC5C4] via-[#4B3D90] to-[#5BC5C4] hidden md:block" />
 
           <StaggerContainer
             className="space-y-12 md:space-y-0"
@@ -117,7 +117,7 @@ export function ProgramStages() {
                       }}
                       className="w-14 h-14 md:w-16 md:h-16 bg-white border-4 border-[#5BC5C4] rounded-full flex items-center justify-center shadow-lg"
                     >
-                      <span className="text-xl md:text-2xl font-bold text-[#5A4B9A]">
+                      <span className="text-xl md:text-2xl font-bold text-[#4B3D90]">
                         {stage.number}
                       </span>
                     </motion.div>
@@ -152,7 +152,7 @@ export function ProgramStages() {
 
                 {/* Connection line for mobile */}
                 {index < stages.length - 1 && (
-                  <div className="w-1 h-8 bg-gradient-to-b from-[#5BC5C4] to-[#5A4B9A] mr-7 md:hidden" />
+                  <div className="w-1 h-8 bg-gradient-to-b from-[#5BC5C4] to-[#4B3D90] mr-7 md:hidden" />
                 )}
               </StaggerItem>
             ))}

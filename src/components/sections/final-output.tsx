@@ -98,7 +98,7 @@ export function FinalOutputSection() {
   return (
     <section
       id="outputs"
-      className="section-padding bg-[#5A4B9A] relative overflow-hidden"
+      className="section-padding bg-[#4B3D90] relative overflow-hidden"
     >
       {/* Background Elements */}
       <div className="absolute inset-0">

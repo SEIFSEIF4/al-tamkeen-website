@@ -34,12 +34,12 @@ export function BenefitsSection() {
   return (
     <section
       id="benefits"
-      className="relative section-padding bg-[#5A4B9A] overflow-hidden"
+      className="relative section-padding bg-[#4B3D90] overflow-hidden"
     >
       {/* Background Elements */}
       <div className="absolute inset-0">
         {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-bl from-[#5A4B9A] via-[#5A4B9A] to-[#4A3D82]" />
+        <div className="absolute inset-0 bg-gradient-to-bl from-[#4B3D90] via-[#4B3D90] to-[#4A3D82]" />
 
         {/* Decorative shapes */}
         <motion.div

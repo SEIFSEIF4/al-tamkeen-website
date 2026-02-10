@@ -98,7 +98,7 @@ export function Header() {
               </div>
               <div className="flex flex-col">
                 <span
-                  className={`font-bold text-lg ${isScrolled || isMobileMenuOpen ? "text-[#5A4B9A]" : "text-white"}`}
+                  className={`font-bold text-lg ${isScrolled || isMobileMenuOpen ? "text-[#4B3D90]" : "text-white"}`}
                 >
                   التمكين الريادي
                 </span>
@@ -141,7 +141,7 @@ export function Header() {
           <div className="hidden lg:block">
             <button
               className={` px-6 py-2 rounded-full font-medium transition-all hover:scale-105 cursor-pointer
-                ${isScrolled ? "bg-[#5BC5C4] text-[#5A4B9A]" : "bg-white text-gray-700"}`}
+                ${isScrolled ? "bg-[#5BC5C4] text-[#4B3D90]" : "bg-white text-gray-700"}`}
             >
               <Link href="#contact">سجل الآن</Link>
             </button>
@@ -157,17 +157,17 @@ export function Header() {
               <span
                 className={`h-0.5 w-full transition-all duration-300 ${
                   isMobileMenuOpen ? "rotate-45 translate-y-2" : ""
-                } ${isScrolled || isMobileMenuOpen ? "bg-[#5A4B9A]" : "bg-white"}`}
+                } ${isScrolled || isMobileMenuOpen ? "bg-[#4B3D90]" : "bg-white"}`}
               />
               <span
                 className={`h-0.5 w-full transition-all duration-300 ${
                   isMobileMenuOpen ? "opacity-0" : ""
-                } ${isScrolled || isMobileMenuOpen ? "bg-[#5A4B9A]" : "bg-white"}`}
+                } ${isScrolled || isMobileMenuOpen ? "bg-[#4B3D90]" : "bg-white"}`}
               />
               <span
                 className={`h-0.5 w-full transition-all duration-300 ${
                   isMobileMenuOpen ? "-rotate-45 -translate-y-2" : ""
-                } ${isScrolled || isMobileMenuOpen ? "bg-[#5A4B9A]" : "bg-white"}`}
+                } ${isScrolled || isMobileMenuOpen ? "bg-[#4B3D90]" : "bg-white"}`}
               />
             </div>
           </button>
@@ -190,7 +190,7 @@ export function Header() {
                 className={`py-3 font-medium transition-colors border-b border-gray-100 last:border-0 ${
                   activeSection === link.href
                     ? "text-[#5BC5C4]"
-                    : "text-[#5A4B9A] hover:text-[#5BC5C4]"
+                    : "text-[#4B3D90] hover:text-[#5BC5C4]"
                 }`}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
@@ -199,7 +199,7 @@ export function Header() {
             ))}
             <Button
               asChild
-              className="mt-4 bg-[#5A4B9A] hover:bg-[#4A3D82] text-white rounded-full"
+              className="mt-4 bg-[#4B3D90] hover:bg-[#4A3D82] text-white rounded-full"
             >
               <Link href="#contact">سجل الآن</Link>
             </Button>

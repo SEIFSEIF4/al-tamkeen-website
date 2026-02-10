@@ -35,7 +35,7 @@ export function AboutSection() {
                     <div className="w-16 h-16 border-4 border-white rounded-lg" />
                   </div>
                   <div className="text-right">
-                    <h2 className="text-3xl font-bold text-[#5A4B9A]">
+                    <h2 className="text-3xl font-bold text-[#4B3D90]">
                       التمكين الريادي
                     </h2>
                     <p className="text-xl text-[#5BC5C4] font-medium text-center">

@@ -92,7 +92,7 @@ export function ContactForm() {
       {/* Background decoration */}
       <div className="absolute inset-0">
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#5BC5C4]/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#5A4B9A]/10 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#4B3D90]/10 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl" />
       </div>
 
       <div className="container mx-auto px-4 md:px-8 lg:px-16 relative z-10">
@@ -103,7 +103,7 @@ export function ContactForm() {
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1E3A5F] mb-4">
                 سجل الآن
               </h2>
-              <h3 className="text-2xl md:text-3xl font-bold text-[#5A4B9A] mb-6">
+              <h3 className="text-2xl md:text-3xl font-bold text-[#4B3D90] mb-6">
                 في برنامج التمكين الريادي
               </h3>
               <p className="text-gray-600 text-lg leading-relaxed">
@@ -143,7 +143,7 @@ export function ContactForm() {
                 whileHover={{ x: -10 }}
                 className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-sm border border-gray-100"
               >
-                <div className="w-12 h-12 bg-[#5A4B9A]/10 rounded-lg flex items-center justify-center text-[#5A4B9A]">
+                <div className="w-12 h-12 bg-[#4B3D90]/10 rounded-lg flex items-center justify-center text-[#4B3D90]">
                   <svg
                     className="w-6 h-6"
                     fill="none"
@@ -227,7 +227,7 @@ export function ContactForm() {
                   <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full h-16 bg-[#5A4B9A] hover:bg-[#4A3D82] text-white text-xl font-bold rounded-2xl shadow-lg shadow-[#5A4B9A]/30 hover:shadow-xl hover:shadow-[#5A4B9A]/40 transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-70 flex items-center justify-center gap-3"
+                    className="w-full h-16 bg-[#4B3D90] hover:bg-[#4A3D82] text-white text-xl font-bold rounded-2xl shadow-lg shadow-[#4B3D90]/30 hover:shadow-xl hover:shadow-[#4B3D90]/40 transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-70 flex items-center justify-center gap-3"
                   >
                     {isSubmitting ? (
                       <>
@@ -261,7 +261,7 @@ export function ContactForm() {
                   ? "bg-green-500 text-white"
                   : toastState.type === "error"
                     ? "bg-red-500 text-white"
-                    : "bg-white text-[#5A4B9A] border border-gray-200"
+                    : "bg-white text-[#4B3D90] border border-gray-200"
               }`}
             >
               {toastState.type === "loading" && (
