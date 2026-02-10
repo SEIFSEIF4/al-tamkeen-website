@@ -22,8 +22,8 @@ export const metadata: Metadata = {
     locale: "ar_SA",
   },
   icons: {
-    icon: "/element4.svg",
-    apple: "/element4.svg",
+    icon: "/logo.svg",
+    apple: "/logo.svg",
   },
 };
 
@@ -35,9 +35,7 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl">
       <body className="antialiased">
-        <LenisProvider>
-          {children}
-        </LenisProvider>
+        <LenisProvider>{children}</LenisProvider>
       </body>
     </html>
   );

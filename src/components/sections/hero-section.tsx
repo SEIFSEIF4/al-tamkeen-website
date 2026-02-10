@@ -29,21 +29,26 @@ export function HeroSection() {
               {/* Main Cyan Shape */}
 
               <div className="relative">
-                <div className="w-[240px]  md:w-[360px] h-[240px] md:h-[360px]  relative">
-                  <img
-                    src="/element4.svg"
-                    alt="Logo"
-                    className="w-full h-full object-contain"
-                    onError={(e) => {
-                      e.currentTarget.style.display = "none";
-                      const fallback =
-                        e.currentTarget.parentElement?.querySelector(
-                          ".fallback-logo",
-                        );
-                      if (fallback)
-                        (fallback as HTMLElement).style.display = "flex";
-                    }}
-                  />
+                <div className="w-[240px] md:w-[360px] h-[300px] md:h-[450px] relative">
+                  {/* Glow effect behind SVG */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-[200px] md:w-[300px] h-[200px] md:h-[300px] rounded-full bg-[#7AD5E7]/30 blur-[80px]" />
+                  </div>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-[140px] md:w-[200px] h-[140px] md:h-[200px] rounded-full bg-[#42A2E4]/25 blur-[60px]" />
+                  </div>
+                  {/* Inline SVG */}
+                  <svg
+                    className="w-full h-full relative z-10"
+                    viewBox="0 0 316 397"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M212.021 313.085L19 396.423V297.16L152.335 243.217H73.3416V149.144H212.021V313.085Z" fill="#7AD5E7"/>
+                    <path d="M316 149.145H212.017V46H316V149.145Z" fill="#42A2E4"/>
+                    <path d="M193.021 267.085L0 350.423V251.16L133.335 197.217H54.3416V103.144H193.021V267.085Z" fill="#7AD5E7" fillOpacity="0.2"/>
+                    <path d="M297 103.145H193.017V3.05176e-05H297V103.145Z" fill="#42A2E4" fillOpacity="0.2"/>
+                  </svg>
                 </div>
               </div>
             </motion.div>
