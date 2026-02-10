@@ -18,7 +18,7 @@ export function AboutSection() {
                 <img
                   src="/logo-with-text.svg"
                   alt="التمكين الريادي"
-                  className="w-full max-w-[220px] sm:max-w-[280px] lg:max-w-[380px] h-auto object-contain"
+                  className="w-full max-w-[220px] ml-4 md:ml-6 xl:ml-0 sm:max-w-[280px] lg:max-w-[380px] h-auto object-contain"
                   onError={(e) => {
                     e.currentTarget.style.display = "none";
                     const fallback =

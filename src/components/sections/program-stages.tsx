@@ -97,7 +97,7 @@ export function ProgramStages() {
                       <h3 className="text-2xl lg:text-3xl font-bold text-[#1E3A5F] mb-2">
                         {stage.title}
                       </h3>
-                      <p className="text-gray-600 leading-relaxed">
+                      <p className="text-gray-600 text-start leading-relaxed">
                         {stage.description}
                       </p>
                     </motion.div>

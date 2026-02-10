@@ -140,8 +140,8 @@ export function Header() {
           {/* CTA Button */}
           <div className="hidden lg:block">
             <button
-              className={` px-6 py-2 rounded-full font-medium transition-all hover:scale-105 cursor-pointer
-                ${isScrolled ? "bg-[#8FD2E3] text-[#4B3D90]" : "bg-white text-gray-700"}`}
+              className={` px-6 py-2 rounded-full font-medium transition-all text-gray-700 hover:scale-105 cursor-pointer
+                ${isScrolled ? "bg-[#8FD2E3]" : "bg-white "}`}
             >
               <Link href="#contact">سجل الآن</Link>
             </button>

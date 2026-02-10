@@ -25,7 +25,7 @@ export function HeroSection() {
               className="absolute inset-0"
             >
               <motion.div
-                className="relative w-full h-full group cursor-pointer pointer-events-auto"
+                className="relative w-full h-full group pointer-events-auto"
                 whileHover="hover"
                 initial="idle"
               >
@@ -116,7 +116,7 @@ export function HeroSection() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.5 }}
-              className="text-3xl md:text-4xl font-bold text-white leading-tight"
+              className="text-3xl md:text-4xl xl:text-5xl font-bold text-white leading-tight"
             >
               من الأثر إلى الاستدامة
             </motion.h1>
@@ -126,7 +126,7 @@ export function HeroSection() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.6 }}
-              className="text-base sm:text-lg md:text-2xl mt-2 text-white/90 leading-relaxed max-w-xl ml-auto"
+              className="text-base sm:text-lg md:text-2xl xl:text-3xl mt-2 text-white/90 leading-relaxed max-w-xl ml-auto"
             >
               نحو جمعيات تُنشئ شركات، لا تكتفي بالمشاريع.
             </motion.p>

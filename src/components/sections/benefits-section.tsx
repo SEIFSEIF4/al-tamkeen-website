@@ -39,7 +39,7 @@ export function BenefitsSection() {
       {/* Background Elements */}
       <div className="absolute inset-0">
         {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-bl from-[#4B3D90] via-[#4B3D90] to-[#4A3D82]" />
+        <div className="absolute inset-0 bg-linear-to-bl from-[#4B3D90] via-[#4B3D90] to-[#4A3D82]" />
 
         {/* Decorative shapes */}
         <motion.div
