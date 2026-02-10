@@ -69,7 +69,9 @@ export function Header() {
       animate={{ y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
       className={`fixed top-0 right-0 left-0 z-50 transition-all duration-300 ${
-        isScrolled ? "bg-white/90 backdrop-blur-md shadow-lg" : "bg-transparent"
+        isScrolled || isMobileMenuOpen
+          ? "bg-white/90 backdrop-blur-md shadow-lg"
+          : "bg-transparent"
       }`}
     >
       <div className="container mx-auto px-4 md:px-8">
@@ -96,7 +98,7 @@ export function Header() {
               </div>
               <div className="flex flex-col">
                 <span
-                  className={`font-bold text-lg ${isScrolled ? "text-[#5A4B9A]" : "text-white"}`}
+                  className={`font-bold text-lg ${isScrolled || isMobileMenuOpen ? "text-[#5A4B9A]" : "text-white"}`}
                 >
                   التمكين الريادي
                 </span>
@@ -137,40 +139,35 @@ export function Header() {
 
           {/* CTA Button */}
           <div className="hidden lg:block">
-            <Button
-              asChild
-              className={` px-6 py-2 rounded-full font-medium transition-all hover:scale-105`}
+            <button
+              className={` px-6 py-2 rounded-full font-medium transition-all hover:scale-105 cursor-pointer
+                ${isScrolled ? "bg-[#5BC5C4] text-[#5A4B9A]" : "bg-white text-gray-700"}`}
             >
               <Link href="#contact">سجل الآن</Link>
-            </Button>
+            </button>
           </div>
 
           {/* Mobile Menu Button */}
           <button
-            className={`lg:hidden p-2 cursor-pointer ${
-              isScrolled ? " text-white" : ""
-            }`}
+            className="lg:hidden p-2 cursor-pointer"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle menu"
           >
             <div className="w-6 h-5 flex flex-col justify-between">
               <span
-                className={`h-0.5 w-full  transition-all duration-300 ${
+                className={`h-0.5 w-full transition-all duration-300 ${
                   isMobileMenuOpen ? "rotate-45 translate-y-2" : ""
-                }
-                ${!isScrolled ? "bg-white" : "bg-[#5A4B9A]"}
-                `}
+                } ${isScrolled || isMobileMenuOpen ? "bg-[#5A4B9A]" : "bg-white"}`}
               />
               <span
-                className={`h-0.5 w-full bg-[#5A4B9A] transition-all duration-300 ${
+                className={`h-0.5 w-full transition-all duration-300 ${
                   isMobileMenuOpen ? "opacity-0" : ""
-                }
-                   ${!isScrolled ? "bg-white" : "bg-[#5A4B9A]"}`}
+                } ${isScrolled || isMobileMenuOpen ? "bg-[#5A4B9A]" : "bg-white"}`}
               />
               <span
-                className={`h-0.5 w-full bg-[#5A4B9A] transition-all duration-300 ${
+                className={`h-0.5 w-full transition-all duration-300 ${
                   isMobileMenuOpen ? "-rotate-45 -translate-y-2" : ""
-                }   ${!isScrolled ? "bg-white" : "bg-[#5A4B9A]"}`}
+                } ${isScrolled || isMobileMenuOpen ? "bg-[#5A4B9A]" : "bg-white"}`}
               />
             </div>
           </button>
@@ -193,10 +190,8 @@ export function Header() {
                 className={`py-3 font-medium transition-colors border-b border-gray-100 last:border-0 ${
                   activeSection === link.href
                     ? "text-[#5BC5C4]"
-                    : "text-white hover:text-[#5BC5C4]"
-                }
-                   ${!isScrolled ? "text-white" : "text-[#5A4B9A]"}
-                `}
+                    : "text-[#5A4B9A] hover:text-[#5BC5C4]"
+                }`}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 {link.label}

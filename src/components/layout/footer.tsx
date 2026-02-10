@@ -36,13 +36,33 @@ export function Footer() {
           >
             <div className="flex items-center gap-3 mb-6">
               {/* Logo */}
-              <div className="w-12 h-12 bg-[#5BC5C4] rounded-lg flex items-center justify-center">
-                <div className="w-7 h-7 border-2 border-white rounded-sm"></div>
-              </div>
-              <div className="flex flex-col">
-                <span className="font-bold text-xl">التمكين الريادي</span>
-                <span className="text-sm text-[#5BC5C4]">للجمعيات الأهلية</span>
-              </div>
+              <Link href="/" className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-10 h-10  rounded-lg flex items-center justify-center overflow-hidden">
+                    <img
+                      src="/logo.svg"
+                      alt="Logo"
+                      className="w-full h-full object-contain"
+                      onError={(e) => {
+                        e.currentTarget.style.display = "none";
+                        const fallback =
+                          e.currentTarget.parentElement?.querySelector(
+                            ".fallback-logo",
+                          );
+                        if (fallback)
+                          (fallback as HTMLElement).style.display = "flex";
+                      }}
+                    />
+                    <div className="fallback-logo hidden w-6 h-6 border-2 border-white rounded-sm"></div>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className={`font-bold text-lg`}>التمكين الريادي</span>
+                    <span className={`text-xs text-[#5BC5C4]`}>
+                      للجمعيات الأهلية
+                    </span>
+                  </div>
+                </div>
+              </Link>
             </div>
             <p className="text-white/80 leading-relaxed max-w-md">
               برنامج التمكين الريادي للجمعيات الأهلية هو أول برنامج وطني يُمكّن

@@ -11,7 +11,7 @@ export function HeroSection() {
       className="relative min-h-screen flex items-center overflow-hidden bg-[#5A4B9A]"
     >
       {/* Abstract Geometric Graphic - Left Side */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none hidden lg:block">
         <motion.div
           initial={{ x: -100, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
@@ -75,18 +75,10 @@ export function HeroSection() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.6 }}
-              className="text-lg md:text-xl  text-white/90 leading-relaxed max-w-xl ml-auto"
+              className="text-lg md:text-xl mt-2 text-white/90 leading-relaxed max-w-xl ml-auto"
             >
               نحو جمعيات تُنشئ شركات، لا تكتفي بالمشاريع.
             </motion.p>
-
-            {/* Small decorative line */}
-            <motion.div
-              initial={{ width: 0 }}
-              animate={{ width: 80 }}
-              transition={{ duration: 1, delay: 1 }}
-              className="h-1 bg-[#5BC5C4] mt-10 mr-0 ml-auto"
-            />
           </motion.div>
         </div>
       </div>

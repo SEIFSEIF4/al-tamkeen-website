@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { LenisProvider } from "@/components/providers/lenis-provider";
-import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "التمكين الريادي للجمعيات الأهلية",
@@ -38,7 +37,6 @@ export default function RootLayout({
       <body className="antialiased">
         <LenisProvider>
           {children}
-          <Toaster position="bottom-left" richColors />
         </LenisProvider>
       </body>
     </html>

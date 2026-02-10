@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -16,9 +16,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { MotionWrapper } from "@/components/ui/motion-wrapper";
-import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
 import { Loader2 } from "lucide-react";
+
+// Convert Arabic/Persian numerals to Latin
+function toLatinNumbers(str: string): string {
+  return str
+    .replace(/[٠-٩]/g, (d) => String("٠١٢٣٤٥٦٧٨٩".indexOf(d)))
+    .replace(/[۰-۹]/g, (d) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d)));
+}
 
 const contactFormSchema = z.object({
   userName: z.string().min(2, {
@@ -31,8 +37,14 @@ const contactFormSchema = z.object({
 
 type ContactFormValues = z.infer<typeof contactFormSchema>;
 
+type ToastState = {
+  type: "success" | "error" | "loading";
+  message: string;
+} | null;
+
 export function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [toastState, setToastState] = useState<ToastState>(null);
 
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
@@ -44,8 +56,9 @@ export function ContactForm() {
 
   async function onSubmit(data: ContactFormValues) {
     setIsSubmitting(true);
+    setToastState({ type: "loading", message: "جاري إرسال طلبك..." });
 
-    const submission = async () => {
+    try {
       const { error } = await supabase.from("registrations").insert([
         {
           user_name: data.userName,
@@ -54,18 +67,21 @@ export function ContactForm() {
       ]);
 
       if (error) throw error;
-      return { name: data.userName };
-    };
 
-    toast.promise(submission(), {
-      loading: "جاري إرسال طلبك...",
-      success: (data) => {
-        form.reset();
-        return `شكراً لك يا ${data.name}، تم استلام طلبك بنجاح!`;
-      },
-      error: "عذراً، حدث خطأ أثناء إرسال الطلب. يرجى المحاولة مرة أخرى.",
-      finally: () => setIsSubmitting(false),
-    });
+      setToastState({
+        type: "success",
+        message: `شكراً لك يا ${data.userName}، تم استلام طلبك بنجاح!`,
+      });
+      form.reset();
+    } catch {
+      setToastState({
+        type: "error",
+        message: "عذراً، حدث خطأ أثناء إرسال الطلب. يرجى المحاولة مرة أخرى.",
+      });
+    } finally {
+      setIsSubmitting(false);
+      setTimeout(() => setToastState(null), 4000);
+    }
   }
 
   return (
@@ -191,10 +207,16 @@ export function ContactForm() {
                         <FormControl>
                           <Input
                             type="tel"
+                            inputMode="numeric"
                             placeholder="+966 5X XXX XXXX"
-                            className="h-14 rounded-2xl border-gray-200 focus:border-[#5BC5C4] focus:ring-[#5BC5C4] text-lg px-6"
+                            className="h-14 rounded-2xl border-gray-200 focus:border-[#5BC5C4] focus:ring-[#5BC5C4] text-lg px-6 font-sans"
                             dir="ltr"
+                            style={{ fontFamily: "sans-serif" }}
                             {...field}
+                            onChange={(e) => {
+                              const latin = toLatinNumbers(e.target.value);
+                              field.onChange(latin);
+                            }}
                           />
                         </FormControl>
                         <FormMessage className="text-red-500" />
@@ -222,6 +244,34 @@ export function ContactForm() {
           </MotionWrapper>
         </div>
       </div>
+
+      {/* Toast overlay - top center */}
+      <AnimatePresence>
+        {toastState && (
+          <motion.div
+            initial={{ opacity: 0, y: -40 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -40 }}
+            transition={{ duration: 0.3 }}
+            className="fixed top-6 left-1/2 -translate-x-1/2 z-[100] w-[90%] max-w-md"
+          >
+            <div
+              className={`rounded-2xl px-6 py-4 shadow-2xl text-center text-lg font-medium ${
+                toastState.type === "success"
+                  ? "bg-green-500 text-white"
+                  : toastState.type === "error"
+                    ? "bg-red-500 text-white"
+                    : "bg-white text-[#5A4B9A] border border-gray-200"
+              }`}
+            >
+              {toastState.type === "loading" && (
+                <Loader2 className="w-5 h-5 animate-spin inline-block ml-2" />
+              )}
+              {toastState.message}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

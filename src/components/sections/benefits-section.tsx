@@ -58,62 +58,8 @@ export function BenefitsSection() {
 
       <div className="container mx-auto px-4 md:px-8 lg:px-16 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          {/* Image Placeholder */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="relative order-2 lg:order-1"
-          >
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl bg-[#4A3D82]">
-              <img
-                src="/benefits-image.png"
-                alt="الجمعية المشاركة"
-                className="w-full aspect-[4/3] object-cover relative z-10"
-                onError={(e) => {
-                  e.currentTarget.style.display = "none";
-                  const fallback =
-                    e.currentTarget.parentElement?.querySelector(
-                      ".fallback-image",
-                    );
-                  if (fallback)
-                    (fallback as HTMLElement).style.display = "flex";
-                }}
-              />
-
-              {/* Placeholder for building image */}
-              <div className="fallback-image hidden aspect-[4/3] bg-gradient-to-br from-[#4A3D82] to-[#1E3A5F] items-center justify-center">
-                <div className="text-center">
-                  <svg
-                    className="w-24 h-24 text-[#5BC5C4] mx-auto mb-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1.5}
-                      d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                    />
-                  </svg>
-                  <p className="text-white/60 text-sm">صورة المبنى</p>
-                </div>
-              </div>
-
-              {/* Decorative corner accent */}
-              <div
-                className="absolute top-0 left-0 w-20 h-20 bg-[#5BC5C4] z-20"
-                style={{
-                  clipPath: "polygon(0 0, 100% 0, 0 100%)",
-                }}
-              />
-            </div>
-          </motion.div>
-
-          {/* Content */}
-          <div className="order-1 lg:order-2">
+          {/* Content - Right Side in RTL */}
+          <div className="order-1">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -129,25 +75,36 @@ export function BenefitsSection() {
               </h3>
             </motion.div>
 
-            <StaggerContainer className="space-y-5" staggerDelay={0.1}>
+            <StaggerContainer className="space-y-6" staggerDelay={0.1}>
               {benefits.map((benefit, index) => (
                 <StaggerItem key={index}>
                   <motion.div
                     whileHover={{ x: -5 }}
                     className="flex items-start gap-4 group"
                   >
-                    {/* Arrow Icon */}
-                    <motion.div
-                      whileHover={{ scale: 1.1 }}
-                      className="flex-shrink-0 w-8 h-8 bg-[#5BC5C4] flex items-center justify-center"
-                      style={{
-                        clipPath: "polygon(0 0, 100% 50%, 0 100%)",
-                      }}
-                    />
+                    {/* Arrow Icon - Chevron Style */}
+                    <div className="relative">
+                      <div className="w-10 h-10  relative">
+                        <img
+                          src="/element4.svg"
+                          alt="Logo"
+                          className="w-full h-full object-contain"
+                          onError={(e) => {
+                            e.currentTarget.style.display = "none";
+                            const fallback =
+                              e.currentTarget.parentElement?.querySelector(
+                                ".fallback-logo",
+                              );
+                            if (fallback)
+                              (fallback as HTMLElement).style.display = "flex";
+                          }}
+                        />
+                      </div>
+                    </div>
 
                     {/* Text */}
-                    <p className="text-white text-lg leading-relaxed">
-                      <span className="font-bold text-[#5BC5C4] ml-1">
+                    <p className="text-white text-lg lg:text-xl leading-relaxed">
+                      <span className="font-bold text-[#5BC5C4] ml-1 block text-xl lg:text-2xl mb-1">
                         {benefit.keyword}
                       </span>
                       {benefit.text}
@@ -157,6 +114,24 @@ export function BenefitsSection() {
               ))}
             </StaggerContainer>
           </div>
+
+          {/* Image - Left Side in RTL */}
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="order-2 flex items-center justify-center"
+          >
+            <img
+              src="/benefits-image.png"
+              alt="الجمعية المشاركة"
+              className="w-full max-w-[500px] h-auto object-contain"
+              onError={(e) => {
+                e.currentTarget.style.display = "none";
+              }}
+            />
+          </motion.div>
         </div>
       </div>
     </section>

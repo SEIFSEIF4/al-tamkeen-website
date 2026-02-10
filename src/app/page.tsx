@@ -13,8 +13,8 @@ export default function Home() {
       <Header />
       <HeroSection />
       <AboutSection />
-      <ProgramStages />
       <BenefitsSection />
+      <ProgramStages />
       <FinalOutputSection />
       <ContactForm />
       <Footer />
