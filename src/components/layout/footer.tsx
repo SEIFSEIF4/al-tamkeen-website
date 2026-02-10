@@ -57,7 +57,7 @@ export function Footer() {
                   </div>
                   <div className="flex flex-col">
                     <span className={`font-bold text-lg`}>التمكين الريادي</span>
-                    <span className={`text-xs text-[#5BC5C4]`}>
+                    <span className={`text-xs text-[#8FD2E3]`}>
                       للجمعيات الأهلية
                     </span>
                   </div>
@@ -84,7 +84,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-white/80 hover:text-[#5BC5C4] transition-colors"
+                    className="text-white/80 hover:text-[#8FD2E3] transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -106,7 +106,7 @@ export function Footer() {
                 <li key={link.label}>
                   <Link
                     href={link.href}
-                    className="text-white/80 hover:text-[#5BC5C4] transition-colors"
+                    className="text-white/80 hover:text-[#8FD2E3] transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -127,7 +127,7 @@ export function Footer() {
               {/* Social Icons - Placeholder */}
               <a
                 href="#"
-                className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-[#5BC5C4] transition-colors"
+                className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-[#8FD2E3] transition-colors"
                 aria-label="Twitter"
               >
                 <svg
@@ -140,7 +140,7 @@ export function Footer() {
               </a>
               <a
                 href="#"
-                className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-[#5BC5C4] transition-colors"
+                className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-[#8FD2E3] transition-colors"
                 aria-label="LinkedIn"
               >
                 <svg
@@ -153,7 +153,7 @@ export function Footer() {
               </a>
               <a
                 href="#"
-                className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-[#5BC5C4] transition-colors"
+                className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-[#8FD2E3] transition-colors"
                 aria-label="Instagram"
               >
                 <svg

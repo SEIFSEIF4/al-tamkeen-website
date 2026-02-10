@@ -46,7 +46,7 @@ export function BenefitsSection() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 0.1 }}
           viewport={{ once: true }}
-          className="absolute top-0 left-0 w-96 h-96 bg-[#5BC5C4] rounded-full -translate-x-1/2 -translate-y-1/2 blur-3xl"
+          className="absolute top-0 left-0 w-96 h-96 bg-[#8FD2E3] rounded-full -translate-x-1/2 -translate-y-1/2 blur-3xl"
         />
         <motion.div
           initial={{ opacity: 0 }}
@@ -70,7 +70,7 @@ export function BenefitsSection() {
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
                 ماذا تكتسب
               </h2>
-              <h3 className="text-2xl md:text-3xl font-bold text-[#5BC5C4]">
+              <h3 className="text-2xl md:text-3xl font-bold text-[#8FD2E3]">
                 الجمعية المشاركة في البرنامج؟
               </h3>
             </motion.div>
@@ -104,7 +104,7 @@ export function BenefitsSection() {
 
                     {/* Text */}
                     <p className="text-white text-lg lg:text-xl leading-relaxed">
-                      <span className="font-bold text-[#5BC5C4] ml-1 block text-xl lg:text-2xl mb-1">
+                      <span className="font-bold text-[#8FD2E3] ml-1 block text-xl lg:text-2xl mb-1">
                         {benefit.keyword}
                       </span>
                       {benefit.text}

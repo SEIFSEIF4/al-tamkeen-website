@@ -91,7 +91,7 @@ export function ContactForm() {
     >
       {/* Background decoration */}
       <div className="absolute inset-0">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#5BC5C4]/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[#8FD2E3]/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#4B3D90]/10 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl" />
       </div>
 
@@ -118,7 +118,7 @@ export function ContactForm() {
                 whileHover={{ x: -10 }}
                 className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-sm border border-gray-100"
               >
-                <div className="w-12 h-12 bg-[#5BC5C4]/10 rounded-lg flex items-center justify-center text-[#5BC5C4]">
+                <div className="w-12 h-12 bg-[#8FD2E3]/10 rounded-lg flex items-center justify-center text-[#8FD2E3]">
                   <svg
                     className="w-6 h-6"
                     fill="none"
@@ -187,7 +187,7 @@ export function ContactForm() {
                         <FormControl>
                           <Input
                             placeholder="أدخل اسمك بالكامل"
-                            className="h-14 rounded-2xl border-gray-200 focus:border-[#5BC5C4] focus:ring-[#5BC5C4] text-lg px-6"
+                            className="h-14 rounded-2xl border-gray-200 focus:border-[#8FD2E3] focus:ring-[#8FD2E3] text-lg px-6"
                             {...field}
                           />
                         </FormControl>
@@ -209,7 +209,7 @@ export function ContactForm() {
                             type="tel"
                             inputMode="numeric"
                             placeholder="+966 5X XXX XXXX"
-                            className="h-14 rounded-2xl border-gray-200 focus:border-[#5BC5C4] focus:ring-[#5BC5C4] text-lg px-6 font-sans"
+                            className="h-14 rounded-2xl border-gray-200 focus:border-[#8FD2E3] focus:ring-[#8FD2E3] text-lg px-6 font-sans"
                             dir="ltr"
                             style={{ fontFamily: "sans-serif" }}
                             {...field}

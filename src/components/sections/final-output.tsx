@@ -116,7 +116,7 @@ export function FinalOutputSection() {
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-2">
             المخرج الأخير
           </h2>
-          <h3 className="text-2xl md:text-3xl font-bold text-[#5BC5C4]">
+          <h3 className="text-2xl md:text-3xl font-bold text-[#8FD2E3]">
             للبرنامج
           </h3>
         </MotionWrapper>
@@ -135,7 +135,7 @@ export function FinalOutputSection() {
               >
                 <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 h-full border border-white/20 hover:bg-white/20 transition-all group">
                   {/* Icon */}
-                  <div className="w-20 h-20 bg-white/10 rounded-xl flex items-center justify-center mb-6 text-[#5BC5C4] group-hover:bg-[#5BC5C4] group-hover:text-white transition-all">
+                  <div className="w-20 h-20 bg-white/10 rounded-xl flex items-center justify-center mb-6 text-[#8FD2E3] group-hover:bg-[#8FD2E3] group-hover:text-white transition-all">
                     {output.icon}
                   </div>
 
@@ -160,7 +160,7 @@ export function FinalOutputSection() {
           whileInView={{ scaleX: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.5 }}
-          className="mt-16 h-1 bg-gradient-to-l from-[#5BC5C4] via-white/30 to-transparent rounded-full origin-right"
+          className="mt-16 h-1 bg-gradient-to-l from-[#8FD2E3] via-white/30 to-transparent rounded-full origin-right"
         />
       </div>
     </section>

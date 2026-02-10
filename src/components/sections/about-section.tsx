@@ -31,14 +31,14 @@ export function AboutSection() {
                 />
 
                 <div className="fallback-mission-logo hidden flex-col items-center gap-4">
-                  <div className="w-32 h-32 bg-[#5BC5C4] rounded-xl flex items-center justify-center shadow-lg">
+                  <div className="w-32 h-32 bg-[#8FD2E3] rounded-xl flex items-center justify-center shadow-lg">
                     <div className="w-16 h-16 border-4 border-white rounded-lg" />
                   </div>
                   <div className="text-right">
                     <h2 className="text-3xl font-bold text-[#4B3D90]">
                       التمكين الريادي
                     </h2>
-                    <p className="text-xl text-[#5BC5C4] font-medium text-center">
+                    <p className="text-xl text-[#8FD2E3] font-medium text-center">
                       للجمعيات الأهلية
                     </p>
                   </div>

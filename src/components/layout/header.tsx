@@ -103,7 +103,7 @@ export function Header() {
                   التمكين الريادي
                 </span>
                 <span
-                  className={`text-xs ${isScrolled ? "text-[#5BC5C4]" : "text-[#5BC5C4]"}`}
+                  className={`text-xs ${isScrolled ? "text-[#8FD2E3]" : "text-[#8FD2E3]"}`}
                 >
                   للجمعيات الأهلية
                 </span>
@@ -119,17 +119,17 @@ export function Header() {
                 href={link.href}
                 className={`font-medium transition-all duration-300 relative py-1 ${
                   activeSection === link.href
-                    ? "text-[#5BC5C4]"
+                    ? "text-[#8FD2E3]"
                     : isScrolled
-                      ? "text-gray-700 hover:text-[#5BC5C4]"
-                      : "text-white hover:text-[#5BC5C4]"
+                      ? "text-gray-700 hover:text-[#8FD2E3]"
+                      : "text-white hover:text-[#8FD2E3]"
                 }`}
               >
                 {link.label}
                 {activeSection === link.href && (
                   <motion.div
                     layoutId="activeNav"
-                    className="absolute bottom-0 right-0 left-0 h-0.5 bg-[#5BC5C4]"
+                    className="absolute bottom-0 right-0 left-0 h-0.5 bg-[#8FD2E3]"
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
                 )}
@@ -141,7 +141,7 @@ export function Header() {
           <div className="hidden lg:block">
             <button
               className={` px-6 py-2 rounded-full font-medium transition-all hover:scale-105 cursor-pointer
-                ${isScrolled ? "bg-[#5BC5C4] text-[#4B3D90]" : "bg-white text-gray-700"}`}
+                ${isScrolled ? "bg-[#8FD2E3] text-[#4B3D90]" : "bg-white text-gray-700"}`}
             >
               <Link href="#contact">سجل الآن</Link>
             </button>
@@ -189,8 +189,8 @@ export function Header() {
                 href={link.href}
                 className={`py-3 font-medium transition-colors border-b border-gray-100 last:border-0 ${
                   activeSection === link.href
-                    ? "text-[#5BC5C4]"
-                    : "text-[#4B3D90] hover:text-[#5BC5C4]"
+                    ? "text-[#8FD2E3]"
+                    : "text-[#4B3D90] hover:text-[#8FD2E3]"
                 }`}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
