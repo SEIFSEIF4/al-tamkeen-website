@@ -12,6 +12,7 @@ const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://y-mu-lac.vercel.app/"),
   title: "التمكين الريادي للجمعيات الأهلية",
   description:
     "برنامج التمكين الريادي للجمعيات الأهلية هو أول برنامج وطني يُمكّن الجمعيات من تحويل رسالتها الاجتماعية إلى شركات ناشئة مستدامة",
@@ -27,8 +28,19 @@ export const metadata: Metadata = {
     title: "التمكين الريادي للجمعيات الأهلية",
     description:
       "برنامج التمكين الريادي للجمعيات الأهلية هو أول برنامج وطني يُمكّن الجمعيات من تحويل رسالتها الاجتماعية إلى شركات ناشئة مستدامة",
+    url: "https://y-mu-lac.vercel.app/",
+    siteName: "التمكين الريادي",
     type: "website",
     locale: "ar_SA",
+    images: ["/opengraph-image"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "التمكين الريادي للجمعيات الأهلية",
+    description:
+      "برنامج التمكين الريادي للجمعيات الأهلية هو أول برنامج وطني يُمكّن الجمعيات من تحويل رسالتها الاجتماعية إلى شركات ناشئة مستدامة",
+    images: ["/opengraph-image"],
+    creator: "@Altamkeen",
   },
   icons: {
     icon: "/logo.svg",

@@ -18,7 +18,7 @@ export function Header() {
     // Intersection Observer for active section highlighting
     const observerOptions = {
       root: null,
-      rootMargin: "-20% 0px -70% 0px",
+      rootMargin: "-40% 0px -40% 0px",
       threshold: 0,
     };
 
@@ -123,9 +123,11 @@ export function Header() {
                 href={link.href}
                 className={`font-medium transition-all duration-300 relative py-1 ${
                   activeSection === link.href
-                    ? "text-[#8FD2E3]"
+                    ? isScrolled
+                      ? "text-[#4B3D90]"
+                      : "text-[#8FD2E3]"
                     : isScrolled
-                      ? "text-gray-700 hover:text-[#8FD2E3]"
+                      ? "text-gray-700 hover:text-[#4B3D90]"
                       : "text-white hover:text-[#8FD2E3]"
                 }`}
               >
@@ -133,7 +135,9 @@ export function Header() {
                 {activeSection === link.href && (
                   <motion.div
                     layoutId="activeNav"
-                    className="absolute bottom-0 right-0 left-0 h-0.5 bg-[#8FD2E3]"
+                    className={`absolute bottom-0 right-0 left-0 h-0.5 ${
+                      isScrolled ? "bg-[#4B3D90]" : "bg-[#8FD2E3]"
+                    }`}
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
                 )}
