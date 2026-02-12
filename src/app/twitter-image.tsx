@@ -62,20 +62,6 @@ export default async function Image() {
           display: "flex",
         }}
       />
-      <div
-        style={{
-          position: "absolute",
-          top: "10%",
-          right: "10%",
-          width: "30%",
-          height: "30%",
-          background:
-            "radial-gradient(circle, rgba(143,210,227,0.08) 0%, transparent 70%)",
-          filter: "blur(40px)",
-          borderRadius: "50%",
-          display: "flex",
-        }}
-      />
 
       {/* Top accent line */}
       <div
@@ -190,14 +176,13 @@ export default async function Image() {
         سجّل الآن
       </div>
 
-      {/* Bottom branding bar */}
+      {/* Bottom branding */}
       <div
         style={{
           position: "absolute",
           bottom: "24px",
           display: "flex",
           alignItems: "center",
-          gap: "8px",
         }}
       >
         <div
