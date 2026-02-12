@@ -21,8 +21,8 @@ export default function Home() {
       <FinalOutputSection />
       <AcceptanceCriteriaSection />
       <SponsorsSection />
-      <FAQSection />
       <CTASection />
+      <FAQSection />
       <Footer />
     </main>
   );

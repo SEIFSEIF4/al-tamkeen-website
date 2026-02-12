@@ -57,7 +57,6 @@ export function ProgramStages() {
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1E3A5F] mb-6">
             مراحل البرنامج
           </h2>
-          <div className="w-24 h-1.5 bg-linear-to-l from-[#4B3D90] to-[#8FD2E3] mx-auto rounded-full" />
         </MotionWrapper>
 
         <div className="relative max-w-5xl mx-auto">
