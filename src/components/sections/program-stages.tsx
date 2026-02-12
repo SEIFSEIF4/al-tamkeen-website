@@ -43,154 +43,95 @@ const stages = [
   },
 ];
 
-function DecoративLogo({ flip = false }: { flip?: boolean }) {
-  return (
-    <div
-      className={`relative w-10 h-8 hidden md:block md:w-12 md:h-10 ${flip ? "scale-x-[-1]" : ""}`}
-    >
-      <div className="absolute top-0 right-0 w-4 h-4 md:w-5 md:h-5 bg-[#1E3A5F]" />
-      <div className="absolute bottom-0 left-0 w-4 h-4 md:w-5 md:h-5 bg-[#8FD2E3]" />
-      <div className="absolute top-2 right-2 md:top-[10px] md:right-[10px] w-4 h-4 md:w-5 md:h-5 bg-[#1E3A5F]" />
-    </div>
-  );
-}
-
 export function ProgramStages() {
   return (
-    <section
-      id="stages"
-      className="section-padding bg-white relative overflow-hidden"
-    >
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-20 left-10 w-32 h-32 bg-[#4B3D90] rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-10 w-40 h-40 bg-[#8FD2E3] rounded-full blur-3xl" />
+    <section id="stages" className="py-24 bg-white relative overflow-hidden">
+      {/* Background Decor */}
+      <div className="absolute inset-0 opacity-5 pointer-events-none">
+        <div className="absolute top-20 left-10 w-64 h-64 bg-[#4B3D90] rounded-full blur-[100px]" />
+        <div className="absolute bottom-20 right-10 w-72 h-72 bg-[#8FD2E3] rounded-full blur-[100px]" />
       </div>
 
       <div className="container mx-auto px-4 md:px-8 lg:px-16 relative z-10">
-        <MotionWrapper className="text-center mb-12 md:mb-24">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1E3A5F] mb-4">
+        <MotionWrapper className="text-center mb-20">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1E3A5F] mb-6">
             مراحل البرنامج
           </h2>
-          <div className="w-24 h-1 bg-liner-to-l from-[#4B3D90] to-[#8FD2E3] mx-auto rounded-full" />
+          <div className="w-24 h-1.5 bg-linear-to-l from-[#4B3D90] to-[#8FD2E3] mx-auto rounded-full" />
         </MotionWrapper>
 
-        {/* Desktop Timeline */}
-        <div className="relative max-w-4xl mx-auto hidden md:block">
-          <div className="absolute right-1/2 translate-x-1/2 top-0 bottom-0 w-1 bg-liner-to-b from-[#8FD2E3] via-[#4B3D90] to-[#8FD2E3]" />
+        <div className="relative max-w-5xl mx-auto">
+          {/* Vertical Line */}
+          <div className="absolute right-[23px] md:right-1/2 md:translate-x-1/2 top-0 bottom-0 w-0.5 bg-gray-100">
+            <motion.div
+              initial={{ height: 0 }}
+              whileInView={{ height: "100%" }}
+              viewport={{ once: true }}
+              transition={{ duration: 1.5, ease: "easeInOut" }}
+              className="w-full bg-linear-to-b from-[#8FD2E3] via-[#4B3D90] to-[#A8C442]"
+            />
+          </div>
 
-          <StaggerContainer className="space-y-0" staggerDelay={0.15}>
-            {stages.map((stage, index) => (
-              <StaggerItem key={stage.number}>
+          <div className="space-y-12 md:space-y-0">
+            {stages.map((stage, index) => {
+              const isEven = index % 2 === 0;
+              return (
                 <div
-                  className={`relative flex items-center ${
-                    stage.position === "right" ? "flex-row" : "flex-row-reverse"
-                  }`}
+                  key={stage.number}
+                  className="relative flex items-center md:h-48 group"
                 >
+                  {/* Content Container */}
                   <div
-                    className={`flex-1 ${
-                      stage.position === "right"
-                        ? "text-left pr-12"
-                        : "text-right pl-12"
-                    }`}
+                    className={`flex flex-col md:flex-row w-full items-center ${isEven ? "md:flex-row-reverse" : ""}`}
                   >
-                    <motion.div whileHover={{ scale: 1.02 }} className="p-6">
-                      <h3 className="text-2xl lg:text-3xl font-bold text-[#1E3A5F] mb-2">
-                        {stage.title}
-                      </h3>
-                      <p className="text-gray-600 text-start leading-relaxed">
-                        {stage.description}
-                      </p>
-                    </motion.div>
-                  </div>
+                    {/* Circle Indicator */}
+                    <div className="absolute right-0 md:right-1/2 md:translate-x-1/2 z-20">
+                      <motion.div
+                        initial={{ scale: 0, opacity: 0 }}
+                        whileInView={{ scale: 1, opacity: 1 }}
+                        viewport={{ once: true, margin: "-100px" }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 260,
+                          damping: 20,
+                          delay: 0.1,
+                        }}
+                        className="w-12 h-12 rounded-full bg-white border-4 border-[#4B3D90] flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300"
+                      >
+                        <span className="text-lg font-bold text-[#1E3A5F]">
+                          {stage.number}
+                        </span>
+                      </motion.div>
+                    </div>
 
-                  <div className="relative z-10 shrink-0 flex flex-col items-center gap-2">
-                    <motion.div
-                      initial={{ opacity: 0, y: -10 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: index * 0.1 + 0.3 }}
+                    {/* Card */}
+                    <div
+                      className={`w-full md:w-[45%] pr-14 md:pr-0 ${isEven ? "md:pl-12" : "md:pr-12 md:text-left"}`}
                     >
-                      <DecoративLogo flip={stage.position === "left"} />
-                    </motion.div>
+                      <motion.div
+                        initial={{ opacity: 0, x: isEven ? -50 : 50 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true, margin: "-100px" }}
+                        transition={{ duration: 0.6, ease: "easeOut" }}
+                        className="bg-white p-6 rounded-2xl shadow-xl shadow-gray-100/50 border border-gray-100 hover:border-[#8FD2E3] transition-colors duration-300"
+                        dir="rtl"
+                      >
+                        <h3 className="text-xl md:text-2xl font-bold text-[#1E3A5F] mb-3">
+                          {stage.title}
+                        </h3>
+                        <p className="text-gray-600 leading-relaxed text-sm md:text-base">
+                          {stage.description}
+                        </p>
+                      </motion.div>
+                    </div>
 
-                    <motion.div
-                      initial={{ scale: 0 }}
-                      whileInView={{ scale: 1 }}
-                      viewport={{ once: true }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 260,
-                        damping: 20,
-                        delay: index * 0.1 + 0.2,
-                      }}
-                      className="w-16 h-16 bg-[#8FD2E3] rounded-lg flex items-center justify-center shadow-lg"
-                    >
-                      <span className="text-2xl font-bold text-white">
-                        {stage.number}
-                      </span>
-                    </motion.div>
-                  </div>
-
-                  <div className="flex-1" />
-                </div>
-              </StaggerItem>
-            ))}
-          </StaggerContainer>
-        </div>
-
-        {/* Mobile Timeline */}
-        <div className="md:hidden">
-          <StaggerContainer className="space-y-6" staggerDelay={0.15}>
-            {stages.map((stage, index) => (
-              <StaggerItem key={stage.number}>
-                <div className="flex items-start gap-3" dir="rtl">
-                  {/* Right column: logo + number + line */}
-                  <div className="flex flex-col items-center shrink-0">
-                    <motion.div
-                      initial={{ opacity: 0, y: -10 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: index * 0.1 + 0.3 }}
-                    >
-                      <DecoративLogo />
-                    </motion.div>
-
-                    <motion.div
-                      initial={{ scale: 0 }}
-                      whileInView={{ scale: 1 }}
-                      viewport={{ once: true }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 260,
-                        damping: 20,
-                        delay: index * 0.1 + 0.2,
-                      }}
-                      className="w-12 h-12 bg-[#8FD2E3] rounded-lg flex items-center justify-center shadow-lg mt-1"
-                    >
-                      <span className="text-lg font-bold text-white">
-                        {stage.number}
-                      </span>
-                    </motion.div>
-
-                    {/* Connector line */}
-                    {index < stages.length - 1 && (
-                      <div className="w-0.5 flex-1 min-h-[24px] bg-liner-to-b from-[#8FD2E3] to-[#4B3D90] mt-2" />
-                    )}
-                  </div>
-
-                  {/* Left column: text content */}
-                  <div className="flex-1 md:pt-7 pb-2">
-                    <h3 className="text-lg font-bold text-[#1E3A5F] mb-1">
-                      {stage.title}
-                    </h3>
-                    <p className="text-gray-600 text-sm leading-relaxed">
-                      {stage.description}
-                    </p>
+                    {/* Spacer for desktop */}
+                    <div className="hidden md:block w-[45%]" />
                   </div>
                 </div>
-              </StaggerItem>
-            ))}
-          </StaggerContainer>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>

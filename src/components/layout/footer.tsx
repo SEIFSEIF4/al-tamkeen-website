@@ -5,11 +5,11 @@ import { motion } from "framer-motion";
 
 export function Footer() {
   return (
-    <footer className="bg-[#4B3D90] text-white py-16">
-      <div className="container mx-auto px-4 md:px-8">
-        <div className="flex flex-col-reverse lg:flex-row justify-between items-center lg:items-start gap-12">
+    <footer className="bg-[#4B3D90] text-white">
+      <div className="container mx-auto px-4 md:px-8 py-8">
+        <div className="flex flex-col-reverse w-full lg:flex-row justify-start items-center lg:items-start gap-12">
           {/* Right Side: Logo */}
-          <div className="flex flex-col items-center lg:items-end">
+          <div className="flex flex-col md:w-1/4 w-full items-start justify-start ">
             <Link href="/" className="flex items-center gap-3">
               <div className="flex flex-col items-end">
                 <h2 className="text-2xl font-bold leading-tight">التمكين</h2>
@@ -29,22 +29,44 @@ export function Footer() {
           </div>
 
           {/* Center: Navigation Links */}
-          <div className="flex flex-wrap justify-center gap-x-16 gap-y-8 text-center lg:text-right">
+          <div className="flex flex-wrap md:w-3/4 w-full justify-start items-start gap-x-16 gap-y-8 text-center lg:text-right">
             <div className="flex flex-col gap-4 text-white/90 font-medium">
               <Link
-                href="#outputs"
+                href="/#hero"
+                className="hover:text-[#8FD2E3] transition-colors"
+              >
+                الرئيسية
+              </Link>
+              <Link
+                href="/#about"
+                className="hover:text-[#8FD2E3] transition-colors"
+              >
+                فكرة البرنامج
+              </Link>
+            </div>
+            <div className="flex flex-col gap-4 text-white/90 font-medium">
+              <Link
+                href="/#stages"
+                className="hover:text-[#8FD2E3] transition-colors"
+              >
+                مراحل البرنامج
+              </Link>
+              <Link
+                href="/#benefits"
+                className="hover:text-[#8FD2E3] transition-colors"
+              >
+                المميزات
+              </Link>
+            </div>
+            <div className="flex flex-col gap-4 text-white/90 font-medium">
+              <Link
+                href="/#outputs"
                 className="hover:text-[#8FD2E3] transition-colors"
               >
                 المخرج الأخير
               </Link>
               <Link
-                href="#faq"
-                className="hover:text-[#8FD2E3] transition-colors"
-              >
-                أسئلة شائعة
-              </Link>
-              <Link
-                href="#criteria"
+                href="/#criteria"
                 className="hover:text-[#8FD2E3] transition-colors"
               >
                 معايير القبول
@@ -52,33 +74,19 @@ export function Footer() {
             </div>
             <div className="flex flex-col gap-4 text-white/90 font-medium">
               <Link
-                href="#hero"
+                href="/#faq"
                 className="hover:text-[#8FD2E3] transition-colors"
               >
-                الرئيسية
+                أسئلة شائعة
               </Link>
+
               <Link
-                href="#about"
+                href="/#contact"
                 className="hover:text-[#8FD2E3] transition-colors"
               >
-                فكرة البرنامج
-              </Link>
-              <Link
-                href="#stages"
-                className="hover:text-[#8FD2E3] transition-colors"
-              >
-                مراحل البرنامج
+                تواصل معنا
               </Link>
             </div>
-          </div>
-          {/* Left Side: Apply Link */}
-          <div className="flex items-center">
-            <Link
-              href="#contact"
-              className="text-white hover:text-[#8FD2E3] transition-colors text-xl font-bold"
-            >
-              رابط التقديم
-            </Link>
           </div>
         </div>
       </div>

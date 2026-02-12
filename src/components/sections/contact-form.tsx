@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Form,
   FormControl,
@@ -17,7 +18,18 @@ import {
 } from "@/components/ui/form";
 import { MotionWrapper } from "@/components/ui/motion-wrapper";
 import { supabase } from "@/lib/supabase";
-import { Loader2 } from "lucide-react";
+import {
+  Loader2,
+  Upload,
+  X,
+  MapPin,
+  Mail,
+  Phone,
+  Globe,
+  Instagram,
+  Send,
+  Clipboard,
+} from "lucide-react";
 
 // Convert Arabic/Persian numerals to Latin
 function toLatinNumbers(str: string): string {
@@ -33,6 +45,7 @@ const contactFormSchema = z.object({
   phoneNumber: z.string().min(10, {
     message: "يرجى إدخال رقم هاتف صحيح",
   }),
+  files: z.any().optional(),
 });
 
 type ContactFormValues = z.infer<typeof contactFormSchema>;
@@ -45,6 +58,8 @@ type ToastState = {
 export function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [toastState, setToastState] = useState<ToastState>(null);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
@@ -54,11 +69,23 @@ export function ContactForm() {
     },
   });
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const files = Array.from(e.target.files);
+      setSelectedFiles((prev) => [...prev, ...files]);
+    }
+  };
+
+  const removeFile = (index: number) => {
+    setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
+  };
+
   async function onSubmit(data: ContactFormValues) {
     setIsSubmitting(true);
     setToastState({ type: "loading", message: "جاري إرسال طلبك..." });
 
     try {
+      // Create record in database
       const { error } = await supabase.from("registrations").insert([
         {
           user_name: data.userName,
@@ -73,6 +100,7 @@ export function ContactForm() {
         message: `شكراً لك يا ${data.userName}، تم استلام طلبك بنجاح!`,
       });
       form.reset();
+      setSelectedFiles([]);
     } catch {
       setToastState({
         type: "error",
@@ -87,172 +115,160 @@ export function ContactForm() {
   return (
     <section
       id="contact"
-      className="section-padding bg-liner-to-b from-gray-50 to-white relative overflow-hidden"
+      className="flex-1 flex items-center py-8 bg-[#95a4b3] relative overflow-hidden"
     >
-      {/* Background decoration */}
-      <div className="absolute inset-0">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#8FD2E3]/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#4B3D90]/10 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl" />
-      </div>
+      <div className="container max-w-4xl mx-auto px-4 md:px-8 lg:px-16 relative z-10">
+        <div className="bg-white rounded-[2rem] shadow-2xl overflow-hidden max-w-5xl mx-auto">
+          {/* Left Column: Contact Info (Brand Blue Sidebar) */}
 
-      <div className="container mx-auto px-4 md:px-8 lg:px-16 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          {/* Content */}
-          <MotionWrapper direction="right">
-            <div className="mb-8">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1E3A5F] mb-4">
-                قدم الآن
-              </h2>
-              <h3 className="text-2xl md:text-3xl font-bold text-[#4B3D90] mb-6">
-                في برنامج التمكين الريادي
-              </h3>
-              <p className="text-gray-600 text-lg leading-relaxed">
-                انضم إلى البرنامج وابدأ رحلتك في تحويل جمعيتك إلى شركة ناشئة
-                مستدامة. فريقنا سيتواصل معك لمناقشة التفاصيل.
-              </p>
-            </div>
+          {/* Right Column: Form */}
+          <div className="p-8 md:p-10 flex flex-col justify-center">
+            <h2 className="text-2xl font-bold text-[#5D9FDD] mb-6">
+              نموذج التقديم
+            </h2>
 
-            {/* Contact Info */}
-            <div className="space-y-4">
-              <motion.div
-                whileHover={{ x: -10 }}
-                className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-sm border border-gray-100"
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-6"
               >
-                <div className="w-12 h-12 bg-[#8FD2E3]/10 rounded-lg flex items-center justify-center text-[#8FD2E3]">
-                  <svg
-                    className="w-6 h-6"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                    />
-                  </svg>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">البريد الإلكتروني</p>
-                  <p className="font-medium text-[#1E3A5F]">info@tamkeen.sa</p>
-                </div>
-              </motion.div>
+                <FormField
+                  control={form.control}
+                  name="userName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-[#5D9FDD] font-medium">
+                        الاسم الرباعي <span className="text-red-500">*</span>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="أدخل الاسم الرباعي"
+                          className="h-12 rounded-xl border-gray-200 focus:border-[#4B3D90] focus:ring-[#4B3D90]"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <motion.div
-                whileHover={{ x: -10 }}
-                className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-sm border border-gray-100"
-              >
-                <div className="w-12 h-12 bg-[#4B3D90]/10 rounded-lg flex items-center justify-center text-[#4B3D90]">
-                  <svg
-                    className="w-6 h-6"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                    />
-                  </svg>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">الهاتف</p>
-                  <p className="font-medium text-[#1E3A5F]" dir="ltr">
-                    +966 XX XXX XXXX
-                  </p>
-                </div>
-              </motion.div>
-            </div>
-          </MotionWrapper>
-
-          {/* Form */}
-          <MotionWrapper direction="left" delay={0.2}>
-            <div className="bg-white rounded-3xl shadow-xl shadow-gray-200/50 p-8 md:p-10 border border-gray-100">
-              <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit(onSubmit)}
-                  className="space-y-6"
-                >
-                  <FormField
-                    control={form.control}
-                    name="userName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-[#1E3A5F] font-medium text-lg">
-                          الاسم الكريم
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="أدخل اسمك بالكامل"
-                            className="h-14 rounded-2xl border-gray-200 focus:border-[#8FD2E3] focus:ring-[#8FD2E3] text-lg px-6"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage className="text-red-500" />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="phoneNumber"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-[#1E3A5F] font-medium text-lg">
-                          رقم الهاتف
-                        </FormLabel>
-                        <FormControl>
+                <FormField
+                  control={form.control}
+                  name="phoneNumber"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-[#5D9FDD] font-medium">
+                        رقم الجوال <span className="text-red-500">*</span>
+                      </FormLabel>
+                      <FormControl>
+                        <div className="relative group">
+                          <div
+                            className="absolute left-0 top-0 h-full px-4 flex items-center bg-gray-50 border-r border-gray-200 rounded-l-xl text-gray-500 font-sans"
+                            dir="ltr"
+                          >
+                            +966
+                          </div>
                           <Input
                             type="tel"
                             inputMode="numeric"
-                            placeholder="+966 5X XXX XXXX"
-                            className="h-14 rounded-2xl border-gray-200 focus:border-[#8FD2E3] focus:ring-[#8FD2E3] text-lg px-6 font-sans"
+                            placeholder="5X XXX XXXX"
+                            className="h-12 pl-20 rounded-xl border-gray-200 focus:border-[#4B3D90] focus:ring-[#4B3D90] font-sans"
                             dir="ltr"
-                            style={{ fontFamily: "sans-serif" }}
                             {...field}
                             onChange={(e) => {
                               const latin = toLatinNumbers(e.target.value);
                               field.onChange(latin);
                             }}
                           />
-                        </FormControl>
-                        <FormMessage className="text-red-500" />
-                      </FormItem>
-                    )}
-                  />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
+                {/* File Upload Section */}
+                <div className="space-y-3">
+                  <FormLabel className="text-[#5D9FDD] font-medium">
+                    المرفقات
+                  </FormLabel>
+                  <div
+                    onClick={() => fileInputRef.current?.click()}
+                    className="border-2 border-dashed border-gray-200 rounded-xl p-6 flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-[#4B3D90] hover:bg-gray-50/50 transition-all"
+                  >
+                    <Upload className="w-8 h-8 text-gray-400" />
+                    <p className="text-sm text-gray-500">رفع الملفات</p>
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      multiple
+                      className="hidden"
+                      onChange={handleFileChange}
+                    />
+                  </div>
+
+                  {/* Selected Files List */}
+                  <AnimatePresence>
+                    {selectedFiles.length > 0 && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="flex flex-wrap gap-2 pt-1"
+                      >
+                        {selectedFiles.map((file, index) => (
+                          <motion.div
+                            key={index}
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            className="bg-gray-100 rounded-lg px-2.5 py-1.5 flex items-center gap-2 text-sm text-[#5D9FDD]"
+                          >
+                            <span className="truncate max-w-[120px]">
+                              {file.name}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => removeFile(index)}
+                              className="text-gray-400 hover:text-red-500 transition-colors"
+                            >
+                              <X className="w-3.5 h-3.5" />
+                            </button>
+                          </motion.div>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                <div className="flex justify-end pt-2">
                   <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full h-16 bg-[#4B3D90] hover:bg-[#4A3D82] text-white text-xl font-bold rounded-2xl shadow-lg shadow-[#4B3D90]/30 hover:shadow-xl hover:shadow-[#4B3D90]/40 transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-70 flex items-center justify-center gap-3"
+                    className="min-w-[140px] h-12 bg-[#4B3D90] hover:bg-[#3D3175] text-white font-bold rounded-xl shadow-lg transition-all flex items-center justify-center gap-2"
                   >
                     {isSubmitting ? (
-                      <>
-                        <Loader2 className="w-6 h-6 animate-spin" />
-                        جاري الإرسال...
-                      </>
+                      <Loader2 className="w-5 h-5 animate-spin" />
                     ) : (
-                      "إرسال الطلب"
+                      <>
+                        <Send className="w-5 h-5 ml-1" />
+                        إرسال
+                      </>
                     )}
                   </Button>
-                </form>
-              </Form>
-            </div>
-          </MotionWrapper>
+                </div>
+              </form>
+            </Form>
+          </div>
         </div>
       </div>
 
-      {/* Toast overlay - top center */}
+      {/* Toast overlay */}
       <AnimatePresence>
         {toastState && (
           <motion.div
             initial={{ opacity: 0, y: -40 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -40 }}
-            transition={{ duration: 0.3 }}
             className="fixed top-6 left-1/2 -translate-x-1/2 z-100 w-[90%] max-w-md"
           >
             <div
@@ -264,9 +280,6 @@ export function ContactForm() {
                     : "bg-white text-[#4B3D90] border border-gray-200"
               }`}
             >
-              {toastState.type === "loading" && (
-                <Loader2 className="w-5 h-5 animate-spin inline-block ml-2" />
-              )}
               {toastState.message}
             </div>
           </motion.div>

@@ -9,7 +9,6 @@ import { AcceptanceCriteriaSection } from "@/components/sections/acceptance-crit
 import { FAQSection } from "@/components/sections/faq-section";
 import { SponsorsSection } from "@/components/sections/sponsors-section";
 import { CTASection } from "@/components/sections/cta-section";
-import { ContactForm } from "@/components/sections/contact-form";
 
 export default function Home() {
   return (
@@ -21,12 +20,9 @@ export default function Home() {
       <ProgramStages />
       <FinalOutputSection />
       <AcceptanceCriteriaSection />
-      <FAQSection />
       <SponsorsSection />
+      <FAQSection />
       <CTASection />
-      {/* <div id="contact">
-        <ContactForm />
-      </div> */}
       <Footer />
     </main>
   );
