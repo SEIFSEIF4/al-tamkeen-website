@@ -40,7 +40,9 @@ export function Header() {
       "stages",
       "benefits",
       "outputs",
-      "contact",
+      "criteria",
+      "faq",
+      // "contact",
     ];
 
     sections.forEach((id) => {
@@ -59,8 +61,10 @@ export function Header() {
     { href: "#hero", label: "الرئيسية" },
     { href: "#benefits", label: "المميزات" },
     { href: "#stages", label: "مراحل البرنامج" },
-    { href: "#outputs", label: "المخرجات" },
-    { href: "#contact", label: "تواصل معنا" },
+    { href: "#outputs", label: "المخرج الأخير" },
+    { href: "#criteria", label: "معايير القبول" },
+    { href: "#faq", label: "الأسئلة الشائعة" },
+    // { href: "#contact", label: "تواصل معنا" },
   ];
 
   return (
@@ -143,7 +147,7 @@ export function Header() {
               className={` px-6 py-2 rounded-full font-medium transition-all text-gray-700 hover:scale-105 cursor-pointer
                 ${isScrolled ? "bg-[#8FD2E3]" : "bg-white "}`}
             >
-              <Link href="#contact">سجل الآن</Link>
+              <Link href="#contact">قدم الآن</Link>
             </button>
           </div>
 
@@ -201,7 +205,7 @@ export function Header() {
               asChild
               className="mt-4 bg-[#4B3D90] hover:bg-[#4A3D82] text-white rounded-full"
             >
-              <Link href="#contact">سجل الآن</Link>
+              <Link href="#contact">قدم الآن</Link>
             </Button>
           </nav>
         </motion.div>

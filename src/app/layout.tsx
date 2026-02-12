@@ -1,6 +1,15 @@
 import type { Metadata } from "next";
+import { IBM_Plex_Sans_Arabic } from "next/font/google"; // Import the font
 import "./globals.css";
 import { LenisProvider } from "@/components/providers/lenis-provider";
+
+// Configure the font
+const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
+  subsets: ["arabic"],
+  weight: ["100", "200", "300", "400", "500", "600", "700"],
+  variable: "--font-ibm-plex-sans-arabic",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "التمكين الريادي للجمعيات الأهلية",
@@ -34,7 +43,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ar" dir="rtl">
-      <body className="antialiased">
+      <body className={`antialiased ${ibmPlexSansArabic.variable}`}>
         <LenisProvider>{children}</LenisProvider>
       </body>
     </html>

@@ -87,7 +87,7 @@ export function ContactForm() {
   return (
     <section
       id="contact"
-      className="section-padding bg-gradient-to-b from-gray-50 to-white relative overflow-hidden"
+      className="section-padding bg-liner-to-b from-gray-50 to-white relative overflow-hidden"
     >
       {/* Background decoration */}
       <div className="absolute inset-0">
@@ -101,7 +101,7 @@ export function ContactForm() {
           <MotionWrapper direction="right">
             <div className="mb-8">
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1E3A5F] mb-4">
-                سجل الآن
+                قدم الآن
               </h2>
               <h3 className="text-2xl md:text-3xl font-bold text-[#4B3D90] mb-6">
                 في برنامج التمكين الريادي
@@ -253,7 +253,7 @@ export function ContactForm() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -40 }}
             transition={{ duration: 0.3 }}
-            className="fixed top-6 left-1/2 -translate-x-1/2 z-[100] w-[90%] max-w-md"
+            className="fixed top-6 left-1/2 -translate-x-1/2 z-100 w-[90%] max-w-md"
           >
             <div
               className={`rounded-2xl px-6 py-4 shadow-2xl text-center text-lg font-medium ${
