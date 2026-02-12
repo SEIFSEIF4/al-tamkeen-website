@@ -13,7 +13,10 @@ const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://y-mu-lac.vercel.app/"),
-  title: "التمكين الريادي للجمعيات الأهلية",
+  title: {
+    default: "التمكين الريادي للجمعيات الأهلية",
+    template: "%s | التمكين الريادي",
+  },
   description:
     "برنامج التمكين الريادي للجمعيات الأهلية هو أول برنامج وطني يُمكّن الجمعيات من تحويل رسالتها الاجتماعية إلى شركات ناشئة مستدامة",
   keywords: [
@@ -44,6 +47,7 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: "/logo.svg",
+    shortcut: "/logo.svg",
     apple: "/logo.svg",
   },
 };
