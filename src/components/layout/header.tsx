@@ -5,14 +5,16 @@ import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 
-export function Header() {
+export function Header({ sticky = false }: { sticky?: boolean }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("#hero");
 
   useEffect(() => {
+    if (sticky) return;
+
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 100);
     };
 
     // Intersection Observer for active section highlighting
@@ -67,12 +69,16 @@ export function Header() {
     // { href: "/#contact", label: "تواصل معنا" },
   ];
 
+  const positionClass = sticky
+    ? "absolute top-0 right-0 left-0"
+    : "fixed top-0 right-0 left-0";
+
   return (
     <motion.header
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
+      initial={sticky ? false : { y: -100 }}
+      animate={sticky ? false : { y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className={`fixed top-0 right-0 left-0 z-50 transition-all duration-300 ${
+      className={`${positionClass} z-50 transition-all duration-300 ${
         isScrolled || isMobileMenuOpen
           ? "bg-white/90 backdrop-blur-md shadow-lg"
           : "bg-transparent"
@@ -84,39 +90,21 @@ export function Header() {
           <Link href="/" className="flex items-center gap-3">
             {/* Al-Tamkeen Logo */}
             <div className="flex items-center gap-2">
-              <div className="w-9 h-9 rounded-lg flex items-center justify-center overflow-hidden">
+              <div className="h-18 w-auto flex items-center justify-center">
                 <img
-                  src="/logo.svg"
+                  src={
+                    isScrolled || isMobileMenuOpen
+                      ? "/tamkeen.svg"
+                      : "/tamkeen_white.svg"
+                  }
                   alt="Logo"
-                  className="w-full h-full object-contain"
+                  className="h-full w-auto object-contain"
                   onError={(e) => {
                     e.currentTarget.style.display = "none";
                   }}
                 />
               </div>
-              <div className="flex flex-col">
-                <span
-                  className={`font-bold text-sm leading-tight ${isScrolled || isMobileMenuOpen ? "text-[#4B3D90]" : "text-white"}`}
-                >
-                  التمكين الريادي
-                </span>
-                <span className="text-[10px] text-[#8FD2E3] leading-tight">
-                  للجمعيات الأهلية
-                </span>
-              </div>
             </div>
-
-            {/* Divider */}
-            <div
-              className={`hidden md:block w-px h-8 ${isScrolled || isMobileMenuOpen ? "bg-gray-300" : "bg-white/30"}`}
-            />
-
-            {/* Riyadah Logo */}
-            <img
-              src="/Riyadah Hor -Dark BG V.png"
-              alt="Riyadah"
-              className="hidden md:block h-16 w-auto object-contain"
-            />
           </Link>
 
           {/* Desktop Navigation */}

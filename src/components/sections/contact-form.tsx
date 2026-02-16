@@ -17,7 +17,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { supabase } from "@/lib/supabase";
-import { Loader2, Upload, X, Send } from "lucide-react";
+import { Loader2, Upload, X, Send, Check } from "lucide-react";
 
 // Convert Arabic/Persian numerals to Latin
 function toLatinNumbers(str: string): string {
@@ -109,6 +109,14 @@ const stepFields: Record<number, (keyof ContactFormValues)[]> = {
 
 const TOTAL_STEPS = 5;
 
+const stepLabels = [
+  "البيانات التعريفية",
+  "القدرات المؤسسية",
+  "الموارد والأصول",
+  "الجاهزية الريادية",
+  "الالتزام الإداري",
+];
+
 const stepTitles = [
   "أولاً: البيانات التعريفية",
   "ثانياً: القدرات المؤسسية والحوكمة",
@@ -122,6 +130,9 @@ type ToastState = {
   message: string;
 } | null;
 
+// Step status: "untouched" | "valid" | "invalid"
+type StepStatus = "untouched" | "valid" | "invalid";
+
 const inputClass =
   "h-12 rounded-xl border-gray-200 focus:border-[#4B3D90] focus:ring-[#4B3D90] text-base w-full px-4";
 const textareaClass =
@@ -133,6 +144,13 @@ export function ContactForm() {
   const [toastState, setToastState] = useState<ToastState>(null);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [stepStatuses, setStepStatuses] = useState<Record<number, StepStatus>>({
+    1: "untouched",
+    2: "untouched",
+    3: "untouched",
+    4: "untouched",
+    5: "untouched",
+  });
 
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
@@ -177,25 +195,115 @@ export function ContactForm() {
     setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const nextStep = async () => {
-    const fields = stepFields[currentStep];
+  // Validate a specific step and update its status
+  const validateStepStatus = async (step: number): Promise<boolean> => {
+    const fields = stepFields[step];
     const isValid = await form.trigger(fields);
+    setStepStatuses((prev) => ({
+      ...prev,
+      [step]: isValid ? "valid" : "invalid",
+    }));
+    return isValid;
+  };
+
+  // Navigate to any step — validate current step first to update indicator
+  const goToStep = async (targetStep: number) => {
+    if (targetStep === currentStep) return;
+    // Validate and update status of the step we're leaving
+    await validateStepStatus(currentStep);
+    setCurrentStep(targetStep);
+  };
+
+  const nextStep = async () => {
+    const isValid = await validateStepStatus(currentStep);
     if (isValid) {
       setCurrentStep((prev) => Math.min(prev + 1, TOTAL_STEPS));
     }
   };
 
-  const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 1));
+  const prevStep = async () => {
+    await validateStepStatus(currentStep);
+    setCurrentStep((prev) => Math.max(prev - 1, 1));
+  };
 
+  // ─── Upload files to Supabase Storage ──────────────────────
+  const uploadFiles = async (): Promise<string[]> => {
+    const urls: string[] = [];
+    for (const file of selectedFiles) {
+      const timestamp = Date.now();
+      const safeName = file.name.replace(/[^a-zA-Z0-9.\u0600-\u06FF_-]/g, "_");
+      const filePath = `submissions/${timestamp}_${safeName}`;
+
+      const { error } = await supabase.storage
+        .from("registrations")
+        .upload(filePath, file);
+
+      if (error) {
+        console.error("File upload error:", error);
+        continue;
+      }
+
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from("registrations").getPublicUrl(filePath);
+
+      urls.push(publicUrl);
+    }
+    return urls;
+  };
+
+  // ─── Submit Handler ─────────────────────────────────────────
   async function onSubmit(data: ContactFormValues) {
     setIsSubmitting(true);
     setToastState({ type: "loading", message: "جاري إرسال طلبك..." });
 
     try {
+      // Upload files first
+      let fileUrls: string[] = [];
+      if (selectedFiles.length > 0) {
+        fileUrls = await uploadFiles();
+      }
+
+      // Insert all form data
       const { error } = await supabase.from("registrations").insert([
         {
           user_name: data.contactPerson,
           phone_number: data.licenseNumber,
+          form_data: {
+            // Section 1
+            association_name: data.associationName,
+            license_number: data.licenseNumber,
+            founding_date: data.foundingDate,
+            geographic_location: data.geographicLocation,
+            service_scope: data.serviceScope,
+            headquarters_address: data.headquartersAddress,
+            social_media_links: data.socialMediaLinks,
+            // Section 2
+            full_time_employees: data.fullTimeEmployees,
+            has_executive_director: data.hasExecutiveDirector,
+            has_strategic_plan: data.hasStrategicPlan,
+            governance_score: data.governanceScore,
+            average_budget: data.averageBudget,
+            awards_and_certificates: data.awardsAndCertificates,
+            has_performance_reports: data.hasPerformanceReports,
+            top_partnerships: data.topPartnerships,
+            // Section 3
+            physical_assets: data.physicalAssets,
+            specialized_expertise: data.specializedExpertise,
+            database_size: data.databaseSize,
+            has_investment_unit: data.hasInvestmentUnit,
+            // Section 4
+            startup_reasons: data.startupReasons,
+            main_goal: data.mainGoal,
+            market_gaps: data.marketGaps,
+            // Section 5
+            contact_person: data.contactPerson,
+            board_approval: data.boardApproval,
+            dedicated_team: data.dedicatedTeam,
+            final_aspirations: data.finalAspirations,
+            // Files
+            file_urls: fileUrls,
+          },
         },
       ]);
 
@@ -208,6 +316,13 @@ export function ContactForm() {
       form.reset();
       setSelectedFiles([]);
       setCurrentStep(1);
+      setStepStatuses({
+        1: "untouched",
+        2: "untouched",
+        3: "untouched",
+        4: "untouched",
+        5: "untouched",
+      });
     } catch {
       setToastState({
         type: "error",
@@ -330,6 +445,22 @@ export function ContactForm() {
     />
   );
 
+  // ─── Step Indicator Component ──────────────────────────────
+  const getStepIndicatorColor = (step: number) => {
+    if (step === currentStep) return "bg-[#4B3D90] text-white border-[#4B3D90]";
+    if (stepStatuses[step] === "valid")
+      return "bg-emerald-500 text-white border-emerald-500";
+    if (stepStatuses[step] === "invalid")
+      return "bg-red-500 text-white border-red-500";
+    return "bg-gray-100 text-gray-400 border-gray-200";
+  };
+
+  const getConnectorColor = (step: number) => {
+    if (stepStatuses[step] === "valid") return "bg-emerald-400";
+    if (stepStatuses[step] === "invalid") return "bg-red-300";
+    return "bg-gray-200";
+  };
+
   return (
     <section
       id="contact"
@@ -337,37 +468,70 @@ export function ContactForm() {
     >
       <div className="container max-w-4xl mx-auto px-4 md:px-8 lg:px-16 relative z-10">
         <div className="bg-white rounded-[1.5rem] overflow-hidden max-w-5xl mx-auto flex flex-col">
-          <div className="p-8 md:p-12 flex flex-col flex-1">
-            {/* Steps Progress Indicator */}
+          <div className="p-8 flex flex-col flex-1">
+            {/* Title */}
+            <div className="mb-6">
+              <h2 className="text-2xl font-bold text-[#1E3A5F]">
+                نموذج التقديم
+              </h2>
+              <p className="text-gray-500 text-sm mt-1">
+                {stepTitles[currentStep - 1]}
+              </p>
+            </div>
+
+            {/* ─── Clickable Step Indicators ─── */}
             <div className="mb-8">
-              <div className="flex justify-between items-end mb-4">
-                <div>
-                  <h2 className="text-2xl font-bold text-[#1E3A5F]">
-                    نموذج التقديم
-                  </h2>
-                  <p className="text-gray-500 text-sm mt-1">
-                    {stepTitles[currentStep - 1]}
-                  </p>
-                </div>
-                <span className="text-sm font-bold text-[#5D9FDD] bg-[#5D9FDD]/5 px-4 py-1.5 rounded-full border border-[#5D9FDD]/10">
-                  خطوة {currentStep} من {TOTAL_STEPS}
-                </span>
-              </div>
-              <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                <motion.div
-                  initial={false}
-                  animate={{
-                    width: `${(currentStep / TOTAL_STEPS) * 100}%`,
-                  }}
-                  className="h-full bg-[#4B3D90]"
-                />
+              <div className="flex items-center justify-between" dir="rtl">
+                {Array.from({ length: TOTAL_STEPS }, (_, i) => i + 1).map(
+                  (step) => (
+                    <div
+                      key={step}
+                      className="flex items-center flex-1 last:flex-none"
+                    >
+                      {/* Step Circle */}
+                      <button
+                        type="button"
+                        onClick={() => goToStep(step)}
+                        className={`relative flex-shrink-0 w-10 h-10 rounded-full border-2 flex items-center justify-center font-bold text-sm transition-all duration-300 cursor-pointer hover:scale-110 ${getStepIndicatorColor(step)}`}
+                      >
+                        {stepStatuses[step] === "valid" &&
+                        step !== currentStep ? (
+                          <Check className="w-5 h-5" />
+                        ) : (
+                          step
+                        )}
+                        {/* Label below */}
+                        <span
+                          className={`absolute -bottom-7 whitespace-nowrap text-[10px] font-bold ${
+                            step === currentStep
+                              ? "text-[#4B3D90]"
+                              : stepStatuses[step] === "valid"
+                                ? "text-emerald-600"
+                                : stepStatuses[step] === "invalid"
+                                  ? "text-red-500"
+                                  : "text-gray-400"
+                          }`}
+                        >
+                          {stepLabels[step - 1]}
+                        </span>
+                      </button>
+
+                      {/* Connector Line */}
+                      {step < TOTAL_STEPS && (
+                        <div
+                          className={`flex-1 h-0.5 mx-1 rounded-full transition-colors duration-300 ${getConnectorColor(step)}`}
+                        />
+                      )}
+                    </div>
+                  ),
+                )}
               </div>
             </div>
 
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="flex-1 flex flex-col justify-between"
+                className="flex-1 flex flex-col justify-between mt-6"
               >
                 <div className="relative min-h-[400px]">
                   <AnimatePresence mode="wait">
@@ -592,7 +756,10 @@ export function ContactForm() {
                                 label: "ابتكار حل تقني للمشكلة الاجتماعية",
                                 value: "ابتكار حل تقني للمشكلة الاجتماعية",
                               },
-                              { label: "جميع ما سبق", value: "جميع ما سبق" },
+                              {
+                                label: "جميع ما سبق",
+                                value: "جميع ما سبق",
+                              },
                             ],
                           )}
                           {renderTextarea(

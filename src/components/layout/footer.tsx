@@ -4,45 +4,24 @@ import Link from "next/link";
 
 export function Footer() {
   return (
-    <footer className="bg-[#4B3D90] text-white">
-      <div className="container mx-auto px-4 md:px-8 py-8">
-        <div className="flex flex-col-reverse w-full lg:flex-row justify-start items-center lg:items-start gap-12">
-          {/* Right Side: Logo */}
-          <div className="flex flex-col md:w-1/4 w-full items-start justify-start ">
-            <Link href="/" className="flex items-center gap-4">
-              {/* Al-Tamkeen Logo */}
-              <div className="flex items-center gap-2">
-                <div className="flex flex-col items-end">
-                  <h2 className="text-xl font-bold leading-tight">التمكين</h2>
-                  <h2 className="text-xl font-bold leading-tight">الريادي</h2>
-                  <span className="text-[10px] text-[#8FD2E3] tracking-wider mt-0.5">
-                    للجمعيــات الأهليــة
-                  </span>
-                </div>
-                <div className="w-10 h-10 relative flex items-center justify-center">
-                  <img
-                    src="/logo.svg"
-                    alt="Logo"
-                    className="w-full h-full object-contain"
-                  />
-                </div>
-              </div>
-
-              {/* Divider */}
-              <div className="w-px h-10 bg-white/20" />
-
-              {/* Riyadah Logo */}
+    <footer className="bg-[#4B3D90] text-white" dir="rtl">
+      {/* Main Footer */}
+      <div className="container mx-auto px-4 md:px-8 py-10">
+        <div className="flex flex-col-reverse lg:flex-row justify-between items-center lg:items-start gap-10">
+          {/* Logo */}
+          <div className="flex-shrink-0">
+            <Link href="/">
               <img
-                src="/Riyadah Hor -Dark BG V.png"
-                alt="Riyadah"
-                className="h-16 w-auto object-contain"
+                src="/tamkeen_white.svg"
+                alt="التمكين الريادي"
+                className="h-24 w-auto object-contain"
               />
             </Link>
           </div>
 
           {/* Navigation Links */}
-          <div className="flex flex-wrap md:w-3/4 w-full justify-end items-start gap-x-16 gap-y-8 text-left lg:text-right">
-            <div className="flex flex-col gap-4 text-white/90 font-medium">
+          <div className="flex flex-wrap justify-center lg:justify-start gap-x-16 gap-y-6 text-right">
+            <div className="flex flex-col gap-3 text-white/90 font-medium">
               <Link
                 href="/#hero"
                 className="hover:text-[#8FD2E3] transition-colors"
@@ -55,22 +34,14 @@ export function Footer() {
               >
                 فكرة البرنامج
               </Link>
-            </div>
-            <div className="flex flex-col gap-4 text-white/90 font-medium">
               <Link
                 href="/#stages"
                 className="hover:text-[#8FD2E3] transition-colors"
               >
                 مراحل البرنامج
               </Link>
-              <Link
-                href="/#benefits"
-                className="hover:text-[#8FD2E3] transition-colors"
-              >
-                المميزات
-              </Link>
             </div>
-            <div className="flex flex-col gap-4 text-white/90 font-medium">
+            <div className="flex flex-col gap-3 text-white/90 font-medium">
               <Link
                 href="/#outputs"
                 className="hover:text-[#8FD2E3] transition-colors"
@@ -83,23 +54,28 @@ export function Footer() {
               >
                 معايير القبول
               </Link>
-            </div>
-            <div className="flex flex-col gap-4 text-white/90 font-medium">
               <Link
                 href="/#faq"
                 className="hover:text-[#8FD2E3] transition-colors"
               >
-                أسئلة شائعة
-              </Link>
-
-              <Link
-                href="/#contact"
-                className="hover:text-[#8FD2E3] transition-colors"
-              >
-                تواصل معنا
+                الأسئلة الشائعة
               </Link>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Bottom Bar */}
+      <div className="border-t border-white/15">
+        <div className="container mx-auto px-4 md:px-8 py-5 flex flex-col-reverse md:flex-row justify-between items-center gap-4">
+          <img
+            src="/ryadah_white.svg"
+            alt="الريادة الاجتماعية"
+            className="h-10 w-auto object-contain"
+          />
+          <p className="text-white/70 text-sm">
+            جميع الحقوق محفوظة للريادة الاجتماعية © {new Date().getFullYear()}.
+          </p>
         </div>
       </div>
     </footer>
