@@ -16,20 +16,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { MotionWrapper } from "@/components/ui/motion-wrapper";
 import { supabase } from "@/lib/supabase";
-import {
-  Loader2,
-  Upload,
-  X,
-  MapPin,
-  Mail,
-  Phone,
-  Globe,
-  Instagram,
-  Send,
-  Clipboard,
-} from "lucide-react";
+import { Loader2, Upload, X, Send } from "lucide-react";
 
 // Convert Arabic/Persian numerals to Latin
 function toLatinNumbers(str: string): string {
@@ -38,31 +26,106 @@ function toLatinNumbers(str: string): string {
     .replace(/[۰-۹]/g, (d) => String("0123456789"["۰۱۲۳۴۵۶۷۸۹".indexOf(d)]));
 }
 
+// ─── Zod Schema ───────────────────────────────────────────────
 const contactFormSchema = z.object({
-  userName: z.string().min(2, {
-    message: "يرجى إدخال اسمك الكريم (حرفين على الأقل)",
-  }),
-  phoneNumber: z.string().min(10, {
-    message: "يرجى إدخال رقم هاتف صحيح",
-  }),
-  associationName: z.string().min(2, {
-    message: "يرجى إدخال اسم الجمعية",
-  }),
-  city: z.string().min(2, {
-    message: "يرجى إدخال المدينة",
-  }),
-  motivation: z.string().min(10, {
-    message: "يرجى كتابة نبذة عن دافعك للانضمام (10 حروف على الأقل)",
-  }),
-  files: z.any().optional(),
+  // Section 1 - البيانات التعريفية
+  associationName: z
+    .string()
+    .min(2, "يرجى إدخال اسم الجمعية (حرفين على الأقل)"),
+  licenseNumber: z
+    .string()
+    .min(1, "يرجى إدخال رقم ترخيص الجمعية")
+    .regex(/^[0-9٠-٩۰-۹]+$/, "يرجى إدخال أرقام فقط"),
+  foundingDate: z.string().optional(),
+  geographicLocation: z.string().min(2, "يرجى إدخال الموقع الجغرافي للجمعية"),
+  serviceScope: z.string().optional(),
+  headquartersAddress: z.string().optional(),
+  socialMediaLinks: z.string().optional(),
+
+  // Section 2 - القدرات المؤسسية والحوكمة
+  fullTimeEmployees: z.string().min(1, "يرجى إدخال عدد الموظفين"),
+  hasExecutiveDirector: z.string().min(1, "يرجى اختيار إجابة"),
+  hasStrategicPlan: z.string().min(1, "يرجى اختيار إجابة"),
+  governanceScore: z.string().optional(),
+  averageBudget: z.string().optional(),
+  awardsAndCertificates: z.string().optional(),
+  hasPerformanceReports: z.string().min(1, "يرجى اختيار إجابة"),
+  topPartnerships: z.string().optional(),
+
+  // Section 3 - الموارد والأصول المتاحة
+  physicalAssets: z
+    .string()
+    .min(5, "يرجى وصف الأصول المادية (5 حروف على الأقل)"),
+  specializedExpertise: z
+    .string()
+    .min(5, "يرجى وصف الخبرات التخصصية (5 حروف على الأقل)"),
+  databaseSize: z.string().optional(),
+  hasInvestmentUnit: z.string().min(1, "يرجى اختيار إجابة"),
+
+  // Section 4 - الجاهزية والتوجه الريادي
+  startupReasons: z.string().min(10, "يرجى ذكر الأسباب (10 حروف على الأقل)"),
+  mainGoal: z.string().min(1, "يرجى اختيار الهدف الرئيسي"),
+  marketGaps: z.string().min(10, "يرجى وصف الفجوات (10 حروف على الأقل)"),
+
+  // Section 5 - الالتزام والقرار الإداري
+  contactPerson: z.string().min(2, "يرجى إدخال اسم ضابط الاتصال"),
+  boardApproval: z.string().min(1, "يرجى اختيار إجابة"),
+  dedicatedTeam: z.string().min(1, "يرجى اختيار إجابة"),
+  finalAspirations: z.string().min(10, "يرجى وصف تطلعاتكم (10 حروف على الأقل)"),
 });
 
 type ContactFormValues = z.infer<typeof contactFormSchema>;
+
+// Fields to validate per step
+const stepFields: Record<number, (keyof ContactFormValues)[]> = {
+  1: [
+    "associationName",
+    "licenseNumber",
+    "foundingDate",
+    "geographicLocation",
+    "serviceScope",
+    "headquartersAddress",
+    "socialMediaLinks",
+  ],
+  2: [
+    "fullTimeEmployees",
+    "hasExecutiveDirector",
+    "hasStrategicPlan",
+    "governanceScore",
+    "averageBudget",
+    "awardsAndCertificates",
+    "hasPerformanceReports",
+    "topPartnerships",
+  ],
+  3: [
+    "physicalAssets",
+    "specializedExpertise",
+    "databaseSize",
+    "hasInvestmentUnit",
+  ],
+  4: ["startupReasons", "mainGoal", "marketGaps"],
+  5: ["contactPerson", "boardApproval", "dedicatedTeam", "finalAspirations"],
+};
+
+const TOTAL_STEPS = 5;
+
+const stepTitles = [
+  "أولاً: البيانات التعريفية",
+  "ثانياً: القدرات المؤسسية والحوكمة",
+  "ثالثاً: الموارد والأصول المتاحة",
+  "رابعاً: الجاهزية والتوجه الريادي",
+  "خامساً: الالتزام والقرار الإداري",
+];
 
 type ToastState = {
   type: "success" | "error" | "loading";
   message: string;
 } | null;
+
+const inputClass =
+  "h-12 rounded-xl border-gray-200 focus:border-[#4B3D90] focus:ring-[#4B3D90] text-base w-full px-4";
+const textareaClass =
+  "min-h-[120px] rounded-xl border-gray-200 focus:border-[#4B3D90] focus:ring-[#4B3D90] resize-none text-base p-4 leading-relaxed w-full";
 
 export function ContactForm() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -74,18 +137,39 @@ export function ContactForm() {
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
     defaultValues: {
-      userName: "",
-      phoneNumber: "",
       associationName: "",
-      city: "",
-      motivation: "",
+      licenseNumber: "",
+      foundingDate: "",
+      geographicLocation: "",
+      serviceScope: "",
+      headquartersAddress: "",
+      socialMediaLinks: "",
+      fullTimeEmployees: "",
+      hasExecutiveDirector: "",
+      hasStrategicPlan: "",
+      governanceScore: "",
+      averageBudget: "",
+      awardsAndCertificates: "",
+      hasPerformanceReports: "",
+      topPartnerships: "",
+      physicalAssets: "",
+      specializedExpertise: "",
+      databaseSize: "",
+      hasInvestmentUnit: "",
+      startupReasons: "",
+      mainGoal: "",
+      marketGaps: "",
+      contactPerson: "",
+      boardApproval: "",
+      dedicatedTeam: "",
+      finalAspirations: "",
     },
+    mode: "onTouched",
   });
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      const files = Array.from(e.target.files);
-      setSelectedFiles((prev) => [...prev, ...files]);
+      setSelectedFiles((prev) => [...prev, ...Array.from(e.target.files!)]);
     }
   };
 
@@ -94,14 +178,10 @@ export function ContactForm() {
   };
 
   const nextStep = async () => {
-    let fieldsToValidate: (keyof ContactFormValues)[] = [];
-    if (currentStep === 1) fieldsToValidate = ["userName", "phoneNumber"];
-    if (currentStep === 2) fieldsToValidate = ["associationName", "city"];
-    if (currentStep === 3) fieldsToValidate = ["motivation"];
-
-    const isValid = await form.trigger(fieldsToValidate);
+    const fields = stepFields[currentStep];
+    const isValid = await form.trigger(fields);
     if (isValid) {
-      setCurrentStep((prev) => Math.min(prev + 1, 3));
+      setCurrentStep((prev) => Math.min(prev + 1, TOTAL_STEPS));
     }
   };
 
@@ -114,9 +194,8 @@ export function ContactForm() {
     try {
       const { error } = await supabase.from("registrations").insert([
         {
-          user_name: data.userName,
-          phone_number: data.phoneNumber,
-          // metadata could include other fields if updated in DB
+          user_name: data.contactPerson,
+          phone_number: data.licenseNumber,
         },
       ]);
 
@@ -124,7 +203,7 @@ export function ContactForm() {
 
       setToastState({
         type: "success",
-        message: `شكراً لك يا ${data.userName}، تم استلام طلبك بنجاح!`,
+        message: "شكراً لكم، تم استلام طلبكم بنجاح!",
       });
       form.reset();
       setSelectedFiles([]);
@@ -140,11 +219,116 @@ export function ContactForm() {
     }
   }
 
-  const steps = [
-    { id: 1, title: "المعلومات والملفات" },
-    { id: 2, title: "تفاصيل الجمعية" },
-    { id: 3, title: "الدافع للمشاركة" },
-  ];
+  // ─── Reusable Field Renderers ──────────────────────────────────
+
+  const renderInput = (
+    name: keyof ContactFormValues,
+    label: string,
+    placeholder: string,
+    options?: { type?: string; dir?: string; numeric?: boolean },
+  ) => (
+    <FormField
+      control={form.control}
+      name={name}
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel className="text-[#1E3A5F] font-bold text-sm">
+            {label}
+          </FormLabel>
+          <FormControl>
+            <Input
+              type={options?.type || "text"}
+              inputMode={options?.numeric ? "numeric" : undefined}
+              placeholder={placeholder}
+              className={inputClass}
+              dir={options?.dir || (options?.numeric ? "ltr" : undefined)}
+              {...field}
+              onChange={(e) => {
+                let val = e.target.value;
+                if (options?.numeric) {
+                  val = val.replace(/[^0-9٠-٩۰-۹]/g, "");
+                }
+                if (options?.type === "tel") {
+                  val = toLatinNumbers(val);
+                }
+                field.onChange(val);
+              }}
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
+
+  const renderTextarea = (
+    name: keyof ContactFormValues,
+    label: string,
+    placeholder: string,
+  ) => (
+    <FormField
+      control={form.control}
+      name={name}
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel className="text-[#1E3A5F] font-bold text-sm">
+            {label}
+          </FormLabel>
+          <FormControl>
+            <Textarea
+              placeholder={placeholder}
+              className={textareaClass}
+              {...field}
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
+
+  const renderRadio = (
+    name: keyof ContactFormValues,
+    label: string,
+    options: { label: string; value: string }[],
+  ) => (
+    <FormField
+      control={form.control}
+      name={name}
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel className="text-[#1E3A5F] font-bold text-sm">
+            {label}
+          </FormLabel>
+          <FormControl>
+            <div className="space-y-2 mt-1">
+              {options.map((opt) => (
+                <label
+                  key={opt.value}
+                  className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${
+                    field.value === opt.value
+                      ? "border-[#4B3D90] bg-[#4B3D90]/5"
+                      : "border-gray-200 hover:border-gray-300"
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name={name}
+                    value={opt.value}
+                    checked={field.value === opt.value}
+                    onChange={() => field.onChange(opt.value)}
+                    className="accent-[#4B3D90] w-4 h-4"
+                  />
+                  <span className="text-sm text-gray-700">{opt.label}</span>
+                </label>
+              ))}
+            </div>
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
 
   return (
     <section
@@ -152,28 +336,30 @@ export function ContactForm() {
       className="flex-1 flex items-center py-12 bg-[#4B3D90] relative overflow-hidden"
     >
       <div className="container max-w-4xl mx-auto px-4 md:px-8 lg:px-16 relative z-10">
-        <div className="bg-white rounded-[1.5rem] shadow-2xl overflow-hidden max-w-5xl mx-auto min-h-[600px] flex flex-col">
+        <div className="bg-white rounded-[1.5rem] overflow-hidden max-w-5xl mx-auto flex flex-col">
           <div className="p-8 md:p-12 flex flex-col flex-1">
             {/* Steps Progress Indicator */}
-            <div className="mb-10">
+            <div className="mb-8">
               <div className="flex justify-between items-end mb-4">
                 <div>
                   <h2 className="text-2xl font-bold text-[#1E3A5F]">
                     نموذج التقديم
                   </h2>
                   <p className="text-gray-500 text-sm mt-1">
-                    {steps[currentStep - 1].title}
+                    {stepTitles[currentStep - 1]}
                   </p>
                 </div>
                 <span className="text-sm font-bold text-[#5D9FDD] bg-[#5D9FDD]/5 px-4 py-1.5 rounded-full border border-[#5D9FDD]/10">
-                  خطوة {currentStep} من 3
+                  خطوة {currentStep} من {TOTAL_STEPS}
                 </span>
               </div>
               <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
                 <motion.div
                   initial={false}
-                  animate={{ width: `${(currentStep / 3) * 100}%` }}
-                  className="h-full bg-linear-to-l from-[#4B3D90] to-[#5D9FDD]"
+                  animate={{
+                    width: `${(currentStep / TOTAL_STEPS) * 100}%`,
+                  }}
+                  className="h-full bg-[#4B3D90]"
                 />
               </div>
             </div>
@@ -183,7 +369,7 @@ export function ContactForm() {
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="flex-1 flex flex-col justify-between"
               >
-                <div className="relative min-h-[300px]">
+                <div className="relative min-h-[400px]">
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={currentStep}
@@ -191,84 +377,154 @@ export function ContactForm() {
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: -20 }}
                       transition={{ duration: 0.3, ease: "easeOut" }}
-                      className="space-y-6"
+                      className="space-y-5"
                     >
+                      {/* ─── Step 1: البيانات التعريفية ─── */}
                       {currentStep === 1 && (
-                        <div className="grid gap-6">
-                          <FormField
-                            control={form.control}
-                            name="userName"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel className="text-[#1E3A5F] font-bold">
-                                  الاسم الرباعي{" "}
-                                  <span className="text-red-500">*</span>
-                                </FormLabel>
-                                <FormControl>
-                                  <Input
-                                    placeholder="أدخل الاسم الرباعي"
-                                    className="h-14 rounded-2xl border-gray-200 focus:border-[#4B3D90] focus:ring-[#4B3D90] text-lg"
-                                    {...field}
-                                  />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                          <FormField
-                            control={form.control}
-                            name="phoneNumber"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel className="text-[#1E3A5F] font-bold">
-                                  رقم الجوال{" "}
-                                  <span className="text-red-500">*</span>
-                                </FormLabel>
-                                <FormControl>
-                                  <div className="relative group">
-                                    <div
-                                      className="absolute left-0 top-0 h-full px-5 flex items-center bg-gray-50 border-r border-gray-200 rounded-l-2xl text-gray-500 font-sans font-medium"
-                                      dir="ltr"
-                                    >
-                                      +966
-                                    </div>
-                                    <Input
-                                      type="tel"
-                                      inputMode="numeric"
-                                      placeholder="5X XXX XXXX"
-                                      className="h-14 pl-24 rounded-2xl border-gray-200 focus:border-[#4B3D90] focus:ring-[#4B3D90] font-sans text-xl"
-                                      dir="ltr"
-                                      {...field}
-                                      onChange={(e) =>
-                                        field.onChange(
-                                          toLatinNumbers(e.target.value),
-                                        )
-                                      }
-                                    />
-                                  </div>
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
+                        <div className="grid gap-5">
+                          {renderInput(
+                            "associationName",
+                            "1. اسم الجمعية *",
+                            "أدخل اسم الجمعية",
+                          )}
+                          {renderInput(
+                            "licenseNumber",
+                            "2. رقم ترخيص الجمعية *",
+                            "أدخل رقم الترخيص",
+                            { numeric: true },
+                          )}
+                          {renderInput("foundingDate", "3. تاريخ التأسيس", "", {
+                            type: "date",
+                          })}
+                          {renderInput(
+                            "geographicLocation",
+                            "4. الموقع الجغرافي للجمعية (المنطقة والمدينة) *",
+                            "مثال: منطقة الرياض - مدينة الرياض",
+                          )}
+                          {renderInput(
+                            "serviceScope",
+                            "5. النطاق الجغرافي لخدمات الجمعية",
+                            "محلي / إقليمي / وطني",
+                          )}
+                          {renderInput(
+                            "headquartersAddress",
+                            "6. عنوان المقر الرئيسي للجمعية",
+                            "أدخل العنوان التفصيلي",
+                          )}
+                          {renderTextarea(
+                            "socialMediaLinks",
+                            "7. حسابات التواصل الاجتماعي والموقع الإلكتروني",
+                            "أدخل روابط حسابات التواصل الاجتماعي والموقع الإلكتروني",
+                          )}
+                        </div>
+                      )}
 
-                          {/* File Upload Section - NOW IN STEP 1 */}
-                          <div className="space-y-4 pt-2">
-                            <FormLabel className="text-[#1E3A5F] font-bold">
-                              المرفقات والوثائق
-                            </FormLabel>
+                      {/* ─── Step 2: القدرات المؤسسية والحوكمة ─── */}
+                      {currentStep === 2 && (
+                        <div className="grid gap-5">
+                          {renderInput(
+                            "fullTimeEmployees",
+                            "8. عدد الموظفين المتفرغين في الجمعية *",
+                            "مثال: 50 أو 50-100",
+                          )}
+                          {renderRadio(
+                            "hasExecutiveDirector",
+                            "9. هل يوجد مدير تنفيذي متفرغ للجمعية؟ *",
+                            [
+                              { label: "نعم", value: "نعم" },
+                              { label: "لا", value: "لا" },
+                            ],
+                          )}
+                          {renderRadio(
+                            "hasStrategicPlan",
+                            "10.  هل تمتلك الجمعية خطة استراتيجية معتمدة؟ (يرجى إرفاقها إن وجدت)*",
+                            [
+                              {
+                                label: "نعم (يرجى إرفاقها في المرفقات)",
+                                value: "نعم",
+                              },
+                              { label: "لا", value: "لا" },
+                            ],
+                          )}
+                          {renderInput(
+                            "governanceScore",
+                            "11. درجة الجمعية في آخر تقييم للحوكمة",
+                            "أدخل الدرجة",
+                            { numeric: true },
+                          )}
+                          {renderInput(
+                            "averageBudget",
+                            "12. متوسط الميزانية السنوية للجمعية في آخر ثلاث سنوات",
+                            "أدخل المبلغ التقريبي بالريال",
+                            { numeric: true },
+                          )}
+                          {renderTextarea(
+                            "awardsAndCertificates",
+                            "13. أهم الجوائز والشهادات التي حصلت عليها الجمعية",
+                            "اذكر أهم الجوائز والشهادات إن وجدت",
+                          )}
+                          {renderRadio(
+                            "hasPerformanceReports",
+                            "14. هل تتوفر تقارير الأداء السنوية والمالية لآخر عامين؟ *",
+                            [
+                              {
+                                label: "نعم (يرجى إرفاقها في المرفقات)",
+                                value: "نعم",
+                              },
+                              { label: "لا", value: "لا" },
+                            ],
+                          )}
+                          {renderTextarea(
+                            "topPartnerships",
+                            "15. اذكر أهم ثلاث شراكات استراتيجية للجمعية مع القطاع الخاص أو الجهات الحكومية",
+                            "اذكر أهم ثلاث شراكات مع القطاع الخاص أو الجهات الحكومية",
+                          )}
+                        </div>
+                      )}
+
+                      {/* ─── Step 3: الموارد والأصول المتاحة ─── */}
+                      {currentStep === 3 && (
+                        <div className="grid gap-5">
+                          {renderTextarea(
+                            "physicalAssets",
+                            "16. ما هي الأصول المادية التي تمتلكها الجمعية وتسمح بالاستفادة منها في مشاريع استثمارية؟ *",
+                            "صف الأصول المادية المتاحة",
+                          )}
+                          {renderTextarea(
+                            "specializedExpertise",
+                            "17. ما هي الخبرات التخصصية أو المعرفة الفنية التي تنفرد بها الجمعية في مجال عملها؟ *",
+                            "صف الخبرات التخصصية والمعرفة الفنية",
+                          )}
+                          {renderTextarea(
+                            "databaseSize",
+                            "18. حجم قاعدة البيانات التي تمتلكها الجمعية وتصنيف الفئات المستفيدة منها",
+                            "صف حجم قاعدة البيانات والفئات المستفيدة",
+                          )}
+                          {renderRadio(
+                            "hasInvestmentUnit",
+                            "19. هل تمتلك الجمعية وحدة استثمار أو إدارة تنمية موارد مالية مستقلة؟ *",
+                            [
+                              { label: "نعم", value: "نعم" },
+                              { label: "لا", value: "لا" },
+                            ],
+                          )}
+
+                          {/* File Upload */}
+                          <div className="space-y-3 pt-2">
+                            <label className="block text-[#1E3A5F] font-bold text-sm mb-1.5">
+                              المرفقات والوثائق (الخطة الاستراتيجية، تقارير
+                              الأداء، وغيرها)
+                            </label>
                             <div
                               onClick={() => fileInputRef.current?.click()}
-                              className="border-2 border-dashed border-gray-200 rounded-2xl p-6 flex flex-col items-center justify-center gap-3 cursor-pointer hover:border-[#5D9FDD] hover:bg-[#5D9FDD]/5 transition-all group"
+                              className="border-2 border-dashed border-gray-200 rounded-xl p-5 flex flex-col items-center justify-center gap-3 cursor-pointer hover:border-[#5D9FDD] hover:bg-[#5D9FDD]/5 transition-all group"
                             >
-                              <div className="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center group-hover:bg-[#5D9FDD]/20 transition-colors">
-                                <Upload className="w-6 h-6 text-gray-400 group-hover:text-[#5D9FDD]" />
+                              <div className="w-11 h-11 bg-gray-50 rounded-full flex items-center justify-center group-hover:bg-[#5D9FDD]/20 transition-colors">
+                                <Upload className="w-5 h-5 text-gray-400 group-hover:text-[#5D9FDD]" />
                               </div>
-                              <div className="text-center">
-                                <p className="font-bold text-[#1E3A5F] text-sm">
-                                  اضغط لرفع الملفات الوثائق
-                                </p>
-                              </div>
+                              <p className="font-bold text-[#1E3A5F] text-sm">
+                                اضغط لرفع الملفات والوثائق
+                              </p>
                               <input
                                 type="file"
                                 ref={fileInputRef}
@@ -312,94 +568,93 @@ export function ContactForm() {
                         </div>
                       )}
 
-                      {currentStep === 2 && (
-                        <div className="grid gap-6">
-                          <FormField
-                            control={form.control}
-                            name="associationName"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel className="text-[#1E3A5F] font-bold">
-                                  اسم الجمعية{" "}
-                                  <span className="text-red-500">*</span>
-                                </FormLabel>
-                                <FormControl>
-                                  <Input
-                                    placeholder="أدخل اسم الجمعية الخيرية"
-                                    className="h-14 rounded-2xl border-gray-200 focus:border-[#4B3D90] focus:ring-[#4B3D90] text-lg"
-                                    {...field}
-                                  />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                          <FormField
-                            control={form.control}
-                            name="city"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel className="text-[#1E3A5F] font-bold">
-                                  المدينة{" "}
-                                  <span className="text-red-500">*</span>
-                                </FormLabel>
-                                <FormControl>
-                                  <Input
-                                    placeholder="أدخل المدينة / المنطقة"
-                                    className="h-14 rounded-2xl border-gray-200 focus:border-[#4B3D90] focus:ring-[#4B3D90] text-lg"
-                                    {...field}
-                                  />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
+                      {/* ─── Step 4: الجاهزية والتوجه الريادي ─── */}
+                      {currentStep === 4 && (
+                        <div className="grid gap-5">
+                          {renderTextarea(
+                            "startupReasons",
+                            "20. ما هي الأسباب التي تدفع الجمعية للرغبة في تأسيس شركة ناشئة؟ *",
+                            "اذكر الأسباب والدوافع",
+                          )}
+                          {renderRadio(
+                            "mainGoal",
+                            "21. ما هو الهدف الرئيسي للجمعية من إنشاء هذه الشركة؟ *",
+                            [
+                              {
+                                label: "الاستدامة المالية للجمعية فقط",
+                                value: "الاستدامة المالية للجمعية فقط",
+                              },
+                              {
+                                label: "خلق فرص عمل للمستفيدين",
+                                value: "خلق فرص عمل للمستفيدين",
+                              },
+                              {
+                                label: "ابتكار حل تقني للمشكلة الاجتماعية",
+                                value: "ابتكار حل تقني للمشكلة الاجتماعية",
+                              },
+                              { label: "جميع ما سبق", value: "جميع ما سبق" },
+                            ],
+                          )}
+                          {renderTextarea(
+                            "marketGaps",
+                            "22. ما هي الفجوات التي تراها الجمعية في سوق العمل وترتبط بمجال تخصصها؟ *",
+                            "صف الفجوات في سوق العمل المرتبطة بتخصص الجمعية",
+                          )}
                         </div>
                       )}
 
-                      {currentStep === 3 && (
-                        <FormField
-                          control={form.control}
-                          name="motivation"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel className="text-[#1E3A5F] font-bold">
-                                لماذا ترغب في الانضمام للبرنامج؟{" "}
-                                <span className="text-red-500">*</span>
-                              </FormLabel>
-                              <FormControl>
-                                <Textarea
-                                  placeholder="اكتب نبذة مختصرة عن دافعك للمشاركة وكيف سيساهم البرنامج في تطوير جمعيتكم..."
-                                  className="min-h-[180px] rounded-2xl border-gray-200 focus:border-[#4B3D90] focus:ring-[#4B3D90] resize-none text-lg p-5 leading-relaxed"
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
+                      {/* ─── Step 5: الالتزام والقرار الإداري ─── */}
+                      {currentStep === 5 && (
+                        <div className="grid gap-5">
+                          {renderInput(
+                            "contactPerson",
+                            "23. اسم ضابط الاتصال المسؤول عن المتابعة في البرنامج *",
+                            "أدخل الاسم الكامل",
                           )}
-                        />
+                          {renderRadio(
+                            "boardApproval",
+                            '24. هل وافق مجلس الإدارة "مبدئياً" على فكرة تأسيس ذراع استثماري أو شركة مستقلة؟ *',
+                            [
+                              { label: "نعم", value: "نعم" },
+                              { label: "لا", value: "لا" },
+                            ],
+                          )}
+                          {renderRadio(
+                            "dedicatedTeam",
+                            "25. هل يوجد موظف أو فريق عمل سيتم تفريغه (جزئياً أو كلياً) لمتابعة هذا البرنامج؟ *",
+                            [
+                              { label: "نعم", value: "نعم" },
+                              { label: "لا", value: "لا" },
+                            ],
+                          )}
+                          {renderTextarea(
+                            "finalAspirations",
+                            "26. ما هي تطلعاتكم النهائية من المشاركة في برنامج التمكين الريادي؟ *",
+                            "صف تطلعاتكم وأهدافكم من المشاركة في البرنامج",
+                          )}
+                        </div>
                       )}
                     </motion.div>
                   </AnimatePresence>
                 </div>
 
                 {/* Form Navigation Controls */}
-                <div className="flex items-center justify-between pt-12 mt-auto">
+                <div className="flex items-center justify-between pt-10 mt-auto">
                   <Button
                     type="button"
                     variant="ghost"
                     onClick={prevStep}
                     disabled={currentStep === 1}
-                    className="rounded-xl px-8 h-14 text-gray-500 font-bold hover:text-[#4B3D90] hover:bg-gray-50 disabled:opacity-20 transition-all text-lg"
+                    className="rounded-xl px-8 h-12 text-gray-500 font-bold hover:text-[#4B3D90] hover:bg-gray-50 disabled:opacity-20 transition-all text-base"
                   >
                     السابق
                   </Button>
 
-                  {currentStep < 3 ? (
+                  {currentStep < TOTAL_STEPS ? (
                     <Button
                       type="button"
                       onClick={nextStep}
-                      className="bg-[#4B3D90] hover:bg-[#3D3175] text-white rounded-xl px-12 h-14 shadow-xl shadow-[#4B3D90]/20 transition-all font-bold text-lg"
+                      className="bg-[#4B3D90] hover:bg-[#3D3175] text-white rounded-xl px-12 h-12 shadow-xl shadow-[#4B3D90]/20 transition-all font-bold text-base"
                     >
                       التالي
                     </Button>
@@ -407,13 +662,13 @@ export function ContactForm() {
                     <Button
                       type="submit"
                       disabled={isSubmitting}
-                      className="bg-[#5D9FDD] hover:bg-[#4D8FCB] text-white rounded-xl px-14 h-14 shadow-xl shadow-[#5D9FDD]/20 transition-all font-bold text-lg flex items-center gap-3"
+                      className="bg-[#5D9FDD] hover:bg-[#4D8FCB] text-white rounded-xl px-12 h-12 shadow-xl shadow-[#5D9FDD]/20 transition-all font-bold text-base flex items-center gap-3"
                     >
                       {isSubmitting ? (
-                        <Loader2 className="w-6 h-6 animate-spin" />
+                        <Loader2 className="w-5 h-5 animate-spin" />
                       ) : (
                         <>
-                          <Send className="w-6 h-6 ml-1" /> إرسال طلب الانضمام
+                          <Send className="w-5 h-5 ml-1" /> إرسال طلب الانضمام
                         </>
                       )}
                     </Button>
@@ -435,7 +690,13 @@ export function ContactForm() {
             className="fixed top-8 left-1/2 -translate-x-1/2 z-100 w-[90%] max-w-md"
           >
             <div
-              className={`rounded-2xl px-8 py-5 shadow-2xl text-center text-xl font-bold ${toastState.type === "success" ? "bg-green-600 text-white" : toastState.type === "error" ? "bg-red-600 text-white" : "bg-white text-[#4B3D90] border-2 border-[#4B3D90]/10"}`}
+              className={`rounded-2xl px-8 py-5 shadow-2xl text-center text-lg font-bold ${
+                toastState.type === "success"
+                  ? "bg-green-600 text-white"
+                  : toastState.type === "error"
+                    ? "bg-red-600 text-white"
+                    : "bg-white text-[#4B3D90] border-2 border-[#4B3D90]/10"
+              }`}
             >
               {toastState.message}
             </div>

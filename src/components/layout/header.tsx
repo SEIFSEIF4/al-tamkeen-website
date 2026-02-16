@@ -79,7 +79,7 @@ export function Header() {
       }`}
     >
       <div className="container mx-auto px-4 md:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between gap-4 h-20">
           {/* Logos */}
           <Link href="/" className="flex items-center gap-3">
             {/* Al-Tamkeen Logo */}
@@ -115,12 +115,12 @@ export function Header() {
             <img
               src="/Riyadah Hor -Dark BG V.png"
               alt="Riyadah"
-              className="hidden md:block h-8 w-auto object-contain"
+              className="hidden md:block h-16 w-auto object-contain"
             />
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-8">
+          <nav className="hidden lg:flex items-center gap-8 mx-auto">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -150,13 +150,18 @@ export function Header() {
           </nav>
 
           {/* CTA Button */}
-          <div className="hidden lg:block">
-            <button
-              className={` px-6 py-2 rounded-full font-medium transition-all hover:scale-105 cursor-pointer
-                ${isScrolled ? "bg-[#4B3D90] text-white" : "bg-white text-[#4B3D90]"}`}
+          <div className="hidden lg:block ml-6">
+            <Link
+              href="/contact"
+              className={`px-7 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 hover:scale-105 cursor-pointer border
+                ${
+                  isScrolled
+                    ? "bg-[#4B3D90] text-white border-[#4B3D90] hover:bg-[#3a2f73] shadow-md shadow-[#4B3D90]/20"
+                    : "bg-white text-[#4B3D90] border-white/80 hover:bg-white/90 shadow-md shadow-white/10"
+                }`}
             >
-              <Link href="/contact">قدم الآن</Link>
-            </button>
+              قدم الآن
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}

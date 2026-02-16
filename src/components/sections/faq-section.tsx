@@ -6,12 +6,12 @@ import { MotionWrapper } from "@/components/ui/motion-wrapper";
 
 const faqs = [
   {
-    question: "هل يشترط وجود فكرة مسبقة؟",
+    question: "هل يشترط وجود فكرة مسبقة للجمعية؟",
     answer:
       "لا يشترط وجود فكرة جاهزة، فالبرنامج يساعد الجمعيات على اكتشاف وبناء الفكرة الريادية.",
   },
   {
-    question: "هل يشترط وجود خبرة تقنية؟",
+    question: "هل يشترط وجود خبرة تقنية للجمعية؟",
     answer: "لا، يوفر البرنامج الدعم التقني لتطوير المنتج.",
   },
   {
@@ -46,10 +46,7 @@ export function FAQSection() {
   };
 
   return (
-    <section
-      id="faq"
-      className="section-padding bg-liner-to-b from-gray-50 to-white overflow-hidden"
-    >
+    <section id="faq" className="section-padding bg-gray-50 overflow-hidden">
       <div className="container mx-auto">
         <MotionWrapper className="text-right mb-12">
           <h2 className="text-3xl md:text-5xl font-bold text-[#4B3D90] mb-4">

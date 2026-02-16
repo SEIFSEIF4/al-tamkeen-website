@@ -3,8 +3,8 @@ import { Footer } from "@/components/layout/footer";
 import { ContactForm } from "@/components/sections/contact-form";
 
 export const metadata = {
-  title: "تواصل معنا | برنامج التمكين الريادي",
-  description: "نستقبل استفساراتكم وملاحظاتكم بكل اهتمام. تواصل معنا الآن.",
+  title: "التمكين الريادي | نموذج التقديم ",
+  description: "التمكين الريادي - نموذج التقديم",
 };
 
 export default function ContactPage() {

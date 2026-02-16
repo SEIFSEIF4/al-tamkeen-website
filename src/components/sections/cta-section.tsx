@@ -12,12 +12,12 @@ export function CTASection() {
           <Button
             asChild
             size="lg"
-            className="bg-[#3E3082] hover:bg-[#32266a] text-white text-3xl px-12 py-8 font-bold rounded-full shadow-xl hover:scale-105 transition-all duration-300 mb-8"
+            className="bg-[#3E3082] hover:bg-[#32266a] text-white text-3xl px-12 py-8 font-bold rounded-xl transition-all duration-300 mb-8"
           >
-            <Link href="#contact">قــدّم الآن</Link>
+            <Link href="/contact">قــدّم الآن</Link>
           </Button>
           <h2 className="text-3xl md:text-5xl font-bold text-white leading-tight">
-            وابدأ رحلة التحوّل الريادي لجمعيتك.
+            وابدأ رحلة التحوّل الريادي لجمعيتك
           </h2>
         </MotionWrapper>
       </div>

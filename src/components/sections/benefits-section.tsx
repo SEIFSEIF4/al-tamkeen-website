@@ -34,8 +34,8 @@ export function BenefitsSection() {
     >
       {/* Background Elements */}
       <div className="absolute inset-0">
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-linear-to-bl from-[#4B3D90] via-[#4B3D90] to-[#4A3D82]" />
+        {/* Background overlay */}
+        <div className="absolute inset-0 bg-[#4B3D90]" />
 
         {/* Decorative shapes */}
         <motion.div
@@ -64,7 +64,7 @@ export function BenefitsSection() {
               className="mb-10"
             >
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
-                ماذا تكسب الجمعية
+                مكتسبات الجمعية:
               </h2>
             </motion.div>
 

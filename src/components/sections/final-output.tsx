@@ -30,7 +30,7 @@ export function FinalOutputSection() {
   return (
     <section
       id="outputs"
-      className="section-padding bg-[#3E3082] relative overflow-hidden flex flex-col items-center justify-center min-h-[600px]"
+      className="bg-[#3E3082] relative overflow-hidden flex flex-col items-center justify-center min-h-[600px]"
     >
       {/* Background Elements */}
       <div className="absolute inset-0 pointer-events-none">
@@ -39,14 +39,14 @@ export function FinalOutputSection() {
 
       <div className="container mx-auto px-4 md:px-8 lg:px-16 relative z-10">
         {/* Section Title */}
-        <MotionWrapper className="text-center mb-12">
+        {/* <MotionWrapper className="text-center mb-12">
           <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">
             المخرج النهائي للبرنامج
           </h2>
-        </MotionWrapper>
+        </MotionWrapper> */}
 
         {/* Output Cards Grid */}
-        <StaggerContainer
+        {/* <StaggerContainer
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-16"
           staggerDelay={0.1}
         >
@@ -62,7 +62,7 @@ export function FinalOutputSection() {
               </motion.div>
             </StaggerItem>
           ))}
-        </StaggerContainer>
+        </StaggerContainer> */}
 
         {/* Final Output Bottom Section */}
         <MotionWrapper
@@ -104,7 +104,7 @@ export function FinalOutputSection() {
               </motion.span>
               <br />
               <span className="text-white mt-4 text-2xl md:text-4xl">
-                تدر دخلاً للجمعية وتُحدث أثراً
+                شركة ناشئة مملوكة للجمعية، تدرُّ دخلاً وتُحدث أثراً
               </span>
             </h3>
           </div>

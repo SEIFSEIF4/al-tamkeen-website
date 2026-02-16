@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
 
 export function Footer() {
   return (
@@ -41,8 +40,8 @@ export function Footer() {
             </Link>
           </div>
 
-          {/* Center: Navigation Links */}
-          <div className="flex flex-wrap md:w-3/4 w-full justify-start items-start gap-x-16 gap-y-8 text-center lg:text-right">
+          {/* Navigation Links */}
+          <div className="flex flex-wrap md:w-3/4 w-full justify-end items-start gap-x-16 gap-y-8 text-left lg:text-right">
             <div className="flex flex-col gap-4 text-white/90 font-medium">
               <Link
                 href="/#hero"

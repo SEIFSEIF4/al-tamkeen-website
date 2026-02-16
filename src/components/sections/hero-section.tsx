@@ -13,7 +13,7 @@ export function HeroSection() {
       className="relative min-h-screen flex items-center overflow-hidden bg-[#4B3D90]"
     >
       <div className="container mx-auto px-4 md:px-8 lg:px-16 relative z-10 w-full">
-        <div className="flex flex-col-reverse lg:flex-row items-center justify-between lg:min-h-0 w-full">
+        <div className="flex flex-col-reverse lg:flex-row items-center justify-between lg:min-h-0 w-full gap-4">
           {/* Content - Right Side */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
@@ -26,7 +26,7 @@ export function HeroSection() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.5 }}
-              className="text-3xl md:text-4xl font-bold mt-10 text-white leading-tight"
+              className="text-3xl md:text-4xl font-bold xl:text-5xl mt-10 text-white leading-tight"
             >
               برنامج التمكين الريادي للجمعيات الأهلية
             </motion.h1>
@@ -36,7 +36,7 @@ export function HeroSection() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.6 }}
-              className="text-base sm:text-lg md:text-2xl mt-2 text-white/90 leading-relaxed max-w-xl ml-auto"
+              className="text-base sm:text-lg md:text-2xl xl:text-3xl mt-2 text-white/90 leading-relaxed max-w-xl ml-auto"
             >
               نحو جمعيات أكثر وصولاً واستدامة وأعمق أثراً
             </motion.p>
@@ -49,16 +49,26 @@ export function HeroSection() {
             transition={{ duration: 1, ease: "easeOut" }}
             className="w-full lg:w-1/2 flex items-center justify-center relative"
           >
-            <div className="relative w-full aspect-square">
+            <div className="relative w-full max-w-2xl aspect-square">
               <style jsx global>{`
                 .spline-container canvas {
                   width: 100% !important;
                   height: 100% !important;
                   display: block;
+                  border: none !important;
+                  outline: none !important;
+                  box-shadow: none !important;
+                  background: transparent !important;
+                }
+                .spline-container > div,
+                .spline-container > div > canvas {
+                  border: none !important;
+                  outline: none !important;
+                  box-shadow: none !important;
                 }
               `}</style>
               {/* LARGE SHAPES REPLACED BY SPLINE */}
-              <div className="absolute inset-0 w-full h-full pointer-events-none spline-container">
+              <div className="absolute inset-0 w-full h-full pointer-events-none spline-container overflow-hidden border-0 outline-none">
                 <Spline
                   scene="https://prod.spline.design/OOzvU5u5cDxzEMbC/scene.splinecode"
                   onLoad={(spline: any) => {

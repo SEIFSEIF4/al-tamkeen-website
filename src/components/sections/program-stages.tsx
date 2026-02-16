@@ -49,7 +49,7 @@ export function ProgramStages() {
 
       <div className="container mx-auto px-4 md:px-8 lg:px-16 relative z-10">
         <MotionWrapper className="text-center mb-20">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1E3A5F] mb-6">
+          <h2 className="text-3xl md:text-4xl  lg:text-5xl font-bold text-[#1E3A5F] mb-6">
             مراحل البرنامج
           </h2>
         </MotionWrapper>
@@ -62,7 +62,7 @@ export function ProgramStages() {
               whileInView={{ height: "100%" }}
               viewport={{ once: true }}
               transition={{ duration: 1.5, ease: "easeInOut" }}
-              className="w-full bg-linear-to-b from-[#8FD2E3] via-[#4B3D90] to-[#A8C442]"
+              className="w-full bg-[#4B3D90]"
             />
           </div>
 
@@ -110,10 +110,10 @@ export function ProgramStages() {
                         className="bg-white p-6 rounded-2xl shadow-xl shadow-gray-100/50 border border-gray-100 hover:border-[#8FD2E3] transition-colors duration-300"
                         dir="rtl"
                       >
-                        <h3 className="text-xl md:text-2xl font-bold text-[#1E3A5F] mb-3">
+                        <h3 className="text-xl text-start md:text-2xl font-bold text-[#1E3A5F] mb-3">
                           {stage.title}
                         </h3>
-                        <p className="text-gray-600 leading-relaxed text-sm md:text-base">
+                        <p className="text-gray-600 text-start leading-relaxed text-sm md:text-base">
                           {stage.description}
                         </p>
                       </motion.div>

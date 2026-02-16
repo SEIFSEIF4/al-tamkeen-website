@@ -127,19 +127,16 @@
 
 /* Custom utility classes */
 @layer utilities {
-  .text-gradient {
-    background: linear-gradient(135deg, #5a4b9a 0%, #5bc5c4 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  .text-highlight {
+    color: #5a4b9a;
   }
 
-  .bg-gradient-purple {
-    background: linear-gradient(135deg, #5a4b9a 0%, #4a3d82 100%);
+  .bg-purple {
+    background: #5a4b9a;
   }
 
-  .bg-gradient-cyan {
-    background: linear-gradient(135deg, #5bc5c4 0%, #4ab4b3 100%);
+  .bg-cyan {
+    background: #5bc5c4;
   }
 
   .glass-effect {
