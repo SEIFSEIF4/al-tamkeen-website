@@ -95,7 +95,8 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl">
       <body className={`antialiased ${ibmPlexSansArabic.variable}`}>
-        <LenisProvider>{children}</LenisProvider>
+        {/* <LenisProvider>{children}</LenisProvider> */}
+        {children}
       </body>
     </html>
   );
