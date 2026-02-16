@@ -50,11 +50,27 @@ export function AboutSection() {
           {/* Mission Text - Left Side */}
           <div className="lg:w-3/5 text-center lg:text-right pt-4 lg:pt-0">
             <MotionWrapper direction="right" delay={0.2}>
-              <p className="text-lg sm:text-xl md:text-2xl  font-bold text-gray-700 leading-relaxed">
-                برنامج التمكين الريادي للجمعيات الأهلية هو أول برنامج يُمكّن
-                الجمعيات من تحويل رسالتها الاجتماعية إلى شركات ناشئة مستدامة،
-                تُدار بعقلية ريادية تُحدث أثراً وتكون مصدراً للدخل.
-              </p>
+              <div className="text-right space-y-6">
+                <ul className="space-y-4">
+                  <li className="flex items-start gap-3 text-lg sm:text-lg font-medium text-gray-700 leading-relaxed">
+                    <span className="text-[#8FD2E3] text-2xl mt-1">•</span>
+                    <span>
+                      برنامج متخصص يمكّن الجمعيات الأهلية من تأسيس شركات ناشئة
+                      منبثقة من خبراتها ومجالات عملها، عبر منهجية عملية تجمع بين
+                      التدريب، والإرشاد، والتطوير التقني، والإطلاق الفعلي.
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3 text-lg sm:text-lg font-medium text-gray-700 leading-relaxed">
+                    <span className="text-[#8FD2E3] text-2xl mt-1">•</span>
+                    <span>
+                      يركز البرنامج على تحويل المعرفة والخبرة التي تمتلكها
+                      الجمعية إلى منتجات أو خدمات مبتكرة قابلة للنمو والاستدامة،
+                      مما يتيح للجمعية بناء مصادر دخل مستدامة وتعظيم أثرها
+                      الاجتماعي.
+                    </span>
+                  </li>
+                </ul>
+              </div>
             </MotionWrapper>
           </div>
         </div>

@@ -10,21 +10,34 @@ export function Footer() {
         <div className="flex flex-col-reverse w-full lg:flex-row justify-start items-center lg:items-start gap-12">
           {/* Right Side: Logo */}
           <div className="flex flex-col md:w-1/4 w-full items-start justify-start ">
-            <Link href="/" className="flex items-center gap-3">
-              <div className="flex flex-col items-end">
-                <h2 className="text-2xl font-bold leading-tight">التمكين</h2>
-                <h2 className="text-2xl font-bold leading-tight">الريادي</h2>
-                <span className="text-xs text-[#8FD2E3] tracking-wider mt-1">
-                  للجمعيــات الأهليــة
-                </span>
+            <Link href="/" className="flex items-center gap-4">
+              {/* Al-Tamkeen Logo */}
+              <div className="flex items-center gap-2">
+                <div className="flex flex-col items-end">
+                  <h2 className="text-xl font-bold leading-tight">التمكين</h2>
+                  <h2 className="text-xl font-bold leading-tight">الريادي</h2>
+                  <span className="text-[10px] text-[#8FD2E3] tracking-wider mt-0.5">
+                    للجمعيــات الأهليــة
+                  </span>
+                </div>
+                <div className="w-10 h-10 relative flex items-center justify-center">
+                  <img
+                    src="/logo.svg"
+                    alt="Logo"
+                    className="w-full h-full object-contain"
+                  />
+                </div>
               </div>
-              <div className="w-12 h-12 relative flex items-center justify-center">
-                <img
-                  src="/logo.svg"
-                  alt="Logo"
-                  className="w-full h-full object-contain"
-                />
-              </div>
+
+              {/* Divider */}
+              <div className="w-px h-10 bg-white/20" />
+
+              {/* Riyadah Logo */}
+              <img
+                src="/Riyadah Hor -Dark BG V.png"
+                alt="Riyadah"
+                className="h-16 w-auto object-contain"
+              />
             </Link>
           </div>
 

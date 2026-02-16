@@ -61,7 +61,7 @@ export function Header() {
     { href: "/#hero", label: "الرئيسية" },
     { href: "/#benefits", label: "المميزات" },
     { href: "/#stages", label: "مراحل البرنامج" },
-    { href: "/#outputs", label: "المخرج الأخير" },
+    { href: "/#outputs", label: "المخرج النهائي" },
     { href: "/#criteria", label: "معايير القبول" },
     { href: "/#faq", label: "الأسئلة الشائعة" },
     // { href: "/#contact", label: "تواصل معنا" },
@@ -80,39 +80,43 @@ export function Header() {
     >
       <div className="container mx-auto px-4 md:px-8">
         <div className="flex items-center justify-between h-20">
-          {/* Logo */}
+          {/* Logos */}
           <Link href="/" className="flex items-center gap-3">
+            {/* Al-Tamkeen Logo */}
             <div className="flex items-center gap-2">
-              <div className="w-10 h-10  rounded-lg flex items-center justify-center overflow-hidden">
+              <div className="w-9 h-9 rounded-lg flex items-center justify-center overflow-hidden">
                 <img
                   src="/logo.svg"
                   alt="Logo"
                   className="w-full h-full object-contain"
                   onError={(e) => {
                     e.currentTarget.style.display = "none";
-                    const fallback =
-                      e.currentTarget.parentElement?.querySelector(
-                        ".fallback-logo",
-                      );
-                    if (fallback)
-                      (fallback as HTMLElement).style.display = "flex";
                   }}
                 />
-                <div className="fallback-logo hidden w-6 h-6 border-2 border-white rounded-sm"></div>
               </div>
               <div className="flex flex-col">
                 <span
-                  className={`font-bold text-lg ${isScrolled || isMobileMenuOpen ? "text-[#4B3D90]" : "text-white"}`}
+                  className={`font-bold text-sm leading-tight ${isScrolled || isMobileMenuOpen ? "text-[#4B3D90]" : "text-white"}`}
                 >
                   التمكين الريادي
                 </span>
-                <span
-                  className={`text-xs ${isScrolled ? "text-[#8FD2E3]" : "text-[#8FD2E3]"}`}
-                >
+                <span className="text-[10px] text-[#8FD2E3] leading-tight">
                   للجمعيات الأهلية
                 </span>
               </div>
             </div>
+
+            {/* Divider */}
+            <div
+              className={`hidden md:block w-px h-8 ${isScrolled || isMobileMenuOpen ? "bg-gray-300" : "bg-white/30"}`}
+            />
+
+            {/* Riyadah Logo */}
+            <img
+              src="/Riyadah Hor -Dark BG V.png"
+              alt="Riyadah"
+              className="hidden md:block h-8 w-auto object-contain"
+            />
           </Link>
 
           {/* Desktop Navigation */}

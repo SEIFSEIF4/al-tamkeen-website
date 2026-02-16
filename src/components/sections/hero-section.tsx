@@ -19,14 +19,14 @@ export function HeroSection() {
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="w-full lg:w-1/2 text-right mt-auto mb-12 lg:my-0"
+            className="w-full lg:w-1/2 text-right  lg:my-0"
           >
             {/* Main Heading */}
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.5 }}
-              className="text-3xl md:text-4xl xl:text-5xl font-bold text-white leading-tight"
+              className="text-3xl md:text-4xl font-bold mt-10 text-white leading-tight"
             >
               برنامج التمكين الريادي للجمعيات الأهلية
             </motion.h1>
@@ -36,7 +36,7 @@ export function HeroSection() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.6 }}
-              className="text-base sm:text-lg md:text-2xl xl:text-3xl mt-2 text-white/90 leading-relaxed max-w-xl ml-auto"
+              className="text-base sm:text-lg md:text-2xl mt-2 text-white/90 leading-relaxed max-w-xl ml-auto"
             >
               نحو جمعيات أكثر وصولاً واستدامة وأعمق أثراً
             </motion.p>
@@ -49,7 +49,7 @@ export function HeroSection() {
             transition={{ duration: 1, ease: "easeOut" }}
             className="w-full lg:w-1/2 flex items-center justify-center relative"
           >
-            <div className="relative w-[20rem] aspect-square">
+            <div className="relative w-full aspect-square">
               <style jsx global>{`
                 .spline-container canvas {
                   width: 100% !important;
@@ -59,7 +59,12 @@ export function HeroSection() {
               `}</style>
               {/* LARGE SHAPES REPLACED BY SPLINE */}
               <div className="absolute inset-0 w-full h-full pointer-events-none spline-container">
-                <Spline scene="https://prod.spline.design/OOzvU5u5cDxzEMbC/scene.splinecode" />
+                <Spline
+                  scene="https://prod.spline.design/OOzvU5u5cDxzEMbC/scene.splinecode"
+                  onLoad={(spline: any) => {
+                    spline.setBackgroundColor("#4B3D90");
+                  }}
+                />
               </div>
             </div>
           </motion.div>
