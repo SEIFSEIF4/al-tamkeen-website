@@ -51,9 +51,9 @@ export function AboutSection() {
           <div className="lg:w-3/5 text-center lg:text-right pt-4 lg:pt-0">
             <MotionWrapper direction="right" delay={0.2}>
               <p className="text-lg sm:text-xl md:text-2xl  font-bold text-gray-700 leading-relaxed">
-                برنامج التمكين الريادي للجمعيات الأهلية هو أول برنامج وطني
-                يُمكّن الجمعيات من تحويل رسالتها الاجتماعية إلى شركات ناشئة
-                مستدامة، تُدار بعقلية ريادية وتُحدث أثرًا طويل المدى.
+                برنامج التمكين الريادي للجمعيات الأهلية هو أول برنامج يُمكّن
+                الجمعيات من تحويل رسالتها الاجتماعية إلى شركات ناشئة مستدامة،
+                تُدار بعقلية ريادية تُحدث أثراً وتكون مصدراً للدخل.
               </p>
             </MotionWrapper>
           </div>

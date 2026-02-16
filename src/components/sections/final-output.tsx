@@ -41,7 +41,7 @@ export function FinalOutputSection() {
         {/* Section Title */}
         <MotionWrapper className="text-center mb-12">
           <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">
-            المخرج الأخير للبرنامج
+            المخرج النهائي للبرنامج
           </h2>
         </MotionWrapper>
 
@@ -104,7 +104,7 @@ export function FinalOutputSection() {
               </motion.span>
               <br />
               <span className="text-white mt-4 text-2xl md:text-4xl">
-                لا مجرد فكرة أو مشروع مؤقت.
+                تدر دخلاً للجمعية وتُحدث أثراً
               </span>
             </h3>
           </div>
