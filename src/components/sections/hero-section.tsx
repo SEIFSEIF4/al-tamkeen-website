@@ -116,9 +116,9 @@ export function HeroSection() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.5 }}
-              className="text-3xl md:text-4xl xl:text-5xl font-bold text-white leading-tight"
+              className="text-3xl md:text-4xl font-bold text-white leading-tight"
             >
-              من الأثر إلى الاستدامة
+              برنامج التمكين الريادي للجمعيات الأهلية
             </motion.h1>
 
             {/* Tagline */}
@@ -128,7 +128,7 @@ export function HeroSection() {
               transition={{ duration: 0.6, delay: 0.6 }}
               className="text-base sm:text-lg md:text-2xl xl:text-3xl mt-2 text-white/90 leading-relaxed max-w-xl ml-auto"
             >
-              نحو جمعيات تُنشئ شركات، لا تكتفي بالمشاريع.
+              نحو جمعيات أكثر وصولاً واستدامة وأعمق أثراً
             </motion.p>
           </motion.div>
         </div>
