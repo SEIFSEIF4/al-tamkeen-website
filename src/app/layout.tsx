@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     locale: "ar_SA",
     images: [
       {
-        url: "/opengraph-image",
+        url: "/og.png",
         width: 1200,
         height: 630,
         alt: "التمكين الريادي للجمعيات الأهلية",
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
     creator: "@Altamkeen",
     images: [
       {
-        url: "/opengraph-image",
+        url: "/og.png",
         width: 1200,
         height: 630,
         alt: "التمكين الريادي للجمعيات الأهلية",
