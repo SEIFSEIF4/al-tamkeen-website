@@ -5,18 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Lock, Loader2 } from "lucide-react";
 
-// SHA-256 hash of the admin password — the actual password is NOT in the code
-const ADMIN_PASSWORD_HASH =
-  "b493da8d531295a4580f2e4a4e625a3e83d3981dff4bce87fa3fc8bd8b7b08e4";
-
-// Hash a string using Web Crypto API
-async function hashPassword(password: string): Promise<string> {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(password);
-  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
-}
+const ADMIN_PASSWORD = "admin@tamkeens1!A";
 
 export function AdminGuard({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -31,14 +20,12 @@ export function AdminGuard({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     setIsChecking(true);
     setError("");
 
-    const hashed = await hashPassword(password);
-
-    if (hashed === ADMIN_PASSWORD_HASH) {
+    if (password === ADMIN_PASSWORD) {
       sessionStorage.setItem("admin_auth", "true");
       setIsAuthenticated(true);
     } else {

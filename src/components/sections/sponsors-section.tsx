@@ -13,17 +13,24 @@ export function SponsorsSection() {
         >
           {/* ryadah Card */}
           <div className="bg-white aspect-square rounded-2xl p-2 w-full max-w-[200px] flex flex-col items-center justify-center shadow-lg">
-            <span className="text-black text-lg font-medium mb-3 block">
-              إحدى مبادرات
-            </span>
-            <div className="relative size-32">
-              <Image
-                src="/ryadah.svg"
-                alt="الريادة الاجتماعية"
-                fill
-                className="object-contain"
-              />
-            </div>
+            <a
+              href="https://ryadh.com.sa/"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="زيارة موقع ريادة"
+            >
+              <span className="text-black text-lg font-medium mb-3 block">
+                إحدى مبادرات
+              </span>
+              <div className="relative size-32">
+                <Image
+                  src="/ryadah.svg"
+                  alt="الريادة الاجتماعية"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            </a>
           </div>
           {/* Partner Card */}
           <div className="bg-white aspect-square rounded-2xl p-2 w-full max-w-[200px] flex flex-col items-center justify-center shadow-lg">
