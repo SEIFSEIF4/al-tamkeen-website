@@ -2,11 +2,28 @@
 
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import Image from "next/image";
+
 const Spline = dynamic(() => import("@splinetool/react-spline"), {
   ssr: false,
+  loading: () => (
+    <div className="w-full h-full flex items-center justify-center">
+      <div className="w-12 h-12 border-4 border-white/30 border-t-white rounded-full animate-spin" />
+    </div>
+  ),
 });
 
 export function HeroSection() {
+  const [isMobile, setIsMobile] = useState(true); // default true to avoid flash of 3D on mobile
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   return (
     <section
       id="hero"
@@ -42,7 +59,7 @@ export function HeroSection() {
             </motion.p>
           </motion.div>
 
-          {/* Spline 3D Graphic - Left Side */}
+          {/* 3D Graphic / Fallback - Left Side */}
           <motion.div
             initial={{ x: -100, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
@@ -50,32 +67,49 @@ export function HeroSection() {
             className="w-full lg:w-1/2 flex items-center justify-center relative"
           >
             <div className="relative w-full max-w-2xl aspect-square">
-              <style jsx global>{`
-                .spline-container canvas {
-                  width: 100% !important;
-                  height: 100% !important;
-                  display: block;
-                  border: none !important;
-                  outline: none !important;
-                  box-shadow: none !important;
-                  background: transparent !important;
-                }
-                .spline-container > div,
-                .spline-container > div > canvas {
-                  border: none !important;
-                  outline: none !important;
-                  box-shadow: none !important;
-                }
-              `}</style>
-              {/* LARGE SHAPES REPLACED BY SPLINE */}
-              <div className="absolute inset-0 w-full h-full pointer-events-none spline-container overflow-hidden border-0 outline-none">
-                <Spline
-                  scene="https://prod.spline.design/OOzvU5u5cDxzEMbC/scene.splinecode"
-                  onLoad={(spline: any) => {
-                    spline.setBackgroundColor("#4B3D90");
-                  }}
-                />
-              </div>
+              {isMobile ? (
+                /* Mobile fallback — static image instead of heavy WebGL */
+                <div className="absolute inset-0 w-full h-full flex items-center justify-center">
+                  <Image
+                    src="/logo.svg"
+                    alt="التمكين الريادي"
+                    width={300}
+                    height={300}
+                    className="w-3/4 max-w-[300px] h-auto opacity-90 drop-shadow-2xl"
+                    priority
+                  />
+                </div>
+              ) : (
+                /* Desktop — full 3D Spline scene */
+                <>
+                  <style jsx global>{`
+                    .spline-container canvas {
+                      width: 100% !important;
+                      height: 100% !important;
+                      display: block;
+                      border: none !important;
+                      outline: none !important;
+                      box-shadow: none !important;
+                      background: transparent !important;
+                    }
+                    .spline-container > div,
+                    .spline-container > div > canvas {
+                      border: none !important;
+                      outline: none !important;
+                      box-shadow: none !important;
+                    }
+                  `}</style>
+                  {/* LARGE SHAPES REPLACED BY SPLINE */}
+                  <div className="absolute inset-0 w-full h-full pointer-events-none spline-container overflow-hidden border-0 outline-none">
+                    <Spline
+                      scene="https://prod.spline.design/OOzvU5u5cDxzEMbC/scene.splinecode"
+                      onLoad={(spline: any) => {
+                        spline.setBackgroundColor("#4B3D90");
+                      }}
+                    />
+                  </div>
+                </>
+              )}
             </div>
           </motion.div>
         </div>
