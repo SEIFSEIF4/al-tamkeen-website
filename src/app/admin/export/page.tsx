@@ -32,26 +32,43 @@ interface Registration {
     association_name?: string;
     license_number?: string;
     founding_date?: string;
+    supervisory_authority?: string;
     geographic_location?: string;
     service_scope?: string;
     headquarters_address?: string;
     social_media_links?: string;
+    board_start_date?: string;
+    board_end_date?: string;
+    board_period?: string;
     full_time_employees?: string;
     has_executive_director?: string;
+    executive_director_name?: string;
+    executive_director_phone?: string;
     has_strategic_plan?: string;
+    strategic_plan_end_date?: string;
+    has_operational_plan?: string;
     governance_score?: string;
     average_budget?: string;
     awards_and_certificates?: string;
     has_performance_reports?: string;
+    has_external_auditor_notes?: string;
+    external_auditor_notes?: string;
     top_partnerships?: string;
     physical_assets?: string;
+    has_debts?: string;
+    has_endowments?: string;
+    endowment_revenue?: string;
     specialized_expertise?: string;
     database_size?: string;
     has_investment_unit?: string;
+    programs_count?: string;
+    development_projects_count?: string;
     startup_reasons?: string;
     main_goal?: string;
     market_gaps?: string;
     contact_person?: string;
+    contact_person_position?: string;
+    contact_person_phone?: string;
     board_approval?: string;
     dedicated_team?: string;
     final_aspirations?: string;
@@ -69,26 +86,43 @@ const fieldLabels: Record<string, string> = {
   association_name: "اسم الجمعية",
   license_number: "رقم الترخيص",
   founding_date: "تاريخ التأسيس",
+  supervisory_authority: "جهة الاشراف الفني",
   geographic_location: "الموقع الجغرافي",
   service_scope: "نطاق الخدمة",
   headquarters_address: "عنوان المقر",
-  social_media_links: "روابط التواصل",
+  social_media_links: "الموقع والتواصل",
+  board_start_date: "تاريخ بداية المجلس",
+  board_end_date: "تاريخ نهاية المجلس",
+  board_period: "فترة المجلس",
   full_time_employees: "عدد الموظفين",
   has_executive_director: "مدير تنفيذي",
+  executive_director_name: "اسم المدير التنفيذي",
+  executive_director_phone: "جوال المدير التنفيذي",
   has_strategic_plan: "خطة استراتيجية",
+  strategic_plan_end_date: "تاريخ انتهاء الخطة",
+  has_operational_plan: "خطة تشغيلية",
   governance_score: "درجة الحوكمة",
   average_budget: "متوسط الميزانية",
   awards_and_certificates: "الجوائز والشهادات",
   has_performance_reports: "تقارير الأداء",
+  has_external_auditor_notes: "ملاحظات المراجع الخارجي",
+  external_auditor_notes: "تفاصيل الملاحظات",
   top_partnerships: "الشراكات الاستراتيجية",
   physical_assets: "الأصول المادية",
+  has_debts: "ديون على الجمعية",
+  has_endowments: "أصول أو أوقاف",
+  endowment_revenue: "إيرادات الأوقاف",
   specialized_expertise: "الخبرات التخصصية",
   database_size: "حجم قاعدة البيانات",
   has_investment_unit: "وحدة استثمار",
+  programs_count: "عدد البرامج والمشاريع",
+  development_projects_count: "عدد المشاريع التنموية",
   startup_reasons: "أسباب التأسيس",
   main_goal: "الهدف الرئيسي",
   market_gaps: "فجوات السوق",
   contact_person: "ضابط الاتصال",
+  contact_person_position: "المنصب",
+  contact_person_phone: "جوال ضابط الاتصال",
   board_approval: "موافقة المجلس",
   dedicated_team: "فريق مفرغ",
   final_aspirations: "التطلعات",
@@ -179,7 +213,12 @@ export default function ExportPage() {
           // Title
           children.push(
             new Paragraph({
-              text: `طلب رقم: ${index + 1} - ${reg.form_data.association_name || reg.user_name}`,
+              children: [
+                new TextRun({
+                  text: `طلب رقم: ${index + 1} - ${reg.form_data.association_name || reg.user_name}`,
+                  rightToLeft: true,
+                }),
+              ],
               heading: HeadingLevel.TITLE,
               alignment: AlignmentType.CENTER,
               bidirectional: true,
@@ -188,7 +227,12 @@ export default function ExportPage() {
 
           children.push(
             new Paragraph({
-              text: `تاريخ التقديم: ${new Date(reg.created_at).toLocaleDateString("ar-SA")}`,
+              children: [
+                new TextRun({
+                  text: `تاريخ التقديم: ${new Date(reg.created_at).toLocaleDateString("ar-SA")}`,
+                  rightToLeft: true,
+                }),
+              ],
               alignment: AlignmentType.CENTER,
               bidirectional: true,
               spacing: { after: 400 },
@@ -210,6 +254,7 @@ export default function ExportPage() {
                     bold: true,
                     color: "000000",
                     size: 32, // 16pt
+                    rightToLeft: true,
                   }),
                 ],
                 heading: HeadingLevel.HEADING_2,
@@ -258,6 +303,7 @@ export default function ExportPage() {
                       bold: true,
                       size: 24, // 12pt
                       color: "000000",
+                      rightToLeft: true,
                     }),
                   ],
                   alignment: AlignmentType.RIGHT,
@@ -274,6 +320,7 @@ export default function ExportPage() {
                       text: answer,
                       color: "1E3A5F", // Dark Blue/Comfortable
                       size: 24, // 12pt
+                      rightToLeft: true,
                     }),
                   ],
                   alignment: AlignmentType.RIGHT,
@@ -291,18 +338,19 @@ export default function ExportPage() {
             [
               { label: "اسم الجمعية", key: "association_name" },
               { label: "رقم ترخيص الجمعية", key: "license_number" },
+              { label: "تاريخ التأسيس", key: "founding_date" },
+              { label: "جهة الاشراف الفني", key: "supervisory_authority" },
               {
-                label: "تاريخ التأسيس (الفعلي أو المتوقع)",
-                key: "founding_date",
+                label: "الموقع الجغرافي للجمعية (المنطقة والمدينة)",
+                key: "geographic_location",
               },
-              { label: "الموقع الجغرافي للجمعية", key: "geographic_location" },
               { label: "النطاق الجغرافي لخدمات الجمعية", key: "service_scope" },
               {
-                label: "عنوان المقر الرئيسي للجمعية",
+                label: "عنوان المقر الرئيس للجمعية",
                 key: "headquarters_address",
               },
               {
-                label: "حسابات التواصل الاجتماعي والموقع الإلكتروني",
+                label: "الموقع الإلكتروني للجمعية وحسابات التواصل الاجتماعي",
                 key: "social_media_links",
               },
             ],
@@ -313,6 +361,9 @@ export default function ExportPage() {
           createSection(
             "ثانياً: القدرات المؤسسية والحوكمة",
             [
+              { label: "تاريخ بداية مجلس الإدارة", key: "board_start_date" },
+              { label: "تاريخ نهاية مجلس الإدارة", key: "board_end_date" },
+              { label: "فترة مجلس الإدارة", key: "board_period" },
               {
                 label: "عدد الموظفين المتفرغين في الجمعية",
                 key: "full_time_employees",
@@ -321,9 +372,19 @@ export default function ExportPage() {
                 label: "هل يوجد مدير تنفيذي متفرغ للجمعية؟",
                 key: "has_executive_director",
               },
+              { label: "اسم المدير التنفيذي", key: "executive_director_name" },
+              { label: "رقم الجوال", key: "executive_director_phone" },
               {
                 label: "هل تمتلك الجمعية خطة استراتيجية معتمدة؟",
                 key: "has_strategic_plan",
+              },
+              {
+                label: "تاريخ انتهاء الخطة الاستراتيجية الحالية",
+                key: "strategic_plan_end_date",
+              },
+              {
+                label: "هل تمتلك الجمعية خطة تشغيلية؟",
+                key: "has_operational_plan",
               },
               {
                 label: "درجة الجمعية في آخر تقييم للحوكمة",
@@ -334,8 +395,7 @@ export default function ExportPage() {
                 key: "average_budget",
               },
               {
-                label:
-                  "اذكر أهم الجوائز والشهادات التي حصلت عليها الجمعية سابقاً إن وجدت",
+                label: "أهم الجوائز والشهادات التي حصلت عليها الجمعية",
                 key: "awards_and_certificates",
               },
               {
@@ -343,8 +403,13 @@ export default function ExportPage() {
                 key: "has_performance_reports",
               },
               {
+                label: "هل توجد أي ملاحظات على الجمعية من المراجع الخارجي؟",
+                key: "has_external_auditor_notes",
+              },
+              { label: "تفاصيل الملاحظات", key: "external_auditor_notes" },
+              {
                 label:
-                  "اذكر أهم ثلاث شراكات استراتيجية للجمعية مع القطاع الخاص أو الجهات الحكومية",
+                  "أهم ثلاث شراكات استراتيجية للجمعية مع القطاع الخاص أو القطاع الحكومي",
                 key: "top_partnerships",
               },
             ],
@@ -353,27 +418,40 @@ export default function ExportPage() {
 
           // 3. Third Section
           createSection(
-            "ثالثاً: الموارد والأصول المتاحة",
+            "ثالثاً: الموارد والأصول المتاحة والمشاريع",
             [
               {
                 label:
                   "ما هي الأصول المادية التي تمتلكها الجمعية وتسمح بالاستفادة منها في مشاريع استثمارية؟",
                 key: "physical_assets",
               },
+              { label: "هل يوجد ديون على الجمعية؟", key: "has_debts" },
+              { label: "هل لدى الجمعية أصول أو اوقاف؟", key: "has_endowments" },
               {
-                label:
-                  "ما هي الخبرات التخصصية أو المعرفة الفنية التي تنفرد بها الجمعية في مجال عملها؟",
-                key: "specialized_expertise",
+                label: "كم تبلغ الإيرادات من الأصول / الأوقاف؟",
+                key: "endowment_revenue",
               },
               {
                 label:
-                  "حجم قاعدة البيانات التي تمتلكها الجمعية وتصنيف الفئات المستفيدة منها",
+                  "ما هي الخبرات التخصصية أو المعرفة الفنية التي تنفرد بها الجمعية؟",
+                key: "specialized_expertise",
+              },
+              {
+                label: "حجم قاعدة البيانات وتصنيف الفئات المستفيدة",
                 key: "database_size",
               },
               {
                 label:
                   "هل تمتلك الجمعية وحدة استثمار أو إدارة تنمية موارد مالية مستقلة؟",
                 key: "has_investment_unit",
+              },
+              {
+                label: "كم عدد برامج ومشاريع الجمعية لعام 2024م - 2025م",
+                key: "programs_count",
+              },
+              {
+                label: "كم عدد المشاريع التنموية منها؟",
+                key: "development_projects_count",
               },
             ],
             16,
@@ -383,7 +461,11 @@ export default function ExportPage() {
           createSection(
             "رابعاً: الجاهزية والتوجه الريادي",
             [
-              { label: "ما هي أسباب التأسيس؟", key: "startup_reasons" },
+              {
+                label:
+                  "ما هي الأسباب التي تدفع الجمعية للرغبة في تأسيس شركة ناشئة؟",
+                key: "startup_reasons",
+              },
               {
                 label: "ما هو الهدف الرئيسي للجمعية من إنشاء هذه الشركة؟",
                 key: "main_goal",
@@ -394,7 +476,7 @@ export default function ExportPage() {
                 key: "market_gaps",
               },
             ],
-            20,
+            25,
           );
 
           // 5. Fifth Section
@@ -405,18 +487,25 @@ export default function ExportPage() {
                 label: "اسم ضابط الاتصال المسؤول عن المتابعة في البرنامج",
                 key: "contact_person",
               },
+              { label: "المنصب", key: "contact_person_position" },
+              { label: "الجوال", key: "contact_person_phone" },
               {
                 label:
-                  'هل وافق مجلس الإدارة "مبدئياً" على فكرة تأسيس ذراع استثماري أو شركة مستقلة؟',
+                  "هل وافق مجلس الإدارة على فكرة تأسيس ذراع استثماري أو شركة مستقلة؟",
                 key: "board_approval",
               },
               {
                 label:
-                  "هل يوجد موظف أو فريق عمل سيتم تفريغه (جزئياً أو كلياً) لمتابعة هذا البرنامج؟",
+                  "هل يوجد موظف أو فريق عمل سيتم تفريغه لمتابعة هذا البرنامج؟",
                 key: "dedicated_team",
               },
+              {
+                label:
+                  "تطلعاتكم النهائية من المشاركة في برنامج التمكين الريادي",
+                key: "final_aspirations",
+              },
             ],
-            23,
+            28,
           );
 
           // 6. Sixth Section - Attachments
@@ -428,6 +517,7 @@ export default function ExportPage() {
                   bold: true,
                   color: "000000",
                   size: 32,
+                  rightToLeft: true,
                 }),
               ],
               heading: HeadingLevel.HEADING_2,
@@ -448,6 +538,7 @@ export default function ExportPage() {
                       bold: true,
                       size: 24,
                       color: "000000",
+                      rightToLeft: true,
                     }),
                     new ExternalHyperlink({
                       children: [
@@ -457,6 +548,7 @@ export default function ExportPage() {
                           color: "1E3A5F",
                           bold: true,
                           size: 24,
+                          rightToLeft: true,
                         }),
                       ],
                       link: url,
@@ -480,6 +572,7 @@ export default function ExportPage() {
                     text: "لا توجد مرفقات",
                     color: "1E3A5F",
                     size: 24,
+                    rightToLeft: true,
                   }),
                 ],
                 alignment: AlignmentType.RIGHT,

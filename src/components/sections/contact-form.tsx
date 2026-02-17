@@ -37,30 +37,45 @@ const contactFormSchema = z.object({
     .min(1, "يرجى إدخال رقم ترخيص الجمعية")
     .regex(/^[0-9٠-٩۰-۹]+$/, "يرجى إدخال أرقام فقط"),
   foundingDate: z.string().optional(),
+  supervisoryAuthority: z.string().optional(),
   geographicLocation: z.string().min(2, "يرجى إدخال الموقع الجغرافي للجمعية"),
   serviceScope: z.string().optional(),
   headquartersAddress: z.string().optional(),
   socialMediaLinks: z.string().optional(),
 
   // Section 2 - القدرات المؤسسية والحوكمة
+  boardStartDate: z.string().optional(),
+  boardEndDate: z.string().optional(),
+  boardPeriod: z.string().optional(),
   fullTimeEmployees: z.string().min(1, "يرجى إدخال عدد الموظفين"),
   hasExecutiveDirector: z.string().min(1, "يرجى اختيار إجابة"),
+  executiveDirectorName: z.string().optional(),
+  executiveDirectorPhone: z.string().optional(),
   hasStrategicPlan: z.string().min(1, "يرجى اختيار إجابة"),
+  strategicPlanEndDate: z.string().optional(),
+  hasOperationalPlan: z.string().optional(),
   governanceScore: z.string().optional(),
   averageBudget: z.string().optional(),
   awardsAndCertificates: z.string().optional(),
   hasPerformanceReports: z.string().min(1, "يرجى اختيار إجابة"),
+  hasExternalAuditorNotes: z.string().optional(),
+  externalAuditorNotes: z.string().optional(),
   topPartnerships: z.string().optional(),
 
-  // Section 3 - الموارد والأصول المتاحة
+  // Section 3 - الموارد والأصول المتاحة والمشاريع
   physicalAssets: z
     .string()
     .min(5, "يرجى وصف الأصول المادية (5 حروف على الأقل)"),
+  hasDebts: z.string().optional(),
+  hasEndowments: z.string().optional(),
+  endowmentRevenue: z.string().optional(),
   specializedExpertise: z
     .string()
     .min(5, "يرجى وصف الخبرات التخصصية (5 حروف على الأقل)"),
   databaseSize: z.string().optional(),
   hasInvestmentUnit: z.string().min(1, "يرجى اختيار إجابة"),
+  programsCount: z.string().optional(),
+  developmentProjectsCount: z.string().optional(),
 
   // Section 4 - الجاهزية والتوجه الريادي
   startupReasons: z.string().min(10, "يرجى ذكر الأسباب (10 حروف على الأقل)"),
@@ -69,6 +84,8 @@ const contactFormSchema = z.object({
 
   // Section 5 - الالتزام والقرار الإداري
   contactPerson: z.string().min(2, "يرجى إدخال اسم ضابط الاتصال"),
+  contactPersonPosition: z.string().optional(),
+  contactPersonPhone: z.string().optional(),
   boardApproval: z.string().min(1, "يرجى اختيار إجابة"),
   dedicatedTeam: z.string().min(1, "يرجى اختيار إجابة"),
   finalAspirations: z.string().min(10, "يرجى وصف تطلعاتكم (10 حروف على الأقل)"),
@@ -82,29 +99,51 @@ const stepFields: Record<number, (keyof ContactFormValues)[]> = {
     "associationName",
     "licenseNumber",
     "foundingDate",
+    "supervisoryAuthority",
     "geographicLocation",
     "serviceScope",
     "headquartersAddress",
     "socialMediaLinks",
   ],
   2: [
+    "boardStartDate",
+    "boardEndDate",
+    "boardPeriod",
     "fullTimeEmployees",
     "hasExecutiveDirector",
+    "executiveDirectorName",
+    "executiveDirectorPhone",
     "hasStrategicPlan",
+    "strategicPlanEndDate",
+    "hasOperationalPlan",
     "governanceScore",
     "averageBudget",
     "awardsAndCertificates",
     "hasPerformanceReports",
+    "hasExternalAuditorNotes",
+    "externalAuditorNotes",
     "topPartnerships",
   ],
   3: [
     "physicalAssets",
+    "hasDebts",
+    "hasEndowments",
+    "endowmentRevenue",
     "specializedExpertise",
     "databaseSize",
     "hasInvestmentUnit",
+    "programsCount",
+    "developmentProjectsCount",
   ],
   4: ["startupReasons", "mainGoal", "marketGaps"],
-  5: ["contactPerson", "boardApproval", "dedicatedTeam", "finalAspirations"],
+  5: [
+    "contactPerson",
+    "contactPersonPosition",
+    "contactPersonPhone",
+    "boardApproval",
+    "dedicatedTeam",
+    "finalAspirations",
+  ],
   6: [], // No text fields to validate in step 6
 };
 
@@ -122,7 +161,7 @@ const stepLabels = [
 const stepTitles = [
   "أولاً: البيانات التعريفية",
   "ثانياً: القدرات المؤسسية والحوكمة",
-  "ثالثاً: الموارد والأصول المتاحة",
+  "ثالثاً: الموارد والأصول المتاحة والمشاريع",
   "رابعاً: الجاهزية والتوجه الريادي",
   "خامساً: الالتزام والقرار الإداري",
   "سادساً: المرفقات والوثائق",
@@ -167,26 +206,43 @@ export function ContactForm() {
     associationName: "",
     licenseNumber: "",
     foundingDate: "",
+    supervisoryAuthority: "",
     geographicLocation: "",
     serviceScope: "",
     headquartersAddress: "",
     socialMediaLinks: "",
+    boardStartDate: "",
+    boardEndDate: "",
+    boardPeriod: "",
     fullTimeEmployees: "",
     hasExecutiveDirector: "",
+    executiveDirectorName: "",
+    executiveDirectorPhone: "",
     hasStrategicPlan: "",
+    strategicPlanEndDate: "",
+    hasOperationalPlan: "",
     governanceScore: "",
     averageBudget: "",
     awardsAndCertificates: "",
     hasPerformanceReports: "",
+    hasExternalAuditorNotes: "",
+    externalAuditorNotes: "",
     topPartnerships: "",
     physicalAssets: "",
+    hasDebts: "",
+    hasEndowments: "",
+    endowmentRevenue: "",
     specializedExpertise: "",
     databaseSize: "",
     hasInvestmentUnit: "",
+    programsCount: "",
+    developmentProjectsCount: "",
     startupReasons: "",
     mainGoal: "",
     marketGaps: "",
     contactPerson: "",
+    contactPersonPosition: "",
+    contactPersonPhone: "",
     boardApproval: "",
     dedicatedTeam: "",
     finalAspirations: "",
@@ -391,30 +447,47 @@ export function ContactForm() {
             association_name: data.associationName,
             license_number: data.licenseNumber,
             founding_date: data.foundingDate,
+            supervisory_authority: data.supervisoryAuthority,
             geographic_location: data.geographicLocation,
             service_scope: data.serviceScope,
             headquarters_address: data.headquartersAddress,
             social_media_links: data.socialMediaLinks,
             // Section 2
+            board_start_date: data.boardStartDate,
+            board_end_date: data.boardEndDate,
+            board_period: data.boardPeriod,
             full_time_employees: data.fullTimeEmployees,
             has_executive_director: data.hasExecutiveDirector,
+            executive_director_name: data.executiveDirectorName,
+            executive_director_phone: data.executiveDirectorPhone,
             has_strategic_plan: data.hasStrategicPlan,
+            strategic_plan_end_date: data.strategicPlanEndDate,
+            has_operational_plan: data.hasOperationalPlan,
             governance_score: data.governanceScore,
             average_budget: data.averageBudget,
             awards_and_certificates: data.awardsAndCertificates,
             has_performance_reports: data.hasPerformanceReports,
+            has_external_auditor_notes: data.hasExternalAuditorNotes,
+            external_auditor_notes: data.externalAuditorNotes,
             top_partnerships: data.topPartnerships,
             // Section 3
             physical_assets: data.physicalAssets,
+            has_debts: data.hasDebts,
+            has_endowments: data.hasEndowments,
+            endowment_revenue: data.endowmentRevenue,
             specialized_expertise: data.specializedExpertise,
             database_size: data.databaseSize,
             has_investment_unit: data.hasInvestmentUnit,
+            programs_count: data.programsCount,
+            development_projects_count: data.developmentProjectsCount,
             // Section 4
             startup_reasons: data.startupReasons,
             main_goal: data.mainGoal,
             market_gaps: data.marketGaps,
             // Section 5
             contact_person: data.contactPerson,
+            contact_person_position: data.contactPersonPosition,
+            contact_person_phone: data.contactPersonPhone,
             board_approval: data.boardApproval,
             dedicated_team: data.dedicatedTeam,
             final_aspirations: data.finalAspirations,
@@ -687,24 +760,29 @@ export function ContactForm() {
                             type: "date",
                           })}
                           {renderInput(
+                            "supervisoryAuthority",
+                            "4. جهة الاشراف الفني",
+                            "أدخل جهة الاشراف الفني",
+                          )}
+                          {renderInput(
                             "geographicLocation",
-                            "4. الموقع الجغرافي للجمعية (المنطقة والمدينة) *",
+                            "5. الموقع الجغرافي للجمعية (المنطقة والمدينة) *",
                             "مثال: منطقة الرياض - مدينة الرياض",
                           )}
                           {renderInput(
                             "serviceScope",
-                            "5. النطاق الجغرافي لخدمات الجمعية",
+                            "6. النطاق الجغرافي لخدمات الجمعية",
                             "محلي / إقليمي / وطني",
                           )}
                           {renderInput(
                             "headquartersAddress",
-                            "6. عنوان المقر الرئيسي للجمعية",
+                            "7. عنوان المقر الرئيس للجمعية",
                             "أدخل العنوان التفصيلي",
                           )}
                           {renderTextarea(
                             "socialMediaLinks",
-                            "7. حسابات التواصل الاجتماعي والموقع الإلكتروني",
-                            "أدخل روابط حسابات التواصل الاجتماعي والموقع الإلكتروني",
+                            "8. الموقع الإلكتروني للجمعية وحسابات التواصل الاجتماعي",
+                            "أدخل الموقع الإلكتروني وروابط حسابات التواصل الاجتماعي",
                           )}
                         </div>
                       )}
@@ -713,21 +791,72 @@ export function ContactForm() {
                       {currentStep === 2 && (
                         <div className="grid gap-5">
                           {renderInput(
+                            "boardStartDate",
+                            "8. تاريخ بداية مجلس الإدارة",
+                            "",
+                            {
+                              type: "date",
+                            },
+                          )}
+                          {renderInput(
+                            "boardEndDate",
+                            "9. تاريخ نهاية مجلس الإدارة",
+                            "",
+                            {
+                              type: "date",
+                            },
+                          )}
+                          {renderInput(
+                            "boardPeriod",
+                            "10. فترة مجلس الإدارة",
+                            "مثال: الفترة الأولى / الثانية",
+                          )}
+                          {renderInput(
                             "fullTimeEmployees",
-                            "8. عدد الموظفين المتفرغين في الجمعية *",
+                            "11. عدد الموظفين المتفرغين في الجمعية *",
                             "مثال: 50 أو 50-100",
                           )}
                           {renderRadio(
                             "hasExecutiveDirector",
-                            "9. هل يوجد مدير تنفيذي متفرغ للجمعية؟ *",
+                            "12. هل يوجد مدير تنفيذي متفرغ للجمعية؟ *",
                             [
                               { label: "نعم", value: "نعم" },
                               { label: "لا", value: "لا" },
                             ],
                           )}
+                          {renderInput(
+                            "executiveDirectorName",
+                            "13. اسم المدير التنفيذي",
+                            "أدخل اسم المدير التنفيذي",
+                          )}
+                          {renderInput(
+                            "executiveDirectorPhone",
+                            "14. رقم الجوال",
+                            "05XXXXXXXX",
+                            { type: "tel", dir: "ltr" },
+                          )}
                           {renderRadio(
                             "hasStrategicPlan",
-                            "10.  هل تمتلك الجمعية خطة استراتيجية معتمدة؟ (يرجى إرفاقها إن وجدت)*",
+                            "15. هل تمتلك الجمعية خطة استراتيجية معتمدة؟ (يرجى إرفاقها إن وجدت) *",
+                            [
+                              {
+                                label: "نعم (يرجى إرفاقها في المرفقات)",
+                                value: "نعم",
+                              },
+                              { label: "لا", value: "لا" },
+                            ],
+                          )}
+                          {renderInput(
+                            "strategicPlanEndDate",
+                            "16. تاريخ انتهاء الخطة الاستراتيجية الحالية",
+                            "",
+                            {
+                              type: "date",
+                            },
+                          )}
+                          {renderRadio(
+                            "hasOperationalPlan",
+                            "17. هل تمتلك الجمعية خطة تشغيلية؟ (يرجى إرفاقها إن وجدت)",
                             [
                               {
                                 label: "نعم (يرجى إرفاقها في المرفقات)",
@@ -738,36 +867,49 @@ export function ContactForm() {
                           )}
                           {renderInput(
                             "governanceScore",
-                            "11. درجة الجمعية في آخر تقييم للحوكمة",
+                            "18. درجة الجمعية في آخر تقييم للحوكمة",
                             "أدخل الدرجة",
                             { numeric: true },
                           )}
                           {renderInput(
                             "averageBudget",
-                            "12. متوسط الميزانية السنوية للجمعية في آخر ثلاث سنوات",
+                            "19. متوسط الميزانية السنوية للجمعية في آخر ثلاث سنوات",
                             "أدخل المبلغ التقريبي بالريال",
                             { numeric: true },
                           )}
                           {renderTextarea(
                             "awardsAndCertificates",
-                            "13. أهم الجوائز والشهادات التي حصلت عليها الجمعية",
+                            "20. اذكر أهم الجوائز والشهادات التي حصلت عليها الجمعية سابقاً إن وجدت",
                             "اذكر أهم الجوائز والشهادات إن وجدت",
                           )}
                           {renderRadio(
                             "hasPerformanceReports",
-                            "14. هل تتوفر تقارير الأداء السنوية والمالية لآخر عامين؟ *",
+                            "21. هل تتوفر تقارير الأداء السنوية والمالية لآخر عامين؟ (يرجى إرفاقها إن وجدت) *",
                             [
                               {
-                                label: "نعم",
+                                label: "نعم (يرجى إرفاقها في المرفقات)",
                                 value: "نعم",
                               },
                               { label: "لا", value: "لا" },
                             ],
                           )}
+                          {renderRadio(
+                            "hasExternalAuditorNotes",
+                            "22. هل توجد أي ملاحظات على الجمعية من المراجع الخارجي؟",
+                            [
+                              { label: "نعم", value: "نعم" },
+                              { label: "لا", value: "لا" },
+                            ],
+                          )}
+                          {renderTextarea(
+                            "externalAuditorNotes",
+                            "23. في حال وجود ملاحظات يرجى ذكرها",
+                            "اذكر الملاحظات إن وجدت",
+                          )}
                           {renderTextarea(
                             "topPartnerships",
-                            "15. اذكر أهم ثلاث شراكات استراتيجية للجمعية مع القطاع الخاص أو الجهات الحكومية",
-                            "اذكر أهم ثلاث شراكات مع القطاع الخاص أو الجهات الحكومية",
+                            "24. اذكر أهم ثلاث شراكات استراتيجية للجمعية مع القطاع الخاص أو القطاع الحكومي",
+                            "اذكر أهم ثلاث شراكات مع القطاع الخاص أو القطاع الحكومي",
                           )}
                         </div>
                       )}
@@ -780,23 +922,56 @@ export function ContactForm() {
                             "16. ما هي الأصول المادية التي تمتلكها الجمعية وتسمح بالاستفادة منها في مشاريع استثمارية؟ *",
                             "صف الأصول المادية المتاحة",
                           )}
-                          {renderTextarea(
-                            "specializedExpertise",
-                            "17. ما هي الخبرات التخصصية أو المعرفة الفنية التي تنفرد بها الجمعية في مجال عملها؟ *",
-                            "صف الخبرات التخصصية والمعرفة الفنية",
-                          )}
-                          {renderTextarea(
-                            "databaseSize",
-                            "18. حجم قاعدة البيانات التي تمتلكها الجمعية وتصنيف الفئات المستفيدة منها",
-                            "صف حجم قاعدة البيانات والفئات المستفيدة",
-                          )}
                           {renderRadio(
-                            "hasInvestmentUnit",
-                            "19. هل تمتلك الجمعية وحدة استثمار أو إدارة تنمية موارد مالية مستقلة؟ *",
+                            "hasDebts",
+                            "17. هل يوجد ديون على الجمعية؟",
                             [
                               { label: "نعم", value: "نعم" },
                               { label: "لا", value: "لا" },
                             ],
+                          )}
+                          {renderRadio(
+                            "hasEndowments",
+                            "18. هل لدى الجمعية أصول أو اوقاف؟",
+                            [
+                              { label: "نعم", value: "نعم" },
+                              { label: "لا", value: "لا" },
+                            ],
+                          )}
+                          {renderInput(
+                            "endowmentRevenue",
+                            "19. اذا نعم، كم تبلغ الإيرادات من الأصول / الأوقاف؟",
+                            "أدخل المبلغ التقريبي بالريال",
+                          )}
+                          {renderTextarea(
+                            "specializedExpertise",
+                            "20. ما هي الخبرات التخصصية أو المعرفة الفنية التي تنفرد بها الجمعية في مجال عملها؟ *",
+                            "صف الخبرات التخصصية والمعرفة الفنية",
+                          )}
+                          {renderTextarea(
+                            "databaseSize",
+                            "21. حجم قاعدة البيانات التي تمتلكها الجمعية وتصنيف الفئات المستفيدة منها",
+                            "صف حجم قاعدة البيانات والفئات المستفيدة",
+                          )}
+                          {renderRadio(
+                            "hasInvestmentUnit",
+                            "22. هل تمتلك الجمعية وحدة استثمار أو إدارة تنمية موارد مالية مستقلة؟ *",
+                            [
+                              { label: "نعم", value: "نعم" },
+                              { label: "لا", value: "لا" },
+                            ],
+                          )}
+                          {renderInput(
+                            "programsCount",
+                            "23. كم عدد برامج ومشاريع الجمعية لعام 2024م - 2025م",
+                            "أدخل العدد",
+                            { numeric: true },
+                          )}
+                          {renderInput(
+                            "developmentProjectsCount",
+                            "24. كم عدد المشاريع التنموية منها؟",
+                            "أدخل العدد",
+                            { numeric: true },
                           )}
                         </div>
                       )}
@@ -847,9 +1022,20 @@ export function ContactForm() {
                             "23. اسم ضابط الاتصال المسؤول عن المتابعة في البرنامج *",
                             "أدخل الاسم الكامل",
                           )}
+                          {renderInput(
+                            "contactPersonPosition",
+                            "24. المنصب",
+                            "أدخل المنصب الوظيفي",
+                          )}
+                          {renderInput(
+                            "contactPersonPhone",
+                            "25. الجوال",
+                            "05XXXXXXXX",
+                            { type: "tel", dir: "ltr" },
+                          )}
                           {renderRadio(
                             "boardApproval",
-                            '24. هل وافق مجلس الإدارة "مبدئياً" على فكرة تأسيس ذراع استثماري أو شركة مستقلة؟ *',
+                            "26. هل وافق مجلس الإدارة على فكرة تأسيس ذراع استثماري أو شركة مستقلة؟ *",
                             [
                               { label: "نعم", value: "نعم" },
                               { label: "لا", value: "لا" },
@@ -857,7 +1043,7 @@ export function ContactForm() {
                           )}
                           {renderRadio(
                             "dedicatedTeam",
-                            "25. هل يوجد موظف أو فريق عمل سيتم تفريغه (جزئياً أو كلياً) لمتابعة هذا البرنامج؟ *",
+                            "27. هل يوجد موظف أو فريق عمل سيتم تفريغه (جزئياً أو كلياً) لمتابعة هذا البرنامج؟ *",
                             [
                               { label: "نعم", value: "نعم" },
                               { label: "لا", value: "لا" },
@@ -865,7 +1051,7 @@ export function ContactForm() {
                           )}
                           {renderTextarea(
                             "finalAspirations",
-                            "26. ما هي تطلعاتكم النهائية من المشاركة في برنامج التمكين الريادي؟ *",
+                            "28. ما هي تطلعاتكم النهائية من المشاركة في برنامج التمكين الريادي؟ *",
                             "صف تطلعاتكم وأهدافكم من المشاركة في البرنامج",
                           )}
                         </div>
