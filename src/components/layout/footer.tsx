@@ -46,7 +46,7 @@ export function Footer() {
                 href="/#outputs"
                 className="hover:text-[#8FD2E3] transition-colors"
               >
-                المخرج الأخير
+                المخرج النهائي
               </Link>
               <Link
                 href="/#criteria"

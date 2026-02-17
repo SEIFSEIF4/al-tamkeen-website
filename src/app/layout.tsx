@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { IBM_Plex_Sans_Arabic } from "next/font/google";
 import "./globals.css";
-import { LenisProvider } from "@/components/providers/lenis-provider";
 
 const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
   subsets: ["arabic"],
@@ -11,10 +10,10 @@ const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://y-mu-lac.vercel.app"),
+  metadataBase: new URL("https://tamkeen.ryadh.com.sa"),
   title: "التمكين الريادي للجمعيات الأهلية",
   description:
-    "أول برنامج وطني يُمكّن الجمعيات الأهلية من تحويل رسالتها الاجتماعية إلى شركات ناشئة مستدامة عبر التدريب والاستثمار والدعم التقني.",
+    "أول برنامج يُمكّن الجمعيات الأهلية من تحويل رسالتها الاجتماعية إلى شركات ناشئة مستدامة عبر التدريب والاستثمار والدعم التقني.",
   keywords: [
     "التمكين الريادي",
     "الجمعيات الأهلية",
@@ -30,13 +29,13 @@ export const metadata: Metadata = {
   creator: "التمكين الريادي",
   publisher: "التمكين الريادي",
   alternates: {
-    canonical: "https://y-mu-lac.vercel.app",
+    canonical: "https://tamkeen.ryadh.com.sa",
   },
   openGraph: {
     title: "التمكين الريادي للجمعيات الأهلية",
     description:
-      "أول برنامج وطني يُمكّن الجمعيات الأهلية من تحويل رسالتها الاجتماعية إلى شركات ناشئة مستدامة عبر التدريب والاستثمار والدعم التقني.",
-    url: "https://y-mu-lac.vercel.app",
+      "أول برنامج يُمكّن الجمعيات الأهلية من تحويل رسالتها الاجتماعية إلى شركات ناشئة مستدامة عبر التدريب والاستثمار والدعم التقني.",
+    url: "https://tamkeen.ryadh.com.sa",
     siteName: "التمكين الريادي للجمعيات الأهلية",
     type: "website",
     locale: "ar_SA",

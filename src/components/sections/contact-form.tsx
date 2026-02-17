@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -105,9 +105,10 @@ const stepFields: Record<number, (keyof ContactFormValues)[]> = {
   ],
   4: ["startupReasons", "mainGoal", "marketGaps"],
   5: ["contactPerson", "boardApproval", "dedicatedTeam", "finalAspirations"],
+  6: [], // No text fields to validate in step 6
 };
 
-const TOTAL_STEPS = 5;
+const TOTAL_STEPS = 6;
 
 const stepLabels = [
   "البيانات التعريفية",
@@ -115,6 +116,7 @@ const stepLabels = [
   "الموارد والأصول",
   "الجاهزية الريادية",
   "الالتزام الإداري",
+  "المرفقات",
 ];
 
 const stepTitles = [
@@ -123,6 +125,7 @@ const stepTitles = [
   "ثالثاً: الموارد والأصول المتاحة",
   "رابعاً: الجاهزية والتوجه الريادي",
   "خامساً: الالتزام والقرار الإداري",
+  "سادساً: المرفقات والوثائق",
 ];
 
 type ToastState = {
@@ -144,50 +147,116 @@ export function ContactForm() {
   const [toastState, setToastState] = useState<ToastState>(null);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploadProgress, setUploadProgress] = useState<{
+    current: number;
+    total: number;
+    fileName: string;
+  } | null>(null);
   const [stepStatuses, setStepStatuses] = useState<Record<number, StepStatus>>({
     1: "untouched",
     2: "untouched",
     3: "untouched",
     4: "untouched",
     5: "untouched",
+    6: "untouched",
   });
+
+  // ... (defaultValues and persistence logic remain same) ...
+
+  const defaultValues: Partial<ContactFormValues> = {
+    associationName: "",
+    licenseNumber: "",
+    foundingDate: "",
+    geographicLocation: "",
+    serviceScope: "",
+    headquartersAddress: "",
+    socialMediaLinks: "",
+    fullTimeEmployees: "",
+    hasExecutiveDirector: "",
+    hasStrategicPlan: "",
+    governanceScore: "",
+    averageBudget: "",
+    awardsAndCertificates: "",
+    hasPerformanceReports: "",
+    topPartnerships: "",
+    physicalAssets: "",
+    specializedExpertise: "",
+    databaseSize: "",
+    hasInvestmentUnit: "",
+    startupReasons: "",
+    mainGoal: "",
+    marketGaps: "",
+    contactPerson: "",
+    boardApproval: "",
+    dedicatedTeam: "",
+    finalAspirations: "",
+  };
 
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
-    defaultValues: {
-      associationName: "",
-      licenseNumber: "",
-      foundingDate: "",
-      geographicLocation: "",
-      serviceScope: "",
-      headquartersAddress: "",
-      socialMediaLinks: "",
-      fullTimeEmployees: "",
-      hasExecutiveDirector: "",
-      hasStrategicPlan: "",
-      governanceScore: "",
-      averageBudget: "",
-      awardsAndCertificates: "",
-      hasPerformanceReports: "",
-      topPartnerships: "",
-      physicalAssets: "",
-      specializedExpertise: "",
-      databaseSize: "",
-      hasInvestmentUnit: "",
-      startupReasons: "",
-      mainGoal: "",
-      marketGaps: "",
-      contactPerson: "",
-      boardApproval: "",
-      dedicatedTeam: "",
-      finalAspirations: "",
-    },
+    defaultValues,
     mode: "onTouched",
   });
 
+  // ─── Persistence Logic ─────────────────────────────────────
+  // 1. Load data from localStorage on mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedData = localStorage.getItem("tamkeen-form-data");
+      const savedStep = localStorage.getItem("tamkeen-form-step");
+
+      if (savedData) {
+        try {
+          const parsedData = JSON.parse(savedData);
+          // Set each field value
+          Object.keys(parsedData).forEach((key) => {
+            form.setValue(key as any, parsedData[key]);
+          });
+        } catch (e) {
+          console.error("Failed to parse saved form data", e);
+        }
+      }
+
+      if (savedStep) {
+        setCurrentStep(Number(savedStep));
+      }
+    }
+  }, [form]);
+
+  // 2. Save data to localStorage on change
+  useEffect(() => {
+    const subscription = form.watch((value) => {
+      localStorage.setItem("tamkeen-form-data", JSON.stringify(value));
+    });
+    return () => subscription.unsubscribe();
+  }, [form.watch]);
+
+  // 3. Save step to localStorage
+  useEffect(() => {
+    localStorage.setItem("tamkeen-form-step", String(currentStep));
+  }, [currentStep]);
+
+  const MAX_FILE_SIZE_MB = 50;
+  const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setSelectedFiles((prev) => [...prev, ...Array.from(e.target.files!)]);
+      const newFiles = Array.from(e.target.files);
+      const tooLarge = newFiles.filter((f) => f.size > MAX_FILE_SIZE_BYTES);
+      const accepted = newFiles.filter((f) => f.size <= MAX_FILE_SIZE_BYTES);
+
+      if (tooLarge.length > 0) {
+        const names = tooLarge.map((f) => f.name).join("، ");
+        setToastState({
+          type: "error",
+          message: `الملف كبير جداً (الحد الأقصى ${MAX_FILE_SIZE_MB} ميجابايت): ${names}`,
+        });
+        setTimeout(() => setToastState(null), 5000);
+      }
+
+      if (accepted.length > 0) {
+        setSelectedFiles((prev) => [...prev, ...accepted]);
+      }
     }
   };
 
@@ -229,7 +298,22 @@ export function ContactForm() {
   // ─── Upload files to Supabase Storage ──────────────────────
   const uploadFiles = async (): Promise<string[]> => {
     const urls: string[] = [];
-    for (const file of selectedFiles) {
+    const failedFiles: string[] = [];
+
+    for (let i = 0; i < selectedFiles.length; i++) {
+      const file = selectedFiles[i];
+
+      // Update progress state
+      setUploadProgress({
+        current: i + 1,
+        total: selectedFiles.length,
+        fileName: file.name,
+      });
+      setToastState({
+        type: "loading",
+        message: `جاري رفع الملف ${i + 1} من ${selectedFiles.length}... (${file.name})`,
+      });
+
       const timestamp = Date.now();
       const safeName = file.name.replace(/[^a-zA-Z0-9.\u0600-\u06FF_-]/g, "_");
       const filePath = `submissions/${timestamp}_${safeName}`;
@@ -240,6 +324,7 @@ export function ContactForm() {
 
       if (error) {
         console.error("File upload error:", error);
+        failedFiles.push(file.name);
         continue;
       }
 
@@ -249,20 +334,52 @@ export function ContactForm() {
 
       urls.push(publicUrl);
     }
+
+    setUploadProgress(null);
+
+    if (failedFiles.length > 0 && failedFiles.length < selectedFiles.length) {
+      // Some files failed — warn the user but continue
+      setToastState({
+        type: "loading",
+        message: `⚠️ تعذّر رفع ${failedFiles.length} ملف(ات): ${failedFiles.join("، ")}. جاري حفظ باقي البيانات...`,
+      });
+      // Brief pause so user can read the warning
+      await new Promise((r) => setTimeout(r, 2000));
+    } else if (failedFiles.length === selectedFiles.length) {
+      // ALL files failed
+      throw new Error(
+        `فشل رفع جميع الملفات. يرجى التحقق من اتصال الإنترنت والمحاولة مرة أخرى.`,
+      );
+    }
+
     return urls;
   };
 
   // ─── Submit Handler ─────────────────────────────────────────
   async function onSubmit(data: ContactFormValues) {
+    // Prevent submission before the last step (Step 6)
+    if (currentStep < TOTAL_STEPS) {
+      nextStep();
+      return;
+    }
+
     setIsSubmitting(true);
-    setToastState({ type: "loading", message: "جاري إرسال طلبك..." });
 
     try {
       // Upload files first
       let fileUrls: string[] = [];
       if (selectedFiles.length > 0) {
+        setToastState({
+          type: "loading",
+          message: `جاري تحضير ${selectedFiles.length} ملف(ات) للرفع...`,
+        });
         fileUrls = await uploadFiles();
+      } else {
+        setToastState({ type: "loading", message: "جاري حفظ بياناتكم..." });
       }
+
+      // Update toast for data save step
+      setToastState({ type: "loading", message: "جاري حفظ بياناتكم..." });
 
       // Insert all form data
       const { error } = await supabase.from("registrations").insert([
@@ -322,15 +439,24 @@ export function ContactForm() {
         3: "untouched",
         4: "untouched",
         5: "untouched",
+        6: "untouched",
       });
-    } catch {
+      // Clear saved data from localStorage on success
+      localStorage.removeItem("tamkeen-form-data");
+      localStorage.removeItem("tamkeen-form-step");
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : "عذراً، حدث خطأ أثناء إرسال الطلب. يرجى المحاولة مرة أخرى.";
       setToastState({
         type: "error",
-        message: "عذراً، حدث خطأ أثناء إرسال الطلب. يرجى المحاولة مرة أخرى.",
+        message: errorMessage,
       });
     } finally {
       setIsSubmitting(false);
-      setTimeout(() => setToastState(null), 4000);
+      setUploadProgress(null);
+      setTimeout(() => setToastState(null), 5000);
     }
   }
 
@@ -492,7 +618,7 @@ export function ContactForm() {
                       <button
                         type="button"
                         onClick={() => goToStep(step)}
-                        className={`relative flex-shrink-0 w-10 h-10 rounded-full border-2 flex items-center justify-center font-bold text-sm transition-all duration-300 cursor-pointer hover:scale-110 ${getStepIndicatorColor(step)}`}
+                        className={`relative hrink-0 w-10 h-10 rounded-full border-2 flex items-center justify-center font-bold text-sm transition-all duration-300 cursor-pointer hover:scale-110 ${getStepIndicatorColor(step)}`}
                       >
                         {stepStatuses[step] === "valid" &&
                         step !== currentStep ? (
@@ -530,7 +656,7 @@ export function ContactForm() {
 
             <Form {...form}>
               <form
-                onSubmit={form.handleSubmit(onSubmit)}
+                onSubmit={(e) => e.preventDefault()}
                 className="flex-1 flex flex-col justify-between mt-6"
               >
                 <div className="relative min-h-[400px]">
@@ -632,7 +758,7 @@ export function ContactForm() {
                             "14. هل تتوفر تقارير الأداء السنوية والمالية لآخر عامين؟ *",
                             [
                               {
-                                label: "نعم (يرجى إرفاقها في المرفقات)",
+                                label: "نعم",
                                 value: "نعم",
                               },
                               { label: "لا", value: "لا" },
@@ -672,63 +798,6 @@ export function ContactForm() {
                               { label: "لا", value: "لا" },
                             ],
                           )}
-
-                          {/* File Upload */}
-                          <div className="space-y-3 pt-2">
-                            <label className="block text-[#1E3A5F] font-bold text-sm mb-1.5">
-                              المرفقات والوثائق (الخطة الاستراتيجية، تقارير
-                              الأداء، وغيرها)
-                            </label>
-                            <div
-                              onClick={() => fileInputRef.current?.click()}
-                              className="border-2 border-dashed border-gray-200 rounded-xl p-5 flex flex-col items-center justify-center gap-3 cursor-pointer hover:border-[#5D9FDD] hover:bg-[#5D9FDD]/5 transition-all group"
-                            >
-                              <div className="w-11 h-11 bg-gray-50 rounded-full flex items-center justify-center group-hover:bg-[#5D9FDD]/20 transition-colors">
-                                <Upload className="w-5 h-5 text-gray-400 group-hover:text-[#5D9FDD]" />
-                              </div>
-                              <p className="font-bold text-[#1E3A5F] text-sm">
-                                اضغط لرفع الملفات والوثائق
-                              </p>
-                              <input
-                                type="file"
-                                ref={fileInputRef}
-                                multiple
-                                className="hidden"
-                                onChange={handleFileChange}
-                              />
-                            </div>
-
-                            <AnimatePresence>
-                              {selectedFiles.length > 0 && (
-                                <motion.div
-                                  initial={{ opacity: 0, height: 0 }}
-                                  animate={{ opacity: 1, height: "auto" }}
-                                  exit={{ opacity: 0, height: 0 }}
-                                  className="flex flex-wrap gap-2 pt-1"
-                                >
-                                  {selectedFiles.map((file, index) => (
-                                    <motion.div
-                                      key={index}
-                                      initial={{ scale: 0.8, opacity: 0 }}
-                                      animate={{ scale: 1, opacity: 1 }}
-                                      className="bg-gray-50 rounded-xl px-3 py-1.5 flex items-center gap-2 text-xs text-[#1E3A5F] border border-gray-100 shadow-sm"
-                                    >
-                                      <span className="truncate max-w-[120px] font-medium">
-                                        {file.name}
-                                      </span>
-                                      <button
-                                        type="button"
-                                        onClick={() => removeFile(index)}
-                                        className="text-gray-400 hover:text-red-500 transition-colors"
-                                      >
-                                        <X className="w-4 h-4" />
-                                      </button>
-                                    </motion.div>
-                                  ))}
-                                </motion.div>
-                              )}
-                            </AnimatePresence>
-                          </div>
                         </div>
                       )}
 
@@ -801,38 +870,162 @@ export function ContactForm() {
                           )}
                         </div>
                       )}
+
+                      {/* ─── Step 6: المرفقات ─── */}
+                      {currentStep === 6 && (
+                        <div className="grid gap-5">
+                          <div className="space-y-3 pt-2">
+                            <div className="bg-blue-50/50 p-4 rounded-xl border border-blue-100 mb-4">
+                              <p className="text-[#1E3A5F] text-sm leading-relaxed">
+                                يرجى إرفاق المستندات الداعمة مثل:
+                                <span className="font-bold">
+                                  {" "}
+                                  الخطة الاستراتيجية، تقارير الأداء المالي
+                                  والفني، أو أي وثائق أخرى ذات صلة.
+                                </span>
+                              </p>
+                            </div>
+
+                            <label className="block text-[#1E3A5F] font-bold text-sm mb-1.5">
+                              المرفقات والوثائق
+                            </label>
+                            <div
+                              onClick={() => fileInputRef.current?.click()}
+                              className="border-2 border-dashed border-gray-200 rounded-xl p-8 flex flex-col items-center justify-center gap-4 cursor-pointer hover:border-[#5D9FDD] hover:bg-[#5D9FDD]/5 transition-all group bg-gray-50/30"
+                            >
+                              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-300">
+                                <Upload className="w-7 h-7 text-[#5D9FDD]" />
+                              </div>
+                              <div className="text-center space-y-1">
+                                <p className="font-bold text-[#1E3A5F] text-lg">
+                                  اضغط لرفع الملفات
+                                </p>
+                                <p className="text-gray-400 text-xs">
+                                  يمكنك رفع ملفات PDF, Word, Excel, Images
+                                </p>
+                              </div>
+                              <input
+                                type="file"
+                                ref={fileInputRef}
+                                multiple
+                                className="hidden"
+                                onChange={handleFileChange}
+                              />
+                            </div>
+
+                            <AnimatePresence>
+                              {selectedFiles.length > 0 && (
+                                <motion.div
+                                  initial={{ opacity: 0, height: 0 }}
+                                  animate={{ opacity: 1, height: "auto" }}
+                                  exit={{ opacity: 0, height: 0 }}
+                                  className="space-y-2 pt-2"
+                                >
+                                  {selectedFiles.map((file, index) => (
+                                    <motion.div
+                                      key={index}
+                                      initial={{ x: 20, opacity: 0 }}
+                                      animate={{ x: 0, opacity: 1 }}
+                                      exit={{ x: -20, opacity: 0 }}
+                                      className="bg-white rounded-xl px-4 py-3 flex items-center justify-between gap-3 text-sm text-[#1E3A5F] border border-gray-100 shadow-sm"
+                                    >
+                                      <div className="flex items-center gap-3 overflow-hidden">
+                                        <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0 text-xs font-bold text-gray-500 uppercase">
+                                          {file.name
+                                            .split(".")
+                                            .pop()
+                                            ?.slice(0, 3) || "FILE"}
+                                        </div>
+                                        <span className="truncate font-medium">
+                                          {file.name}
+                                        </span>
+                                        <span className="text-xs text-gray-400 flex-shrink-0">
+                                          (
+                                          {(file.size / 1024 / 1024).toFixed(2)}{" "}
+                                          MB)
+                                        </span>
+                                      </div>
+
+                                      <button
+                                        type="button"
+                                        onClick={() => removeFile(index)}
+                                        className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-red-50 text-gray-400 hover:text-red-500 transition-colors"
+                                      >
+                                        <X className="w-5 h-5" />
+                                      </button>
+                                    </motion.div>
+                                  ))}
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </div>
+                        </div>
+                      )}
                     </motion.div>
                   </AnimatePresence>
                 </div>
 
                 {/* Form Navigation Controls */}
                 <div className="flex items-center justify-between pt-10 mt-auto">
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    onClick={prevStep}
-                    disabled={currentStep === 1}
-                    className="rounded-xl px-8 h-12 text-gray-500 font-bold hover:text-[#4B3D90] hover:bg-gray-50 disabled:opacity-20 transition-all text-base"
-                  >
-                    السابق
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      onClick={prevStep}
+                      disabled={currentStep === 1}
+                      className="rounded-xl px-4 md:px-8 h-12 text-gray-500 font-bold hover:text-[#4B3D90] hover:bg-gray-50 disabled:opacity-20 transition-all text-base"
+                    >
+                      السابق
+                    </Button>
+
+                    {/* Reset Button */}
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      onClick={() => {
+                        if (
+                          confirm(
+                            "هل أنت متأكد من رغبتك في حذف جميع البيانات والبدء من جديد؟",
+                          )
+                        ) {
+                          form.reset(defaultValues);
+                          setCurrentStep(1);
+                          setSelectedFiles([]);
+                          localStorage.removeItem("tamkeen-form-data");
+                          localStorage.removeItem("tamkeen-form-step");
+                          window.location.reload(); // Force reload to clear any lingering state
+                        }
+                      }}
+                      className="text-red-400 hover:text-red-600 hover:bg-red-50 rounded-xl px-4 h-12 font-bold transition-all text-sm"
+                    >
+                      إعادة تعيين
+                    </Button>
+                  </div>
 
                   {currentStep < TOTAL_STEPS ? (
                     <Button
                       type="button"
                       onClick={nextStep}
-                      className="bg-[#4B3D90] hover:bg-[#3D3175] text-white rounded-xl px-12 h-12 shadow-xl shadow-[#4B3D90]/20 transition-all font-bold text-base"
+                      className="bg-[#4B3D90] hover:bg-[#3D3175] text-white rounded-xl px-8 md:px-12 h-12 shadow-xl shadow-[#4B3D90]/20 transition-all font-bold text-base"
                     >
                       التالي
                     </Button>
                   ) : (
                     <Button
-                      type="submit"
+                      type="button"
                       disabled={isSubmitting}
-                      className="bg-[#5D9FDD] hover:bg-[#4D8FCB] text-white rounded-xl px-12 h-12 shadow-xl shadow-[#5D9FDD]/20 transition-all font-bold text-base flex items-center gap-3"
+                      onClick={() => form.handleSubmit(onSubmit)()}
+                      className="bg-[#5D9FDD] hover:bg-[#4D8FCB] text-white rounded-xl px-8 md:px-12 h-12 shadow-xl shadow-[#5D9FDD]/20 transition-all font-bold text-base flex items-center gap-3"
                     >
                       {isSubmitting ? (
-                        <Loader2 className="w-5 h-5 animate-spin" />
+                        <>
+                          <Loader2 className="w-5 h-5 animate-spin" />
+                          <span className="text-sm">
+                            {uploadProgress
+                              ? `رفع ${uploadProgress.current}/${uploadProgress.total}`
+                              : "جاري الإرسال..."}
+                          </span>
+                        </>
                       ) : (
                         <>
                           <Send className="w-5 h-5 ml-1" /> إرسال طلب الانضمام
@@ -857,7 +1050,7 @@ export function ContactForm() {
             className="fixed top-8 left-1/2 -translate-x-1/2 z-100 w-[90%] max-w-md"
           >
             <div
-              className={`rounded-2xl px-8 py-5 shadow-2xl text-center text-lg font-bold ${
+              className={`rounded-2xl px-8 py-5 shadow-2xl text-center font-bold ${
                 toastState.type === "success"
                   ? "bg-green-600 text-white"
                   : toastState.type === "error"
@@ -865,7 +1058,25 @@ export function ContactForm() {
                     : "bg-white text-[#4B3D90] border-2 border-[#4B3D90]/10"
               }`}
             >
-              {toastState.message}
+              <div className="text-lg">{toastState.message}</div>
+              {/* Upload progress bar */}
+              {toastState.type === "loading" && uploadProgress && (
+                <div className="mt-3 w-full">
+                  <div className="h-2 bg-[#4B3D90]/10 rounded-full overflow-hidden">
+                    <motion.div
+                      className="h-full bg-[#4B3D90] rounded-full"
+                      initial={{ width: 0 }}
+                      animate={{
+                        width: `${(uploadProgress.current / uploadProgress.total) * 100}%`,
+                      }}
+                      transition={{ duration: 0.4, ease: "easeOut" }}
+                    />
+                  </div>
+                  <p className="text-xs text-[#4B3D90]/60 mt-1">
+                    {uploadProgress.current} / {uploadProgress.total} ملفات
+                  </p>
+                </div>
+              )}
             </div>
           </motion.div>
         )}

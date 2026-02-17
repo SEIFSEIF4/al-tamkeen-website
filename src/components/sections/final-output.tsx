@@ -104,7 +104,7 @@ export function FinalOutputSection() {
               </motion.span>
               <br />
               <span className="text-white mt-4 text-2xl md:text-4xl">
-                شركة ناشئة مملوكة للجمعية، تدرُّ دخلاً وتُحدث أثراً
+                مملوكة للجمعية، تدرُّ دخلاً وتُحدث أثراً
               </span>
             </h3>
           </div>

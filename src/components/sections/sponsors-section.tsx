@@ -7,13 +7,16 @@ export function SponsorsSection() {
   return (
     <section className="py-6 bg-[#5D9FDD] text-center">
       <div className="container mx-auto px-4">
-        {/* Executing Entity Card */}
-        <MotionWrapper className="flex justify-center mb-8">
-          <div className="bg-white rounded-2xl p-6 w-full max-w-[400px]  flex flex-col items-center justify-center shadow-lg">
+        <MotionWrapper
+          delay={0.1}
+          className="flex flex-col md:flex-row justify-center items-center gap-6"
+        >
+          {/* ryadah Card */}
+          <div className="bg-white aspect-square rounded-2xl p-2 w-full max-w-[200px] flex flex-col items-center justify-center shadow-lg">
             <span className="text-black text-lg font-medium mb-3 block">
               إحدى مبادرات
             </span>
-            <div className="relative h-20 w-56">
+            <div className="relative size-32">
               <Image
                 src="/ryadah.svg"
                 alt="الريادة الاجتماعية"
@@ -22,12 +25,6 @@ export function SponsorsSection() {
               />
             </div>
           </div>
-        </MotionWrapper>
-
-        <MotionWrapper
-          delay={0.1}
-          className="flex flex-col md:flex-row justify-center items-center gap-6"
-        >
           {/* Partner Card */}
           <div className="bg-white aspect-square rounded-2xl p-2 w-full max-w-[200px] flex flex-col items-center justify-center shadow-lg">
             <span className="text-black text-lg font-medium mb-3 block">
