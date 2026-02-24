@@ -85,12 +85,12 @@ export function Header({ sticky = false }: { sticky?: boolean }) {
       }`}
     >
       <div className="container mx-auto px-4 md:px-8">
-        <div className="flex items-center justify-between gap-4 h-20">
+        <div className="flex items-center justify-between gap-4 h-16 md:h-20">
           {/* Logos */}
           <Link href="/" className="flex items-center gap-3">
             {/* Al-Tamkeen Logo */}
             <div className="flex items-center gap-2">
-              <div className="h-18 w-auto flex items-center justify-center">
+              <div className="h-12 md:h-18 w-auto flex items-center justify-center">
                 <img
                   src={
                     isScrolled || isMobileMenuOpen
@@ -140,7 +140,7 @@ export function Header({ sticky = false }: { sticky?: boolean }) {
           {/* CTA Button */}
           <div className="hidden lg:block ml-6">
             <Link
-              href="/contact"
+              href="/submit"
               className={`px-7 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 hover:scale-105 cursor-pointer border
                 ${
                   isScrolled
@@ -206,7 +206,7 @@ export function Header({ sticky = false }: { sticky?: boolean }) {
               asChild
               className="mt-4 bg-[#4B3D90] hover:bg-[#4A3D82] text-white rounded-full"
             >
-              <Link href="/contact">قدم الآن</Link>
+              <Link href="/submit">قدم الآن</Link>
             </Button>
           </nav>
         </motion.div>

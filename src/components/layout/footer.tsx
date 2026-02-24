@@ -74,7 +74,7 @@ export function Footer() {
             className="h-10 w-auto object-contain"
           />
           <p className="text-white/70 text-sm">
-            جميع الحقوق محفوظة للريادة الاجتماعية © {new Date().getFullYear()}.
+            جميع الحقوق محفوظة للريادة الاجتماعية © {new Date().getFullYear()}
           </p>
         </div>
       </div>

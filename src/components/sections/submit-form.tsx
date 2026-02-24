@@ -180,7 +180,7 @@ const inputClass =
 const textareaClass =
   "min-h-[120px] rounded-xl border-gray-200 focus:border-[#4B3D90] focus:ring-[#4B3D90] resize-none text-base p-4 leading-relaxed w-full";
 
-export function ContactForm() {
+export function SubmitForm() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [toastState, setToastState] = useState<ToastState>(null);
@@ -546,7 +546,7 @@ export function ContactForm() {
       name={name}
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="text-[#1E3A5F] font-bold text-sm">
+          <FormLabel className="text-[#1E3A5F] font-bold text-xs md:text-sm leading-relaxed">
             {label}
           </FormLabel>
           <FormControl>
@@ -585,7 +585,7 @@ export function ContactForm() {
       name={name}
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="text-[#1E3A5F] font-bold text-sm">
+          <FormLabel className="text-[#1E3A5F] font-bold text-xs md:text-sm leading-relaxed">
             {label}
           </FormLabel>
           <FormControl>
@@ -611,7 +611,7 @@ export function ContactForm() {
       name={name}
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="text-[#1E3A5F] font-bold text-sm">
+          <FormLabel className="text-[#1E3A5F] font-bold text-xs md:text-sm leading-relaxed">
             {label}
           </FormLabel>
           <FormControl>
@@ -662,12 +662,12 @@ export function ContactForm() {
 
   return (
     <section
-      id="contact"
-      className="flex-1 flex items-center py-12 bg-[#4B3D90] relative overflow-hidden"
+      id="submit"
+      className="flex-1 flex items-center py-6 md:py-12 bg-[#4B3D90] relative overflow-hidden"
     >
       <div className="container max-w-4xl mx-auto px-4 md:px-8 lg:px-16 relative z-10">
         <div className="bg-white rounded-[1.5rem] overflow-hidden max-w-5xl mx-auto flex flex-col">
-          <div className="p-8 flex flex-col flex-1">
+          <div className="p-4 sm:p-6 md:p-8 flex flex-col flex-1">
             {/* Title */}
             <div className="mb-6">
               <h2 className="text-2xl font-bold text-[#1E3A5F]">
@@ -691,17 +691,18 @@ export function ContactForm() {
                       <button
                         type="button"
                         onClick={() => goToStep(step)}
-                        className={`relative hrink-0 w-10 h-10 rounded-full border-2 flex items-center justify-center font-bold text-sm transition-all duration-300 cursor-pointer hover:scale-110 ${getStepIndicatorColor(step)}`}
+                        className={`relative shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 flex items-center justify-center font-bold text-xs sm:text-sm transition-all duration-300 cursor-pointer hover:scale-110 ${getStepIndicatorColor(step)}`}
                       >
                         {stepStatuses[step] === "valid" &&
-                        step !== currentStep ? (
+                        step !== currentStep &&
+                        step !== TOTAL_STEPS ? (
                           <Check className="w-5 h-5" />
                         ) : (
                           step
                         )}
-                        {/* Label below */}
+                        {/* Label below - hidden on mobile */}
                         <span
-                          className={`absolute -bottom-7 whitespace-nowrap text-[10px] font-bold ${
+                          className={`absolute -bottom-6 whitespace-nowrap text-[10px] font-bold hidden sm:block ${
                             step === currentStep
                               ? "text-[#4B3D90]"
                               : stepStatuses[step] === "valid"
@@ -726,13 +727,12 @@ export function ContactForm() {
                 )}
               </div>
             </div>
-
             <Form {...form}>
               <form
                 onSubmit={(e) => e.preventDefault()}
                 className="flex-1 flex flex-col justify-between mt-6"
               >
-                <div className="relative min-h-[400px]">
+                <div className="relative min-h-[300px] md:min-h-[400px]">
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={currentStep}
@@ -1072,7 +1072,7 @@ export function ContactForm() {
                               </p>
                             </div>
 
-                            <label className="block text-[#1E3A5F] font-bold text-sm mb-1.5">
+                            <label className="block text-[#1E3A5F] font-bold text-xs md:text-sm mb-1.5 leading-relaxed">
                               المرفقات والوثائق
                             </label>
                             <div
@@ -1116,7 +1116,7 @@ export function ContactForm() {
                                       className="bg-white rounded-xl px-4 py-3 flex items-center justify-between gap-3 text-sm text-[#1E3A5F] border border-gray-100 shadow-sm"
                                     >
                                       <div className="flex items-center gap-3 overflow-hidden">
-                                        <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0 text-xs font-bold text-gray-500 uppercase">
+                                        <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center shrink-0 text-xs font-bold text-gray-500 uppercase">
                                           {file.name
                                             .split(".")
                                             .pop()
@@ -1125,7 +1125,7 @@ export function ContactForm() {
                                         <span className="truncate font-medium">
                                           {file.name}
                                         </span>
-                                        <span className="text-xs text-gray-400 flex-shrink-0">
+                                        <span className="text-xs text-gray-400 shrink-0">
                                           (
                                           {(file.size / 1024 / 1024).toFixed(2)}{" "}
                                           MB)
@@ -1152,19 +1152,52 @@ export function ContactForm() {
                 </div>
 
                 {/* Form Navigation Controls */}
-                <div className="flex items-center justify-between pt-10 mt-auto">
-                  <div className="flex gap-2">
+                <div className="pt-8 mt-auto space-y-3">
+                  {/* Previous & Next/Submit side by side */}
+                  <div className="flex items-center gap-3">
                     <Button
                       type="button"
                       variant="ghost"
                       onClick={prevStep}
                       disabled={currentStep === 1}
-                      className="rounded-xl px-4 md:px-8 h-12 text-gray-500 font-bold hover:text-[#4B3D90] hover:bg-gray-50 disabled:opacity-20 transition-all text-base"
+                      className="rounded-xl px-4 md:px-8 h-12 text-gray-500 font-bold hover:text-[#4B3D90] hover:bg-gray-50 disabled:opacity-20 transition-all text-base flex-1"
                     >
                       السابق
                     </Button>
 
-                    {/* Reset Button */}
+                    {currentStep < TOTAL_STEPS ? (
+                      <Button
+                        type="button"
+                        onClick={nextStep}
+                        className="bg-[#4B3D90] hover:bg-[#3D3175] text-white rounded-xl px-8 md:px-12 h-12 shadow-xl shadow-[#4B3D90]/20 transition-all font-bold text-base flex-1"
+                      >
+                        التالي
+                      </Button>
+                    ) : (
+                      <Button
+                        type="button"
+                        disabled={isSubmitting}
+                        onClick={() => form.handleSubmit(onSubmit)()}
+                        className="bg-[#5D9FDD] hover:bg-[#4D8FCB] text-white rounded-xl px-6 md:px-12 h-12 shadow-xl shadow-[#5D9FDD]/20 transition-all font-bold text-base flex-1"
+                      >
+                        {isSubmitting ? (
+                          <>
+                            <Loader2 className="w-5 h-5 animate-spin" />
+                            <span className="text-sm">
+                              {uploadProgress
+                                ? `رفع ${uploadProgress.current}/${uploadProgress.total}`
+                                : "جاري الإرسال..."}
+                            </span>
+                          </>
+                        ) : (
+                          "إرسال الطلب"
+                        )}
+                      </Button>
+                    )}
+                  </div>
+
+                  {/* Reset button alone */}
+                  <div className="flex justify-center">
                     <Button
                       type="button"
                       variant="ghost"
@@ -1179,46 +1212,14 @@ export function ContactForm() {
                           setSelectedFiles([]);
                           localStorage.removeItem("tamkeen-form-data");
                           localStorage.removeItem("tamkeen-form-step");
-                          window.location.reload(); // Force reload to clear any lingering state
+                          window.location.reload();
                         }
                       }}
-                      className="text-red-400 hover:text-red-600 hover:bg-red-50 rounded-xl px-4 h-12 font-bold transition-all text-sm"
+                      className="text-red-400 hover:text-red-600 hover:bg-red-50 rounded-xl px-4 h-10 font-bold transition-all text-xs"
                     >
                       إعادة تعيين
                     </Button>
                   </div>
-
-                  {currentStep < TOTAL_STEPS ? (
-                    <Button
-                      type="button"
-                      onClick={nextStep}
-                      className="bg-[#4B3D90] hover:bg-[#3D3175] text-white rounded-xl px-8 md:px-12 h-12 shadow-xl shadow-[#4B3D90]/20 transition-all font-bold text-base"
-                    >
-                      التالي
-                    </Button>
-                  ) : (
-                    <Button
-                      type="button"
-                      disabled={isSubmitting}
-                      onClick={() => form.handleSubmit(onSubmit)()}
-                      className="bg-[#5D9FDD] hover:bg-[#4D8FCB] text-white rounded-xl px-8 md:px-12 h-12 shadow-xl shadow-[#5D9FDD]/20 transition-all font-bold text-base flex items-center gap-3"
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <Loader2 className="w-5 h-5 animate-spin" />
-                          <span className="text-sm">
-                            {uploadProgress
-                              ? `رفع ${uploadProgress.current}/${uploadProgress.total}`
-                              : "جاري الإرسال..."}
-                          </span>
-                        </>
-                      ) : (
-                        <>
-                          <Send className="w-5 h-5 ml-1" /> إرسال طلب الانضمام
-                        </>
-                      )}
-                    </Button>
-                  )}
                 </div>
               </form>
             </Form>

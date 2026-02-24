@@ -52,7 +52,7 @@ export function BenefitsSection() {
         />
       </div>
 
-      <div className="container mx-auto px-4 md:px-8 lg:px-16 relative z-10">
+      <div className="container mx-auto px-6 md:px-8 lg:px-16 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Content - Right Side in RTL */}
           <div className="order-1">
@@ -68,7 +68,10 @@ export function BenefitsSection() {
               </h2>
             </motion.div>
 
-            <StaggerContainer className="space-y-6" staggerDelay={0.1}>
+            <StaggerContainer
+              className="space-y-4 md:space-y-6"
+              staggerDelay={0.1}
+            >
               {benefits.map((benefit, index) => (
                 <StaggerItem key={index}>
                   <motion.div
@@ -96,8 +99,8 @@ export function BenefitsSection() {
                     </div>
 
                     {/* Text */}
-                    <p className="text-white text-lg lg:text-xl leading-relaxed">
-                      <span className="font-bold text-[#8FD2E3] ml-1 block text-xl lg:text-2xl mb-1">
+                    <p className="text-white text-base md:text-lg lg:text-xl leading-relaxed">
+                      <span className="font-bold text-[#8FD2E3] ml-1 block text-lg md:text-xl lg:text-2xl mb-1">
                         {benefit.keyword}
                       </span>
                       {benefit.text}
@@ -114,7 +117,7 @@ export function BenefitsSection() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="order-2 flex items-center justify-center"
+            className="order-2 hidden md:flex items-center justify-center"
           >
             <img
               src="/benefits-image.png"

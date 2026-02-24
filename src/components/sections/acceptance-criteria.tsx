@@ -14,12 +14,12 @@ const criteria = [
 export function AcceptanceCriteriaSection() {
   return (
     <section id="criteria" className="section-padding bg-white overflow-hidden">
-      <div className="container mx-auto">
+      <div className="container mx-auto px-6 md:px-8 lg:px-16 relative z-10">
         <div className="flex flex-col lg:flex-row items-start justify-between gap-12">
           {/* Text Content */}
           <div className="w-full lg:w-1/2">
             <MotionWrapper>
-              <h2 className="text-3xl md:text-5xl font-bold text-[#4B3D90] mb-8 leading-tight">
+              <h2 className="text-2xl md:text-5xl font-bold text-[#4B3D90] mb-8 leading-tight">
                 معايير القبول
                 <br />
                 في البرنامج للجمعيات
@@ -37,7 +37,7 @@ export function AcceptanceCriteriaSection() {
                   className="flex items-start gap-3"
                 >
                   <span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#4B3D90] shrink-0" />
-                  <p className="text-lg md:text-xl text-gray-700 leading-relaxed font-medium">
+                  <p className="text-sm md:text-base text-gray-600 leading-relaxed font-medium">
                     {item}
                   </p>
                 </motion.div>

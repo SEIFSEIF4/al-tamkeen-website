@@ -30,14 +30,14 @@ export function FinalOutputSection() {
   return (
     <section
       id="outputs"
-      className="bg-[#3E3082] relative overflow-hidden flex flex-col items-center justify-center min-h-[600px]"
+      className="bg-[#3E3082] relative overflow-hidden flex flex-col items-center justify-center min-h-[350px] md:min-h-[600px] py-12 md:py-0"
     >
       {/* Background Elements */}
       <div className="absolute inset-0 pointer-events-none">
         {/* Optional subtle noise or gradient if needed, keeping it clean for now as per design */}
       </div>
 
-      <div className="container mx-auto px-4 md:px-8 lg:px-16 relative z-10">
+      <div className="container mx-auto px-6 md:px-8 lg:px-16 relative z-10">
         {/* Section Title */}
         {/* <MotionWrapper className="text-center mb-12">
           <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">
@@ -81,7 +81,7 @@ export function FinalOutputSection() {
               style={{ originX: 0.5 }} // Center expand
               className="inline-block bg-[#5D9FDD] text-white px-6 py-2 relative"
             >
-              <span className="block font-bold text-2xl md:text-4xl">
+              <span className="block font-bold text-xl md:text-4xl">
                 المخرج النهائي
               </span>
             </motion.div>
@@ -98,21 +98,21 @@ export function FinalOutputSection() {
                   backgroundRepeat: "no-repeat",
                   backgroundPosition: "right center", // Start from right (RTL)
                 }}
-                className="text-3xl md:text-5xl px-2 leading-loose box-decoration-clone text-white pb-1"
+                className="text-2xl md:text-5xl px-2 leading-loose box-decoration-clone text-white pb-1"
               >
                 ﴍﻛـــــــــــــﺔ ﻧﺎﺷــــــــــﺌﺔ اﺟﺘﻤـــــــــﺎﻋﻴﺔ،
               </motion.span>
               <br />
-              <span className="text-white mt-4 text-2xl md:text-4xl">
+              <span className="text-white mt-4 text-lg md:text-4xl">
                 مملوكة للجمعية، تدرُّ دخلاً وتُحدث أثراً
               </span>
             </h3>
           </div>
           {/* Large Quote Mark Graphic (Stylized) */}
-          <div className="absolute -right-4 top-0 text-[#8FD2E3] opacity-20 text-[150px] font-serif leading-none select-none pointer-events-none">
+          <div className="absolute right-0 md:-right-4 top-0 text-[#8FD2E3] opacity-20 text-[80px] md:text-[150px] font-serif leading-none select-none pointer-events-none">
             ”
           </div>
-          <div className="absolute -left-4 -bottom-34 text-[#8FD2E3] opacity-20 text-[150px] font-serif leading-none select-none pointer-events-none">
+          <div className="absolute left-0 md:-left-4 -bottom-16 md:-bottom-34 text-[#8FD2E3] opacity-20 text-[80px] md:text-[150px] font-serif leading-none select-none pointer-events-none">
             “
           </div>
         </MotionWrapper>

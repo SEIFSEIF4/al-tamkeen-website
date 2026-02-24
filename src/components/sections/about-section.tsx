@@ -7,9 +7,9 @@ export function AboutSection() {
   return (
     <section
       id="about"
-      className="relative pt-16 md:pt-28 pb-12 md:pb-24 bg-white overflow-hidden"
+      className="relative pt-8 md:pt-28 pb-8 md:pb-24 bg-white overflow-hidden"
     >
-      <div className="container mx-auto px-4 md:px-8 lg:px-16 relative z-10">
+      <div className="container mx-auto px-6 md:px-8 lg:px-16 relative z-10">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-20">
           {/* Logo - Right Side */}
           <div className="lg:w-2/5 flex justify-center lg:justify-end">
@@ -52,7 +52,7 @@ export function AboutSection() {
             <MotionWrapper direction="right" delay={0.2}>
               <div className="text-right space-y-6">
                 <ul className="space-y-4">
-                  <li className="flex items-start gap-3 text-lg sm:text-lg font-medium text-gray-700 leading-relaxed">
+                  <li className="flex items-start gap-3 text-base md:text-lg font-medium text-gray-700 leading-relaxed">
                     <span className="text-[#8FD2E3] text-2xl mt-1">•</span>
                     <span>
                       برنامج متخصص يمكّن الجمعيات الأهلية من تأسيس شركات ناشئة
@@ -60,7 +60,7 @@ export function AboutSection() {
                       التدريب، والإرشاد، والتطوير التقني، والإطلاق الفعلي.
                     </span>
                   </li>
-                  <li className="flex items-start gap-3 text-lg sm:text-lg font-medium text-gray-700 leading-relaxed">
+                  <li className="flex items-start gap-3 text-base md:text-lg font-medium text-gray-700 leading-relaxed">
                     <span className="text-[#8FD2E3] text-2xl mt-1">•</span>
                     <span>
                       يركز البرنامج على تحويل المعرفة والخبرة التي تمتلكها
