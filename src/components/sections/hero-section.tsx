@@ -43,25 +43,15 @@ export function HeroSection() {
       `}</style>
 
       {/* Centered Content */}
-      <div className="relative z-10 flex flex-col items-center text-center px-6 py-16 md:py-0 gap-6 md:gap-8 max-w-3xl mx-auto">
-        {/* 3D Scene / Logo */}
+      <div className="relative z-10 flex flex-col items-center text-center px-6 py-16 md:py-0 gap-2 md:gap-4 max-w-3xl mx-auto">
+        {/* 3D Scene */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.7, ease: "easeOut" }}
           className="w-[200px] h-[200px] sm:w-[250px] sm:h-[250px] md:w-[300px] md:h-[300px] relative"
         >
-          {/* Logo fallback — always visible behind */}
-          <Image
-            src="/logo.svg"
-            alt="التمكين الريادي"
-            width={300}
-            height={300}
-            className="w-full h-full object-contain absolute inset-0 z-0"
-            priority
-          />
-          {/* 3D Spline — renders on top */}
-          <div className="absolute inset-0 w-full h-full z-10 pointer-events-none spline-hero overflow-hidden rounded-none border-0 outline-none">
+          <div className="absolute inset-0 w-full h-full pointer-events-none spline-hero overflow-hidden rounded-none border-0 outline-none">
             <Spline
               scene="https://prod.spline.design/OOzvU5u5cDxzEMbC/scene.splinecode"
               onLoad={(spline: any) => {
