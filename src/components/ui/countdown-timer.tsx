@@ -44,7 +44,7 @@ export function CountdownTimer({ targetDate }: CountdownTimerProps) {
 
   return (
     <div className={styles.wrapper}>
-      <div className={styles.title}>الوقت المتبقي للانطلاق</div>
+      <div className={styles.title}>الوقت المتبقي لانتهاء التقديم</div>
       <div className={styles.row}>
         {units.map((unit, i) => (
           <div className={styles.unit} key={unit.label}>

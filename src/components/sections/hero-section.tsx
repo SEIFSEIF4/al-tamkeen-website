@@ -57,7 +57,7 @@ export function HeroSection() {
             alt="التمكين الريادي"
             width={300}
             height={300}
-            className="w-full h-full object-contain drop-shadow-2xl absolute inset-0 z-0"
+            className="w-full h-full object-contain absolute inset-0 z-0"
             priority
           />
           {/* 3D Spline — renders on top */}
