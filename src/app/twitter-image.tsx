@@ -27,7 +27,8 @@ export default async function Image() {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        background: "linear-gradient(135deg, #3E3082 0%, #2D2466 50%, #1E1850 100%)",
+        background:
+          "linear-gradient(135deg, #3E3082 0%, #2D2466 50%, #1E1850 100%)",
         position: "relative",
         overflow: "hidden",
         fontFamily: '"IBM Plex Sans Arabic"',
@@ -71,7 +72,8 @@ export default async function Image() {
           left: 0,
           right: 0,
           height: "6px",
-          background: "linear-gradient(90deg, #8fd2e3 0%, #5d9fdd 50%, #8fd2e3 100%)",
+          background:
+            "linear-gradient(90deg, #8fd2e3 0%, #5d9fdd 50%, #8fd2e3 100%)",
           display: "flex",
         }}
       />
@@ -154,7 +156,8 @@ export default async function Image() {
             display: "flex",
           }}
         >
-          أول برنامج وطني يُمكّن الجمعيات من تحويل رسالتها الاجتماعية إلى شركات ناشئة مستدامة
+          أول مشروع وطني يُمكّن الجمعيات من تحويل رسالتها الاجتماعية إلى شركات
+          ناشئة مستدامة
         </div>
       </div>
 

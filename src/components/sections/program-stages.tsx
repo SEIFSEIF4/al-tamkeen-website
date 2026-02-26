@@ -53,7 +53,7 @@ export function ProgramStages() {
       <div className="container mx-auto px-6 md:px-8 lg:px-16 relative z-10">
         <MotionWrapper className="text-center mb-10 md:mb-20">
           <h2 className="text-3xl md:text-4xl  lg:text-5xl font-bold text-[#1E3A5F] mb-6">
-            مراحل البرنامج
+            مراحل المشروع
           </h2>
         </MotionWrapper>
 
@@ -113,10 +113,10 @@ export function ProgramStages() {
                         className="bg-white p-6 rounded-2xl shadow-xl shadow-gray-100/50 border border-gray-100 hover:border-[#8FD2E3] transition-colors duration-300"
                         dir="rtl"
                       >
-                        <h3 className="text-xl md:text-2xl font-bold text-[#1E3A3F] mb-1 md:mb-2">
+                        <h3 className="text-xl text-start md:text-2xl font-bold text-[#1E3A3F] mb-1 md:mb-2">
                           {stage.title}
                         </h3>
-                        <p className="text-sm md:text-base text-gray-600 leading-relaxed font-medium">
+                        <p className="text-sm text-start md:text-base text-gray-600 leading-relaxed font-medium">
                           {stage.description}
                         </p>
                       </motion.div>

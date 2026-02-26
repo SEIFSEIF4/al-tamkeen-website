@@ -41,7 +41,7 @@ export function FinalOutputSection() {
         {/* Section Title */}
         {/* <MotionWrapper className="text-center mb-12">
           <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">
-            المخرج النهائي للبرنامج
+            المخرج النهائي للمشروع
           </h2>
         </MotionWrapper> */}
 

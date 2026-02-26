@@ -62,7 +62,7 @@ export function Header({ sticky = false }: { sticky?: boolean }) {
   const navLinks = [
     { href: "/#hero", label: "الرئيسية" },
     { href: "/#benefits", label: "المميزات" },
-    { href: "/#stages", label: "مراحل البرنامج" },
+    { href: "/#stages", label: "مراحل المشروع" },
     { href: "/#outputs", label: "المخرج النهائي" },
     { href: "/#criteria", label: "معايير القبول" },
     { href: "/#faq", label: "الأسئلة الشائعة" },

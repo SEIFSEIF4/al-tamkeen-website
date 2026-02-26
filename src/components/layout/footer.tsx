@@ -32,13 +32,13 @@ export function Footer() {
                 href="/#about"
                 className="hover:text-[#8FD2E3] transition-colors"
               >
-                فكرة البرنامج
+                فكرة المشروع
               </Link>
               <Link
                 href="/#stages"
                 className="hover:text-[#8FD2E3] transition-colors"
               >
-                مراحل البرنامج
+                مراحل المشروع
               </Link>
             </div>
             <div className="flex flex-col gap-3 text-white/90 font-medium">

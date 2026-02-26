@@ -12,7 +12,7 @@ export function SponsorsSection() {
           className="flex flex-row flex-wrap justify-center items-center gap-3 md:gap-6"
         >
           {/* ryadah Card */}
-          <div className="bg-white rounded-2xl p-2 w-[110px] h-[110px] sm:w-[140px] sm:h-[140px] md:w-[200px] md:h-[200px] flex flex-col items-center justify-center shadow-lg">
+          <div className="bg-white rounded-2xl p-3 sm:p-4 md:p-6 h-[110px] sm:h-[130px] md:h-[180px] w-[130px] sm:w-[160px] md:w-[220px] flex flex-col items-center justify-center shadow-lg">
             <a
               href="https://ryadh.com.sa/"
               target="_blank"
@@ -20,10 +20,10 @@ export function SponsorsSection() {
               title="زيارة موقع ريادة"
               className="flex flex-col items-center justify-center"
             >
-              <span className="text-black text-xs sm:text-sm md:text-lg font-medium mb-1 md:mb-3 block">
+              <span className="text-black text-xs sm:text-sm md:text-lg font-medium mb-1 md:mb-2 block">
                 إحدى مبادرات
               </span>
-              <div className="relative size-16 sm:size-20 md:size-32">
+              <div className="relative size-14 sm:size-16 md:size-24">
                 <Image
                   src="/ryadah.svg"
                   alt="الريادة الاجتماعية"
@@ -33,30 +33,12 @@ export function SponsorsSection() {
               </div>
             </a>
           </div>
-          {/* Partner Card */}
-          <div className="bg-white rounded-2xl p-2 w-[110px] h-[110px] sm:w-[140px] sm:h-[140px] md:w-[200px] md:h-[200px] flex flex-col items-center justify-center shadow-lg">
-            <span className="text-black text-xs sm:text-sm md:text-lg font-medium mb-1 md:mb-3 block">
-              بالشراكة مع
-            </span>
-            <div className="relative size-16 sm:size-20 md:size-32">
+          {/* Partners Card */}
+          <div className="bg-white  rounded-2xl p-3 sm:p-4 md:p-6 h-[110px] sm:h-[130px] md:h-[180px] flex flex-col items-center justify-center shadow-lg">
+            <div className="relative h-[50px] sm:h-[60px] md:h-[90px] w-[200px] sm:w-[280px] md:w-[380px]">
               <Image
-                src="/kingKhaildFoundation.jpg"
-                alt="King Khalid Foundation"
-                fill
-                className="object-contain"
-              />
-            </div>
-          </div>
-
-          {/* Sponsor Card */}
-          <div className="bg-white rounded-2xl p-2 w-[110px] h-[110px] sm:w-[140px] sm:h-[140px] md:w-[200px] md:h-[200px] flex flex-col items-center justify-center shadow-lg">
-            <span className="text-black text-xs sm:text-sm md:text-lg font-medium mb-1 md:mb-3 block">
-              برعاية
-            </span>
-            <div className="relative size-16 sm:size-20 md:size-32">
-              <Image
-                src="/SNB.png"
-                alt="Saudi National Bank"
+                src="/ahalina.png"
+                alt="SNB Ahalina | مؤسسة الملك خالد"
                 fill
                 className="object-contain"
               />

@@ -55,7 +55,7 @@ export function AboutSection() {
                   <li className="flex items-start gap-3 text-base md:text-lg font-medium text-gray-700 leading-relaxed">
                     <span className="text-[#8FD2E3] text-2xl mt-1">•</span>
                     <span>
-                      برنامج متخصص يمكّن الجمعيات الأهلية من تأسيس شركات ناشئة
+                      مشروع متخصص يمكّن الجمعيات الأهلية من تأسيس شركات ناشئة
                       منبثقة من خبراتها ومجالات عملها، عبر منهجية عملية تجمع بين
                       التدريب، والإرشاد، والتطوير التقني، والإطلاق الفعلي.
                     </span>
@@ -63,7 +63,7 @@ export function AboutSection() {
                   <li className="flex items-start gap-3 text-base md:text-lg font-medium text-gray-700 leading-relaxed">
                     <span className="text-[#8FD2E3] text-2xl mt-1">•</span>
                     <span>
-                      يركز البرنامج على تحويل المعرفة والخبرة التي تمتلكها
+                      يركز المشروع على تحويل المعرفة والخبرة التي تمتلكها
                       الجمعية إلى منتجات أو خدمات مبتكرة قابلة للنمو والاستدامة،
                       مما يتيح للجمعية بناء مصادر دخل مستدامة وتعظيم أثرها
                       الاجتماعي.
