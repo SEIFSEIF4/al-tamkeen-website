@@ -21,7 +21,7 @@ export function SponsorsSection() {
               className="flex flex-col items-center justify-center"
             >
               <span className="text-black text-xs sm:text-sm md:text-lg font-medium mb-1 md:mb-2 block">
-                إحدى مبادرات
+                إحدى مشاريع
               </span>
               <div className="relative w-24 h-16 md:w-36 md:h-24">
                 <Image
