@@ -68,11 +68,16 @@ export function Footer() {
       {/* Bottom Bar */}
       <div className="border-t border-white/15">
         <div className="container mx-auto px-4 md:px-8 py-5 flex flex-col-reverse md:flex-row justify-between items-center gap-4">
-          <img
-            src="/ryadah_white.svg"
-            alt="الريادة الاجتماعية"
-            className="h-10 w-auto object-contain"
-          />
+          <div className="flex flex-col items-center md:items-start gap-1">
+            <span className="text-white/60 pr-4 text-[10px] md:text-xs">
+              أحد مشاريع
+            </span>
+            <img
+              src="/ryadah_white.svg"
+              alt="الريادة الاجتماعية"
+              className="h-8 md:h-10 w-auto pr-1 object-contain"
+            />
+          </div>
           <p className="text-white/70 text-sm">
             جميع الحقوق محفوظة للريادة الاجتماعية © {new Date().getFullYear()}
           </p>
