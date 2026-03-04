@@ -11,7 +11,6 @@ export function SponsorsSection() {
           delay={0.1}
           className="flex flex-row flex-wrap justify-center items-center gap-3 md:gap-6"
         >
-          {/* ryadah Card */}
           <div className="bg-white order-3 rounded-2xl p-3 sm:p-4 md:p-6 h-[110px] sm:h-[130px] md:h-[180px] w-[130px] sm:w-[160px] md:w-[220px] flex flex-col items-center justify-center shadow-lg">
             <a
               href="https://ryadh.com.sa/"
@@ -33,12 +32,20 @@ export function SponsorsSection() {
               </div>
             </a>
           </div>
-          {/* Partners Card */}
-          <div className="bg-white order-1 rounded-2xl p-3 sm:p-4 md:p-6 h-[110px] sm:h-[130px] md:h-[180px] flex flex-col items-center justify-center shadow-lg">
-            <div className="relative h-[50px] sm:h-[60px] md:h-[90px] w-[200px] sm:w-[280px] md:w-[380px]">
+          <div className="bg-white order-1 rounded-2xl p-3 sm:p-4 md:p-6 h-[110px] sm:h-[130px] md:h-[180px] flex items-center justify-center shadow-lg gap-3 sm:gap-4 md:gap-6">
+            <div className="relative h-[50px] sm:h-[60px] md:h-[80px] w-[100px] sm:w-[130px] md:w-[170px] shrink-0">
               <Image
-                src="/ahalina.png"
-                alt="SNB Ahalina | مؤسسة الملك خالد"
+                src="/khaled.svg"
+                alt="مؤسسة الملك خالد | King Khalid Foundation"
+                fill
+                className="object-contain"
+              />
+            </div>
+            <div className="w-px h-[50px] sm:h-[60px] md:h-[80px] bg-gray-300 shrink-0" />
+            <div className="relative p-4 h-[50px] sm:h-[60px] md:h-[80px] w-[100px] sm:w-[140px] md:w-[190px] shrink-0">
+              <Image
+                src="/ahalinaa.svg"
+                alt="SNB Ahalina"
                 fill
                 className="object-contain"
               />
