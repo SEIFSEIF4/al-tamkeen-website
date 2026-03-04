@@ -12,58 +12,29 @@ export function SponsorsSection() {
           className="flex flex-row flex-wrap justify-center items-center gap-3 md:gap-6"
         >
           <div className="bg-white order-3 rounded-2xl p-3 sm:p-4 md:p-6 h-[110px] sm:h-[130px] md:h-[180px] w-[130px] sm:w-[160px] md:w-[220px] flex flex-col items-center justify-center shadow-lg">
-            <a
-              href="https://ryadh.com.sa/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="زيارة موقع ريادة"
-              className="flex flex-col items-center justify-center"
-            >
-              <div className="relative w-24 h-16 md:w-36 md:h-24">
-                <Image
-                  src="/SNB.svg"
-                  alt="SNB"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-            </a>
+            <div className="relative w-24 h-16 md:w-36 md:h-24">
+              <Image src="/SNB.svg" alt="SNB" fill className="object-contain" />
+            </div>
           </div>
           <div className="bg-white order-3 rounded-2xl p-3 sm:p-4 md:p-6 h-[110px] sm:h-[130px] md:h-[180px] w-[130px] sm:w-[160px] md:w-[220px] flex flex-col items-center justify-center shadow-lg">
-            <a
-              href="https://ryadh.com.sa/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="زيارة موقع ريادة"
-              className="flex flex-col items-center justify-center"
-            >
-              <div className="relative w-24 h-16 md:w-36 md:h-24">
-                <Image
-                  src="/ahalinaa.svg"
-                  alt="Ahalina"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-            </a>
+            <div className="relative w-24 h-16 md:w-36 md:h-24">
+              <Image
+                src="/ahalinaa.svg"
+                alt="Ahalina"
+                fill
+                className="object-contain"
+              />
+            </div>
           </div>
           <div className="bg-white order-3 rounded-2xl p-3 sm:p-4 md:p-6 h-[110px] sm:h-[130px] md:h-[180px] w-[130px] sm:w-[160px] md:w-[220px] flex flex-col items-center justify-center shadow-lg">
-            <a
-              href="https://ryadh.com.sa/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="زيارة موقع ريادة"
-              className="flex flex-col items-center justify-center"
-            >
-              <div className="relative w-24 h-16 md:w-36 md:h-24">
-                <Image
-                  src="/khaled.svg"
-                  alt="King Khalid Foundation"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-            </a>
+            <div className="relative w-24 h-16 md:w-36 md:h-24">
+              <Image
+                src="/khaled.svg"
+                alt="King Khalid Foundation"
+                fill
+                className="object-contain"
+              />
+            </div>
           </div>
         </MotionWrapper>
       </div>
