@@ -439,8 +439,8 @@ export function SubmitForm() {
         .from("registrations")
         .insert([
           {
-            user_name: data.contactPerson,
-            phone_number: data.licenseNumber,
+            user_name: data.associationName,
+            phone_number: data.executiveDirectorPhone,
             form_data: {
               // Section 1
               association_name: data.associationName,

@@ -36,6 +36,7 @@ interface Registration {
     geographic_location?: string;
     service_scope?: string;
     headquarters_address?: string;
+    work_field?: string;
     social_media_links?: string;
     board_start_date?: string;
     board_end_date?: string;
@@ -72,7 +73,7 @@ interface Registration {
     board_approval?: string;
     dedicated_team?: string;
     final_aspirations?: string;
-    file_urls?: string[];
+    file_urls?: Record<string, string[]>;
     [key: string]: any;
   };
 }
@@ -90,6 +91,7 @@ const fieldLabels: Record<string, string> = {
   geographic_location: "الموقع الجغرافي",
   service_scope: "نطاق الخدمة",
   headquarters_address: "عنوان المقر",
+  work_field: "مجال عمل الجمعية",
   social_media_links: "الموقع والتواصل",
   board_start_date: "تاريخ بداية المجلس",
   board_end_date: "تاريخ نهاية المجلس",
@@ -127,6 +129,12 @@ const fieldLabels: Record<string, string> = {
   dedicated_team: "فريق مفرغ",
   final_aspirations: "التطلعات",
   file_urls: "روابط الملفات",
+};
+
+const fileCategoryLabels: Record<string, string> = {
+  strategicPlan: "الخطة الاستراتيجية",
+  operationalPlan: "الخطة التشغيلية",
+  performanceReports: "تقارير الأداء",
 };
 
 import JSZip from "jszip";
@@ -172,7 +180,22 @@ export default function ExportPage() {
 
         Object.entries(reg.form_data).forEach(([key, value]) => {
           const label = fieldLabels[key] || key;
-          if (key === "file_urls" && Array.isArray(value)) {
+          if (
+            key === "file_urls" &&
+            typeof value === "object" &&
+            value !== null &&
+            !Array.isArray(value)
+          ) {
+            // Categorized file URLs
+            Object.entries(value as Record<string, string[]>).forEach(
+              ([cat, urls]) => {
+                const catLabel = fileCategoryLabels[cat] || cat;
+                if (Array.isArray(urls)) {
+                  row[`مرفقات - ${catLabel}`] = urls.join(", ");
+                }
+              },
+            );
+          } else if (key === "file_urls" && Array.isArray(value)) {
             row[label] = value.join(", ");
           } else {
             row[label] = value;
@@ -349,6 +372,7 @@ export default function ExportPage() {
                 label: "عنوان المقر الرئيس للجمعية",
                 key: "headquarters_address",
               },
+              { label: "مجال عمل الجمعية", key: "work_field" },
               {
                 label: "الموقع الإلكتروني للجمعية وحسابات التواصل الاجتماعي",
                 key: "social_media_links",
@@ -507,7 +531,7 @@ export default function ExportPage() {
             28,
           );
 
-          // 6. Sixth Section - Attachments
+          // 6. Sixth Section - Attachments (categorized)
           children.push(
             new Paragraph({
               children: [
@@ -526,9 +550,85 @@ export default function ExportPage() {
             }),
           );
 
-          const fileUrls = reg.form_data.file_urls as string[] | undefined;
-          if (Array.isArray(fileUrls) && fileUrls.length > 0) {
-            fileUrls.forEach((url, i) => {
+          const fileUrls = reg.form_data.file_urls;
+          const hasFiles =
+            fileUrls && typeof fileUrls === "object" && !Array.isArray(fileUrls)
+              ? Object.values(fileUrls).some(
+                  (urls) => Array.isArray(urls) && urls.length > 0,
+                )
+              : Array.isArray(fileUrls) && fileUrls.length > 0;
+
+          if (
+            hasFiles &&
+            typeof fileUrls === "object" &&
+            !Array.isArray(fileUrls)
+          ) {
+            // Categorized file URLs (new format)
+            Object.entries(fileUrls as Record<string, string[]>).forEach(
+              ([category, urls]) => {
+                if (!Array.isArray(urls) || urls.length === 0) return;
+
+                const categoryLabel = fileCategoryLabels[category] || category;
+
+                // Category sub-header
+                children.push(
+                  new Paragraph({
+                    children: [
+                      new TextRun({
+                        text: categoryLabel,
+                        bold: true,
+                        size: 26,
+                        color: "4B3D90",
+                        rightToLeft: true,
+                      }),
+                    ],
+                    alignment: AlignmentType.RIGHT,
+                    bidirectional: true,
+                    spacing: { before: 200, after: 100 },
+                  }),
+                );
+
+                urls.forEach((url, i) => {
+                  // Extract filename from URL
+                  const filename = decodeURIComponent(
+                    url.split("/").pop() || `ملف ${i + 1}`,
+                  );
+
+                  children.push(
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          text: `${i + 1}. `,
+                          bold: true,
+                          size: 24,
+                          color: "000000",
+                          rightToLeft: true,
+                        }),
+                        new ExternalHyperlink({
+                          children: [
+                            new TextRun({
+                              text: filename,
+                              style: "Hyperlink",
+                              color: "1E3A5F",
+                              bold: true,
+                              size: 24,
+                              rightToLeft: true,
+                            }),
+                          ],
+                          link: url,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                      bidirectional: true,
+                      spacing: { after: 100 },
+                    }),
+                  );
+                });
+              },
+            );
+          } else if (Array.isArray(fileUrls) && fileUrls.length > 0) {
+            // Legacy flat array format
+            (fileUrls as string[]).forEach((url, i) => {
               children.push(
                 new Paragraph({
                   children: [
@@ -551,10 +651,6 @@ export default function ExportPage() {
                         }),
                       ],
                       link: url,
-                    }),
-                    new TextRun({
-                      text: "  ",
-                      size: 24,
                     }),
                   ],
                   alignment: AlignmentType.RIGHT,
