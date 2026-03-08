@@ -15,7 +15,22 @@ const Spline = dynamic(() => import("@splinetool/react-spline"), {
   loading: () => <div className="w-full h-full" />,
 });
 
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth <= 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  return isMobile;
+}
+
 export function HeroSection() {
+  const isMobile = useIsMobile();
+
   return (
     <section
       id="hero"
@@ -44,21 +59,34 @@ export function HeroSection() {
 
       {/* Centered Content */}
       <div className="relative z-10 flex flex-col items-center text-center px-6 py-16 md:py-0 gap-2 md:gap-4 max-w-3xl mx-auto">
-        {/* 3D Scene */}
+        {/* 3D Scene on desktop, static logo on mobile */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.7, ease: "easeOut" }}
           className="w-[200px] h-[200px] sm:w-[250px] sm:h-[250px] md:w-[300px] md:h-[300px] relative"
         >
-          <div className="absolute inset-0 w-full h-full pointer-events-none spline-hero overflow-hidden rounded-none border-0 outline-none">
-            <Spline
-              scene="https://prod.spline.design/OOzvU5u5cDxzEMbC/scene.splinecode"
-              onLoad={(spline: any) => {
-                spline.setBackgroundColor("#4B3D90");
-              }}
-            />
-          </div>
+          {isMobile ? (
+            <div className="flex items-center justify-center w-full h-full">
+              <Image
+                src="/logo.svg"
+                alt="التمكين الريادي"
+                width={200}
+                height={200}
+                className="w-full h-full object-contain drop-shadow-2xl"
+                priority
+              />
+            </div>
+          ) : (
+            <div className="absolute inset-0 w-full h-full pointer-events-none spline-hero overflow-hidden rounded-none border-0 outline-none">
+              <Spline
+                scene="https://prod.spline.design/OOzvU5u5cDxzEMbC/scene.splinecode"
+                onLoad={(spline: any) => {
+                  spline.setBackgroundColor("#4B3D90");
+                }}
+              />
+            </div>
+          )}
         </motion.div>
 
         {/* Heading */}

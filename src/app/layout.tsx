@@ -81,6 +81,10 @@ export const metadata: Metadata = {
     apple: "/logo.svg",
   },
   category: "ريادة أعمال",
+  other: {
+    "color-scheme": "only light",
+    "darkreader-lock": "",
+  },
 };
 
 export default function RootLayout({

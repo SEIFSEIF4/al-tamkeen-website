@@ -36,46 +36,58 @@ const contactFormSchema = z.object({
     .string()
     .min(1, "يرجى إدخال رقم ترخيص الجمعية")
     .regex(/^[0-9٠-٩۰-۹]+$/, "يرجى إدخال أرقام فقط"),
-  foundingDate: z.string().optional(),
-  supervisoryAuthority: z.string().optional(),
+  foundingDate: z.string().min(1, "يرجى إدخال تاريخ التأسيس"),
+  supervisoryAuthority: z.string().min(1, "يرجى إدخال جهة الاشراف الفني"),
   geographicLocation: z.string().min(2, "يرجى إدخال الموقع الجغرافي للجمعية"),
-  serviceScope: z.string().optional(),
-  headquartersAddress: z.string().optional(),
-  socialMediaLinks: z.string().optional(),
+  serviceScope: z.string().min(1, "يرجى إدخال النطاق الجغرافي لخدمات الجمعية"),
+  headquartersAddress: z.string().min(1, "يرجى إدخال عنوان المقر الرئيس"),
+  socialMediaLinks: z
+    .string()
+    .min(1, "يرجى إدخال الموقع الإلكتروني أو حسابات التواصل"),
 
   // Section 2 - القدرات المؤسسية والحوكمة
-  boardStartDate: z.string().optional(),
-  boardEndDate: z.string().optional(),
-  boardPeriod: z.string().optional(),
+  boardStartDate: z.string().min(1, "يرجى إدخال تاريخ بداية مجلس الإدارة"),
+  boardEndDate: z.string().min(1, "يرجى إدخال تاريخ نهاية مجلس الإدارة"),
+  boardPeriod: z.string().min(1, "يرجى إدخال فترة مجلس الإدارة"),
   fullTimeEmployees: z.string().min(1, "يرجى إدخال عدد الموظفين"),
   hasExecutiveDirector: z.string().min(1, "يرجى اختيار إجابة"),
-  executiveDirectorName: z.string().optional(),
-  executiveDirectorPhone: z.string().optional(),
+  executiveDirectorName: z.string().min(1, "يرجى إدخال اسم المدير التنفيذي"),
+  executiveDirectorPhone: z.string().min(1, "يرجى إدخال رقم الجوال"),
   hasStrategicPlan: z.string().min(1, "يرجى اختيار إجابة"),
-  strategicPlanEndDate: z.string().optional(),
-  hasOperationalPlan: z.string().optional(),
-  governanceScore: z.string().optional(),
-  averageBudget: z.string().optional(),
-  awardsAndCertificates: z.string().optional(),
+  strategicPlanEndDate: z
+    .string()
+    .min(1, "يرجى إدخال تاريخ انتهاء الخطة الاستراتيجية"),
+  hasOperationalPlan: z.string().min(1, "يرجى اختيار إجابة"),
+  governanceScore: z.string().min(1, "يرجى إدخال درجة الحوكمة"),
+  averageBudget: z.string().min(1, "يرجى إدخال متوسط الميزانية السنوية"),
+  awardsAndCertificates: z
+    .string()
+    .min(1, "يرجى ذكر الجوائز والشهادات أو كتابة 'لا يوجد'"),
   hasPerformanceReports: z.string().min(1, "يرجى اختيار إجابة"),
-  hasExternalAuditorNotes: z.string().optional(),
-  externalAuditorNotes: z.string().optional(),
-  topPartnerships: z.string().optional(),
+  hasExternalAuditorNotes: z.string().min(1, "يرجى اختيار إجابة"),
+  externalAuditorNotes: z
+    .string()
+    .min(1, "يرجى ذكر الملاحظات أو كتابة 'لا يوجد'"),
+  topPartnerships: z.string().min(1, "يرجى ذكر الشراكات أو كتابة 'لا يوجد'"),
 
   // Section 3 - الموارد والأصول المتاحة والمشاريع
   physicalAssets: z
     .string()
     .min(5, "يرجى وصف الأصول المادية (5 حروف على الأقل)"),
-  hasDebts: z.string().optional(),
-  hasEndowments: z.string().optional(),
-  endowmentRevenue: z.string().optional(),
+  hasDebts: z.string().min(1, "يرجى اختيار إجابة"),
+  hasEndowments: z.string().min(1, "يرجى اختيار إجابة"),
+  endowmentRevenue: z
+    .string()
+    .min(1, "يرجى إدخال الإيرادات أو كتابة 'لا يوجد'"),
   specializedExpertise: z
     .string()
     .min(5, "يرجى وصف الخبرات التخصصية (5 حروف على الأقل)"),
-  databaseSize: z.string().optional(),
+  databaseSize: z.string().min(1, "يرجى إدخال حجم قاعدة البيانات"),
   hasInvestmentUnit: z.string().min(1, "يرجى اختيار إجابة"),
-  programsCount: z.string().optional(),
-  developmentProjectsCount: z.string().optional(),
+  programsCount: z.string().min(1, "يرجى إدخال عدد البرامج والمشاريع"),
+  developmentProjectsCount: z
+    .string()
+    .min(1, "يرجى إدخال عدد المشاريع التنموية"),
 
   // Section 4 - الجاهزية والتوجه الريادي
   startupReasons: z.string().min(10, "يرجى ذكر الأسباب (10 حروف على الأقل)"),
@@ -84,8 +96,8 @@ const contactFormSchema = z.object({
 
   // Section 5 - الالتزام والقرار الإداري
   contactPerson: z.string().min(2, "يرجى إدخال اسم ضابط الاتصال"),
-  contactPersonPosition: z.string().optional(),
-  contactPersonPhone: z.string().optional(),
+  contactPersonPosition: z.string().min(1, "يرجى إدخال المنصب"),
+  contactPersonPhone: z.string().min(1, "يرجى إدخال رقم الجوال"),
   boardApproval: z.string().min(1, "يرجى اختيار إجابة"),
   dedicatedTeam: z.string().min(1, "يرجى اختيار إجابة"),
   finalAspirations: z.string().min(10, "يرجى وصف تطلعاتكم (10 حروف على الأقل)"),
@@ -144,10 +156,9 @@ const stepFields: Record<number, (keyof ContactFormValues)[]> = {
     "dedicatedTeam",
     "finalAspirations",
   ],
-  6: [], // No text fields to validate in step 6
 };
 
-const TOTAL_STEPS = 6;
+const TOTAL_STEPS = 5;
 
 const stepLabels = [
   "البيانات التعريفية",
@@ -155,7 +166,6 @@ const stepLabels = [
   "الموارد والأصول",
   "الجاهزية الريادية",
   "الالتزام الإداري",
-  "المرفقات",
 ];
 
 const stepTitles = [
@@ -164,7 +174,6 @@ const stepTitles = [
   "ثالثاً: الموارد والأصول المتاحة والمشاريع",
   "رابعاً: الجاهزية والتوجه الريادي",
   "خامساً: الالتزام والقرار الإداري",
-  "سادساً: المرفقات والوثائق",
 ];
 
 type ToastState = {
@@ -175,6 +184,9 @@ type ToastState = {
 // Step status: "untouched" | "valid" | "invalid"
 type StepStatus = "untouched" | "valid" | "invalid";
 
+// File categories for inline uploads
+type FileCategory = "strategicPlan" | "operationalPlan" | "performanceReports";
+
 const inputClass =
   "h-12 rounded-xl border-gray-200 focus:border-[#4B3D90] focus:ring-[#4B3D90] text-base w-full px-4";
 const textareaClass =
@@ -184,8 +196,18 @@ export function SubmitForm() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [toastState, setToastState] = useState<ToastState>(null);
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [categoryFiles, setCategoryFiles] = useState<
+    Record<FileCategory, File[]>
+  >({
+    strategicPlan: [],
+    operationalPlan: [],
+    performanceReports: [],
+  });
+  const fileInputRefs = {
+    strategicPlan: useRef<HTMLInputElement>(null),
+    operationalPlan: useRef<HTMLInputElement>(null),
+    performanceReports: useRef<HTMLInputElement>(null),
+  };
   const [uploadProgress, setUploadProgress] = useState<{
     current: number;
     total: number;
@@ -197,7 +219,6 @@ export function SubmitForm() {
     3: "untouched",
     4: "untouched",
     5: "untouched",
-    6: "untouched",
   });
 
   // ... (defaultValues and persistence logic remain same) ...
@@ -295,29 +316,36 @@ export function SubmitForm() {
   const MAX_FILE_SIZE_MB = 50;
   const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const newFiles = Array.from(e.target.files);
-      const tooLarge = newFiles.filter((f) => f.size > MAX_FILE_SIZE_BYTES);
-      const accepted = newFiles.filter((f) => f.size <= MAX_FILE_SIZE_BYTES);
+  const handleCategoryFileChange =
+    (category: FileCategory) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e.target.files) {
+        const newFiles = Array.from(e.target.files);
+        const tooLarge = newFiles.filter((f) => f.size > MAX_FILE_SIZE_BYTES);
+        const accepted = newFiles.filter((f) => f.size <= MAX_FILE_SIZE_BYTES);
 
-      if (tooLarge.length > 0) {
-        const names = tooLarge.map((f) => f.name).join("، ");
-        setToastState({
-          type: "error",
-          message: `الملف كبير جداً (الحد الأقصى ${MAX_FILE_SIZE_MB} ميجابايت): ${names}`,
-        });
-        setTimeout(() => setToastState(null), 5000);
+        if (tooLarge.length > 0) {
+          const names = tooLarge.map((f) => f.name).join("، ");
+          setToastState({
+            type: "error",
+            message: `الملف كبير جداً (الحد الأقصى ${MAX_FILE_SIZE_MB} ميجابايت): ${names}`,
+          });
+          setTimeout(() => setToastState(null), 5000);
+        }
+
+        if (accepted.length > 0) {
+          setCategoryFiles((prev) => ({
+            ...prev,
+            [category]: [...prev[category], ...accepted],
+          }));
+        }
       }
+    };
 
-      if (accepted.length > 0) {
-        setSelectedFiles((prev) => [...prev, ...accepted]);
-      }
-    }
-  };
-
-  const removeFile = (index: number) => {
-    setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
+  const removeCategoryFile = (category: FileCategory, index: number) => {
+    setCategoryFiles((prev) => ({
+      ...prev,
+      [category]: prev[category].filter((_, i) => i !== index),
+    }));
   };
 
   // Validate a specific step and update its status
@@ -352,35 +380,30 @@ export function SubmitForm() {
   };
 
   // ─── Upload files to Supabase Storage ──────────────────────
-  const uploadFiles = async (): Promise<string[]> => {
+  const uploadCategoryFiles = async (
+    registrationId: string,
+    category: FileCategory,
+    files: File[],
+  ): Promise<string[]> => {
     const urls: string[] = [];
-    const failedFiles: string[] = [];
 
-    for (let i = 0; i < selectedFiles.length; i++) {
-      const file = selectedFiles[i];
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const safeName = file.name.replace(/[^a-zA-Z0-9.\u0600-\u06FF_-]/g, "_");
+      const filePath = `submissions/${registrationId}/${category}/${safeName}`;
 
-      // Update progress state
       setUploadProgress({
         current: i + 1,
-        total: selectedFiles.length,
+        total: files.length,
         fileName: file.name,
       });
-      setToastState({
-        type: "loading",
-        message: `جاري رفع الملف ${i + 1} من ${selectedFiles.length}... (${file.name})`,
-      });
-
-      const timestamp = Date.now();
-      const safeName = file.name.replace(/[^a-zA-Z0-9.\u0600-\u06FF_-]/g, "_");
-      const filePath = `submissions/${timestamp}_${safeName}`;
 
       const { error } = await supabase.storage
         .from("registrations")
         .upload(filePath, file);
 
       if (error) {
-        console.error("File upload error:", error);
-        failedFiles.push(file.name);
+        console.error(`File upload error (${category}):`, error);
         continue;
       }
 
@@ -391,29 +414,12 @@ export function SubmitForm() {
       urls.push(publicUrl);
     }
 
-    setUploadProgress(null);
-
-    if (failedFiles.length > 0 && failedFiles.length < selectedFiles.length) {
-      // Some files failed — warn the user but continue
-      setToastState({
-        type: "loading",
-        message: `⚠️ تعذّر رفع ${failedFiles.length} ملف(ات): ${failedFiles.join("، ")}. جاري حفظ باقي البيانات...`,
-      });
-      // Brief pause so user can read the warning
-      await new Promise((r) => setTimeout(r, 2000));
-    } else if (failedFiles.length === selectedFiles.length) {
-      // ALL files failed
-      throw new Error(
-        `فشل رفع جميع الملفات. يرجى التحقق من اتصال الإنترنت والمحاولة مرة أخرى.`,
-      );
-    }
-
     return urls;
   };
 
   // ─── Submit Handler ─────────────────────────────────────────
   async function onSubmit(data: ContactFormValues) {
-    // Prevent submission before the last step (Step 6)
+    // Prevent submission before the last step
     if (currentStep < TOTAL_STEPS) {
       nextStep();
       return;
@@ -422,89 +428,122 @@ export function SubmitForm() {
     setIsSubmitting(true);
 
     try {
-      // Upload files first
-      let fileUrls: string[] = [];
-      if (selectedFiles.length > 0) {
-        setToastState({
-          type: "loading",
-          message: `جاري تحضير ${selectedFiles.length} ملف(ات) للرفع...`,
-        });
-        fileUrls = await uploadFiles();
-      } else {
-        setToastState({ type: "loading", message: "جاري حفظ بياناتكم..." });
-      }
-
-      // Update toast for data save step
       setToastState({ type: "loading", message: "جاري حفظ بياناتكم..." });
 
-      // Insert all form data
-      const { error } = await supabase.from("registrations").insert([
-        {
-          user_name: data.contactPerson,
-          phone_number: data.licenseNumber,
-          form_data: {
-            // Section 1
-            association_name: data.associationName,
-            license_number: data.licenseNumber,
-            founding_date: data.foundingDate,
-            supervisory_authority: data.supervisoryAuthority,
-            geographic_location: data.geographicLocation,
-            service_scope: data.serviceScope,
-            headquarters_address: data.headquartersAddress,
-            social_media_links: data.socialMediaLinks,
-            // Section 2
-            board_start_date: data.boardStartDate,
-            board_end_date: data.boardEndDate,
-            board_period: data.boardPeriod,
-            full_time_employees: data.fullTimeEmployees,
-            has_executive_director: data.hasExecutiveDirector,
-            executive_director_name: data.executiveDirectorName,
-            executive_director_phone: data.executiveDirectorPhone,
-            has_strategic_plan: data.hasStrategicPlan,
-            strategic_plan_end_date: data.strategicPlanEndDate,
-            has_operational_plan: data.hasOperationalPlan,
-            governance_score: data.governanceScore,
-            average_budget: data.averageBudget,
-            awards_and_certificates: data.awardsAndCertificates,
-            has_performance_reports: data.hasPerformanceReports,
-            has_external_auditor_notes: data.hasExternalAuditorNotes,
-            external_auditor_notes: data.externalAuditorNotes,
-            top_partnerships: data.topPartnerships,
-            // Section 3
-            physical_assets: data.physicalAssets,
-            has_debts: data.hasDebts,
-            has_endowments: data.hasEndowments,
-            endowment_revenue: data.endowmentRevenue,
-            specialized_expertise: data.specializedExpertise,
-            database_size: data.databaseSize,
-            has_investment_unit: data.hasInvestmentUnit,
-            programs_count: data.programsCount,
-            development_projects_count: data.developmentProjectsCount,
-            // Section 4
-            startup_reasons: data.startupReasons,
-            main_goal: data.mainGoal,
-            market_gaps: data.marketGaps,
-            // Section 5
-            contact_person: data.contactPerson,
-            contact_person_position: data.contactPersonPosition,
-            contact_person_phone: data.contactPersonPhone,
-            board_approval: data.boardApproval,
-            dedicated_team: data.dedicatedTeam,
-            final_aspirations: data.finalAspirations,
-            // Files
-            file_urls: fileUrls,
+      // 1. Insert form data first to get the registration ID
+      const { data: insertedRow, error } = await supabase
+        .from("registrations")
+        .insert([
+          {
+            user_name: data.contactPerson,
+            phone_number: data.licenseNumber,
+            form_data: {
+              // Section 1
+              association_name: data.associationName,
+              license_number: data.licenseNumber,
+              founding_date: data.foundingDate,
+              supervisory_authority: data.supervisoryAuthority,
+              geographic_location: data.geographicLocation,
+              service_scope: data.serviceScope,
+              headquarters_address: data.headquartersAddress,
+              social_media_links: data.socialMediaLinks,
+              // Section 2
+              board_start_date: data.boardStartDate,
+              board_end_date: data.boardEndDate,
+              board_period: data.boardPeriod,
+              full_time_employees: data.fullTimeEmployees,
+              has_executive_director: data.hasExecutiveDirector,
+              executive_director_name: data.executiveDirectorName,
+              executive_director_phone: data.executiveDirectorPhone,
+              has_strategic_plan: data.hasStrategicPlan,
+              strategic_plan_end_date: data.strategicPlanEndDate,
+              has_operational_plan: data.hasOperationalPlan,
+              governance_score: data.governanceScore,
+              average_budget: data.averageBudget,
+              awards_and_certificates: data.awardsAndCertificates,
+              has_performance_reports: data.hasPerformanceReports,
+              has_external_auditor_notes: data.hasExternalAuditorNotes,
+              external_auditor_notes: data.externalAuditorNotes,
+              top_partnerships: data.topPartnerships,
+              // Section 3
+              physical_assets: data.physicalAssets,
+              has_debts: data.hasDebts,
+              has_endowments: data.hasEndowments,
+              endowment_revenue: data.endowmentRevenue,
+              specialized_expertise: data.specializedExpertise,
+              database_size: data.databaseSize,
+              has_investment_unit: data.hasInvestmentUnit,
+              programs_count: data.programsCount,
+              development_projects_count: data.developmentProjectsCount,
+              // Section 4
+              startup_reasons: data.startupReasons,
+              main_goal: data.mainGoal,
+              market_gaps: data.marketGaps,
+              // Section 5
+              contact_person: data.contactPerson,
+              contact_person_position: data.contactPersonPosition,
+              contact_person_phone: data.contactPersonPhone,
+              board_approval: data.boardApproval,
+              dedicated_team: data.dedicatedTeam,
+              final_aspirations: data.finalAspirations,
+            },
           },
-        },
-      ]);
+        ])
+        .select("id")
+        .single();
 
       if (error) throw error;
+
+      const registrationId = insertedRow?.id;
+
+      // 2. Upload files into the registration's folder
+      const allFileUrls: Record<string, string[]> = {};
+      const totalFiles = Object.values(categoryFiles).reduce(
+        (sum, files) => sum + files.length,
+        0,
+      );
+
+      if (totalFiles > 0 && registrationId) {
+        setToastState({
+          type: "loading",
+          message: `جاري رفع ${totalFiles} ملف(ات)...`,
+        });
+
+        for (const [category, files] of Object.entries(categoryFiles)) {
+          if (files.length > 0) {
+            const urls = await uploadCategoryFiles(
+              String(registrationId),
+              category as FileCategory,
+              files,
+            );
+            if (urls.length > 0) {
+              allFileUrls[category] = urls;
+            }
+          }
+        }
+
+        // 3. Update the record with file URLs
+        await supabase
+          .from("registrations")
+          .update({
+            form_data: {
+              ...insertedRow,
+              file_urls: allFileUrls,
+            },
+          })
+          .eq("id", registrationId);
+      }
 
       setToastState({
         type: "success",
         message: "شكراً لكم، تم استلام طلبكم بنجاح!",
       });
       form.reset();
-      setSelectedFiles([]);
+      setCategoryFiles({
+        strategicPlan: [],
+        operationalPlan: [],
+        performanceReports: [],
+      });
       setCurrentStep(1);
       setStepStatuses({
         1: "untouched",
@@ -512,7 +551,6 @@ export function SubmitForm() {
         3: "untouched",
         4: "untouched",
         5: "untouched",
-        6: "untouched",
       });
       // Clear saved data from localStorage on success
       localStorage.removeItem("tamkeen-form-data");
@@ -644,6 +682,68 @@ export function SubmitForm() {
     />
   );
 
+  // ─── Inline File Upload Component ─────────────────────────
+  const renderInlineFileUpload = (category: FileCategory) => (
+    <div className="mt-3 space-y-2">
+      <div
+        onClick={() => fileInputRefs[category].current?.click()}
+        className="border-2 border-dashed border-gray-200 rounded-xl p-4 flex items-center justify-center gap-3 cursor-pointer hover:border-[#5D9FDD] hover:bg-[#5D9FDD]/5 transition-all group bg-gray-50/30"
+      >
+        <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-300">
+          <Upload className="w-5 h-5 text-[#5D9FDD]" />
+        </div>
+        <div className="text-center">
+          <p className="font-bold text-[#1E3A5F] text-sm">اضغط لرفع الملفات</p>
+          <p className="text-gray-400 text-[10px]">PDF, Word, Excel, Images</p>
+        </div>
+        <input
+          type="file"
+          ref={fileInputRefs[category]}
+          multiple
+          className="hidden"
+          onChange={handleCategoryFileChange(category)}
+        />
+      </div>
+      <AnimatePresence>
+        {categoryFiles[category].length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="space-y-1.5"
+          >
+            {categoryFiles[category].map((file: File, index: number) => (
+              <motion.div
+                key={index}
+                initial={{ x: 20, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                exit={{ x: -20, opacity: 0 }}
+                className="bg-white rounded-lg px-3 py-2 flex items-center justify-between gap-2 text-xs text-[#1E3A5F] border border-gray-100 shadow-sm"
+              >
+                <div className="flex items-center gap-2 overflow-hidden">
+                  <div className="w-6 h-6 rounded bg-gray-100 flex items-center justify-center shrink-0 text-[10px] font-bold text-gray-500 uppercase">
+                    {file.name.split(".").pop()?.slice(0, 3) || "FILE"}
+                  </div>
+                  <span className="truncate font-medium">{file.name}</span>
+                  <span className="text-[10px] text-gray-400 shrink-0">
+                    ({(file.size / 1024 / 1024).toFixed(1)} MB)
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => removeCategoryFile(category, index)}
+                  className="w-6 h-6 flex items-center justify-center rounded-full hover:bg-red-50 text-gray-400 hover:text-red-500 transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+
   // ─── Step Indicator Component ──────────────────────────────
   const getStepIndicatorColor = (step: number) => {
     if (step === currentStep) return "bg-[#4B3D90] text-white border-[#4B3D90]";
@@ -745,15 +845,11 @@ export function SubmitForm() {
                       {/* ─── Step 1: البيانات التعريفية ─── */}
                       {currentStep === 1 && (
                         <div className="grid gap-5">
-                          {renderInput(
-                            "associationName",
-                            "1. اسم الجمعية *",
-                            "أدخل اسم الجمعية",
-                          )}
+                          {renderInput("associationName", "1. اسم الجمعية", "")}
                           {renderInput(
                             "licenseNumber",
-                            "2. رقم ترخيص الجمعية *",
-                            "أدخل رقم الترخيص",
+                            "2. رقم ترخيص الجمعية",
+                            "",
                             { numeric: true },
                           )}
                           {renderInput("foundingDate", "3. تاريخ التأسيس", "", {
@@ -762,27 +858,27 @@ export function SubmitForm() {
                           {renderInput(
                             "supervisoryAuthority",
                             "4. جهة الاشراف الفني",
-                            "أدخل جهة الاشراف الفني",
+                            "",
                           )}
                           {renderInput(
                             "geographicLocation",
-                            "5. الموقع الجغرافي للجمعية (المنطقة والمدينة) *",
-                            "مثال: منطقة الرياض - مدينة الرياض",
+                            "5. الموقع الجغرافي للجمعية (المنطقة والمدينة)",
+                            "",
                           )}
                           {renderInput(
                             "serviceScope",
                             "6. النطاق الجغرافي لخدمات الجمعية",
-                            "محلي / إقليمي / وطني",
+                            "",
                           )}
                           {renderInput(
                             "headquartersAddress",
                             "7. عنوان المقر الرئيس للجمعية",
-                            "أدخل العنوان التفصيلي",
+                            "",
                           )}
                           {renderTextarea(
                             "socialMediaLinks",
                             "8. الموقع الإلكتروني للجمعية وحسابات التواصل الاجتماعي",
-                            "أدخل الموقع الإلكتروني وروابط حسابات التواصل الاجتماعي",
+                            "",
                           )}
                         </div>
                       )}
@@ -809,16 +905,16 @@ export function SubmitForm() {
                           {renderInput(
                             "boardPeriod",
                             "10. فترة مجلس الإدارة",
-                            "مثال: الفترة الأولى / الثانية",
+                            "",
                           )}
                           {renderInput(
                             "fullTimeEmployees",
-                            "11. عدد الموظفين المتفرغين في الجمعية *",
-                            "مثال: 50 أو 50-100",
+                            "11. عدد الموظفين المتفرغين في الجمعية",
+                            "",
                           )}
                           {renderRadio(
                             "hasExecutiveDirector",
-                            "12. هل يوجد مدير تنفيذي متفرغ للجمعية؟ *",
+                            "12. هل يوجد مدير تنفيذي متفرغ للجمعية؟",
                             [
                               { label: "نعم", value: "نعم" },
                               { label: "لا", value: "لا" },
@@ -827,25 +923,24 @@ export function SubmitForm() {
                           {renderInput(
                             "executiveDirectorName",
                             "13. اسم المدير التنفيذي",
-                            "أدخل اسم المدير التنفيذي",
+                            "",
                           )}
                           {renderInput(
                             "executiveDirectorPhone",
                             "14. رقم الجوال",
-                            "05XXXXXXXX",
+                            "",
                             { type: "tel", dir: "ltr" },
                           )}
                           {renderRadio(
                             "hasStrategicPlan",
-                            "15. هل تمتلك الجمعية خطة استراتيجية معتمدة؟ (يرجى إرفاقها إن وجدت) *",
+                            "15. هل تمتلك الجمعية خطة استراتيجية معتمدة؟ (يرجى إرفاقها إن وجدت)",
                             [
-                              {
-                                label: "نعم (يرجى إرفاقها في المرفقات)",
-                                value: "نعم",
-                              },
+                              { label: "نعم", value: "نعم" },
                               { label: "لا", value: "لا" },
                             ],
                           )}
+                          {form.watch("hasStrategicPlan") === "نعم" &&
+                            renderInlineFileUpload("strategicPlan")}
                           {renderInput(
                             "strategicPlanEndDate",
                             "16. تاريخ انتهاء الخطة الاستراتيجية الحالية",
@@ -858,41 +953,39 @@ export function SubmitForm() {
                             "hasOperationalPlan",
                             "17. هل تمتلك الجمعية خطة تشغيلية؟ (يرجى إرفاقها إن وجدت)",
                             [
-                              {
-                                label: "نعم (يرجى إرفاقها في المرفقات)",
-                                value: "نعم",
-                              },
+                              { label: "نعم", value: "نعم" },
                               { label: "لا", value: "لا" },
                             ],
                           )}
+                          {form.watch("hasOperationalPlan") === "نعم" &&
+                            renderInlineFileUpload("operationalPlan")}
                           {renderInput(
                             "governanceScore",
                             "18. درجة الجمعية في آخر تقييم للحوكمة",
-                            "أدخل الدرجة",
+                            "",
                             { numeric: true },
                           )}
                           {renderInput(
                             "averageBudget",
                             "19. متوسط الميزانية السنوية للجمعية في آخر ثلاث سنوات",
-                            "أدخل المبلغ التقريبي بالريال",
+                            "",
                             { numeric: true },
                           )}
                           {renderTextarea(
                             "awardsAndCertificates",
                             "20. اذكر أهم الجوائز والشهادات التي حصلت عليها الجمعية سابقاً إن وجدت",
-                            "اذكر أهم الجوائز والشهادات إن وجدت",
+                            "",
                           )}
                           {renderRadio(
                             "hasPerformanceReports",
-                            "21. هل تتوفر تقارير الأداء السنوية والمالية لآخر عامين؟ (يرجى إرفاقها إن وجدت) *",
+                            "21. هل تتوفر تقارير الأداء السنوية والمالية لآخر عامين؟ (يرجى إرفاقها إن وجدت)",
                             [
-                              {
-                                label: "نعم (يرجى إرفاقها في المرفقات)",
-                                value: "نعم",
-                              },
+                              { label: "نعم", value: "نعم" },
                               { label: "لا", value: "لا" },
                             ],
                           )}
+                          {form.watch("hasPerformanceReports") === "نعم" &&
+                            renderInlineFileUpload("performanceReports")}
                           {renderRadio(
                             "hasExternalAuditorNotes",
                             "22. هل توجد أي ملاحظات على الجمعية من المراجع الخارجي؟",
@@ -904,12 +997,12 @@ export function SubmitForm() {
                           {renderTextarea(
                             "externalAuditorNotes",
                             "23. في حال وجود ملاحظات يرجى ذكرها",
-                            "اذكر الملاحظات إن وجدت",
+                            "",
                           )}
                           {renderTextarea(
                             "topPartnerships",
                             "24. اذكر أهم ثلاث شراكات استراتيجية للجمعية مع القطاع الخاص أو القطاع الحكومي",
-                            "اذكر أهم ثلاث شراكات مع القطاع الخاص أو القطاع الحكومي",
+                            "",
                           )}
                         </div>
                       )}
@@ -919,8 +1012,8 @@ export function SubmitForm() {
                         <div className="grid gap-5">
                           {renderTextarea(
                             "physicalAssets",
-                            "16. ما هي الأصول المادية التي تمتلكها الجمعية وتسمح بالاستفادة منها في مشاريع استثمارية؟ *",
-                            "صف الأصول المادية المتاحة",
+                            "16. ما هي الأصول المادية التي تمتلكها الجمعية وتسمح بالاستفادة منها في مشاريع استثمارية؟",
+                            "",
                           )}
                           {renderRadio(
                             "hasDebts",
@@ -941,21 +1034,21 @@ export function SubmitForm() {
                           {renderInput(
                             "endowmentRevenue",
                             "19. اذا نعم، كم تبلغ الإيرادات من الأصول / الأوقاف؟",
-                            "أدخل المبلغ التقريبي بالريال",
+                            "",
                           )}
                           {renderTextarea(
                             "specializedExpertise",
-                            "20. ما هي الخبرات التخصصية أو المعرفة الفنية التي تنفرد بها الجمعية في مجال عملها؟ *",
-                            "صف الخبرات التخصصية والمعرفة الفنية",
+                            "20. ما هي الخبرات التخصصية أو المعرفة الفنية التي تنفرد بها الجمعية في مجال عملها؟",
+                            "",
                           )}
                           {renderTextarea(
                             "databaseSize",
                             "21. حجم قاعدة البيانات التي تمتلكها الجمعية وتصنيف الفئات المستفيدة منها",
-                            "صف حجم قاعدة البيانات والفئات المستفيدة",
+                            "",
                           )}
                           {renderRadio(
                             "hasInvestmentUnit",
-                            "22. هل تمتلك الجمعية وحدة استثمار أو إدارة تنمية موارد مالية مستقلة؟ *",
+                            "22. هل تمتلك الجمعية وحدة استثمار أو إدارة تنمية موارد مالية مستقلة؟",
                             [
                               { label: "نعم", value: "نعم" },
                               { label: "لا", value: "لا" },
@@ -963,14 +1056,14 @@ export function SubmitForm() {
                           )}
                           {renderInput(
                             "programsCount",
-                            "23. كم عدد برامج ومشاريع الجمعية لعام 2024م - 2025م",
-                            "أدخل العدد",
+                            "23. كم عدد برامج ومشاريع الجمعية لعام 2024م -2025م",
+                            "",
                             { numeric: true },
                           )}
                           {renderInput(
                             "developmentProjectsCount",
                             "24. كم عدد المشاريع التنموية منها؟",
-                            "أدخل العدد",
+                            "",
                             { numeric: true },
                           )}
                         </div>
@@ -981,35 +1074,35 @@ export function SubmitForm() {
                         <div className="grid gap-5">
                           {renderTextarea(
                             "startupReasons",
-                            "20. ما هي الأسباب التي تدفع الجمعية للرغبة في تأسيس شركة ناشئة؟ *",
-                            "اذكر الأسباب والدوافع",
+                            "20. ما هي الأسباب التي تدفع الجمعية للرغبة في تأسيس شركة ناشئة؟",
+                            "",
                           )}
                           {renderRadio(
                             "mainGoal",
-                            "21. ما هو الهدف الرئيسي للجمعية من إنشاء هذه الشركة؟ *",
+                            "21. ما هو الهدف الرئيس للجمعية من إنشاء هذه الشركة؟",
                             [
                               {
-                                label: "الاستدامة المالية للجمعية فقط",
-                                value: "الاستدامة المالية للجمعية فقط",
+                                label: "الاستدامة المالية للجمعية فقط.",
+                                value: "الاستدامة المالية للجمعية فقط.",
                               },
                               {
-                                label: "خلق فرص عمل للمستفيدين",
-                                value: "خلق فرص عمل للمستفيدين",
+                                label: "خلق فرص عمل للمستفيدين.",
+                                value: "خلق فرص عمل للمستفيدين.",
                               },
                               {
-                                label: "ابتكار حل تقني للمشكلة الاجتماعية",
-                                value: "ابتكار حل تقني للمشكلة الاجتماعية",
+                                label: "ابتكار حل تقني للمشكلة الاجتماعية.",
+                                value: "ابتكار حل تقني للمشكلة الاجتماعية.",
                               },
                               {
-                                label: "جميع ما سبق",
-                                value: "جميع ما سبق",
+                                label: "جميع ما سبق.",
+                                value: "جميع ما سبق.",
                               },
                             ],
                           )}
                           {renderTextarea(
                             "marketGaps",
-                            "22. ما هي الفجوات التي تراها الجمعية في سوق العمل وترتبط بمجال تخصصها؟ *",
-                            "صف الفجوات في سوق العمل المرتبطة بتخصص الجمعية",
+                            "22. ما هي الفجوات التي تراها الجمعية في سوق العمل وترتبط بمجال تخصصها؟",
+                            "",
                           )}
                         </div>
                       )}
@@ -1019,23 +1112,21 @@ export function SubmitForm() {
                         <div className="grid gap-5">
                           {renderInput(
                             "contactPerson",
-                            "23. اسم ضابط الاتصال المسؤول عن المتابعة في المشروع *",
-                            "أدخل الاسم الكامل",
+                            "23. اسم ضابط الاتصال المسؤول عن المتابعة في المشروع",
+                            "",
                           )}
                           {renderInput(
                             "contactPersonPosition",
                             "24. المنصب",
-                            "أدخل المنصب الوظيفي",
+                            "",
                           )}
-                          {renderInput(
-                            "contactPersonPhone",
-                            "25. الجوال",
-                            "05XXXXXXXX",
-                            { type: "tel", dir: "ltr" },
-                          )}
+                          {renderInput("contactPersonPhone", "25. الجوال", "", {
+                            type: "tel",
+                            dir: "ltr",
+                          })}
                           {renderRadio(
                             "boardApproval",
-                            "26. هل وافق مجلس الإدارة على فكرة تأسيس ذراع استثماري أو شركة مستقلة؟ *",
+                            "26. هل وافق مجلس الإدارة على فكرة تأسيس ذراع استثماري أو شركة مستقلة؟",
                             [
                               { label: "نعم", value: "نعم" },
                               { label: "لا", value: "لا" },
@@ -1043,7 +1134,7 @@ export function SubmitForm() {
                           )}
                           {renderRadio(
                             "dedicatedTeam",
-                            "27. هل يوجد موظف أو فريق عمل سيتم تفريغه (جزئياً أو كلياً) لمتابعة هذا المشروع؟ *",
+                            "27. هل يوجد موظف أو فريق عمل سيتم تفريغه (جزئياً أو كلياً) لمتابعة هذا المشروع؟",
                             [
                               { label: "نعم", value: "نعم" },
                               { label: "لا", value: "لا" },
@@ -1051,100 +1142,9 @@ export function SubmitForm() {
                           )}
                           {renderTextarea(
                             "finalAspirations",
-                            "28. ما هي تطلعاتكم النهائية من المشاركة في مشروع التمكين الريادي؟ *",
-                            "صف تطلعاتكم وأهدافكم من المشاركة في المشروع",
+                            "28. ما هي تطلعاتكم النهائية من المشاركة في برنامج التمكين الريادي؟",
+                            "",
                           )}
-                        </div>
-                      )}
-
-                      {/* ─── Step 6: المرفقات ─── */}
-                      {currentStep === 6 && (
-                        <div className="grid gap-5">
-                          <div className="space-y-3 pt-2">
-                            <div className="bg-blue-50/50 p-4 rounded-xl border border-blue-100 mb-4">
-                              <p className="text-[#1E3A5F] text-sm leading-relaxed">
-                                يرجى إرفاق المستندات الداعمة مثل:
-                                <span className="font-bold">
-                                  {" "}
-                                  الخطة الاستراتيجية، تقارير الأداء المالي
-                                  والفني، أو أي وثائق أخرى ذات صلة.
-                                </span>
-                              </p>
-                            </div>
-
-                            <label className="block text-[#1E3A5F] font-bold text-xs md:text-sm mb-1.5 leading-relaxed">
-                              المرفقات والوثائق
-                            </label>
-                            <div
-                              onClick={() => fileInputRef.current?.click()}
-                              className="border-2 border-dashed border-gray-200 rounded-xl p-8 flex flex-col items-center justify-center gap-4 cursor-pointer hover:border-[#5D9FDD] hover:bg-[#5D9FDD]/5 transition-all group bg-gray-50/30"
-                            >
-                              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-300">
-                                <Upload className="w-7 h-7 text-[#5D9FDD]" />
-                              </div>
-                              <div className="text-center space-y-1">
-                                <p className="font-bold text-[#1E3A5F] text-lg">
-                                  اضغط لرفع الملفات
-                                </p>
-                                <p className="text-gray-400 text-xs">
-                                  يمكنك رفع ملفات PDF, Word, Excel, Images
-                                </p>
-                              </div>
-                              <input
-                                type="file"
-                                ref={fileInputRef}
-                                multiple
-                                className="hidden"
-                                onChange={handleFileChange}
-                              />
-                            </div>
-
-                            <AnimatePresence>
-                              {selectedFiles.length > 0 && (
-                                <motion.div
-                                  initial={{ opacity: 0, height: 0 }}
-                                  animate={{ opacity: 1, height: "auto" }}
-                                  exit={{ opacity: 0, height: 0 }}
-                                  className="space-y-2 pt-2"
-                                >
-                                  {selectedFiles.map((file, index) => (
-                                    <motion.div
-                                      key={index}
-                                      initial={{ x: 20, opacity: 0 }}
-                                      animate={{ x: 0, opacity: 1 }}
-                                      exit={{ x: -20, opacity: 0 }}
-                                      className="bg-white rounded-xl px-4 py-3 flex items-center justify-between gap-3 text-sm text-[#1E3A5F] border border-gray-100 shadow-sm"
-                                    >
-                                      <div className="flex items-center gap-3 overflow-hidden">
-                                        <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center shrink-0 text-xs font-bold text-gray-500 uppercase">
-                                          {file.name
-                                            .split(".")
-                                            .pop()
-                                            ?.slice(0, 3) || "FILE"}
-                                        </div>
-                                        <span className="truncate font-medium">
-                                          {file.name}
-                                        </span>
-                                        <span className="text-xs text-gray-400 shrink-0">
-                                          (
-                                          {(file.size / 1024 / 1024).toFixed(2)}{" "}
-                                          MB)
-                                        </span>
-                                      </div>
-
-                                      <button
-                                        type="button"
-                                        onClick={() => removeFile(index)}
-                                        className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-red-50 text-gray-400 hover:text-red-500 transition-colors"
-                                      >
-                                        <X className="w-5 h-5" />
-                                      </button>
-                                    </motion.div>
-                                  ))}
-                                </motion.div>
-                              )}
-                            </AnimatePresence>
-                          </div>
                         </div>
                       )}
                     </motion.div>
@@ -1194,31 +1194,6 @@ export function SubmitForm() {
                         )}
                       </Button>
                     )}
-                  </div>
-
-                  {/* Reset button alone */}
-                  <div className="flex justify-center">
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      onClick={() => {
-                        if (
-                          confirm(
-                            "هل أنت متأكد من رغبتك في حذف جميع البيانات والبدء من جديد؟",
-                          )
-                        ) {
-                          form.reset(defaultValues);
-                          setCurrentStep(1);
-                          setSelectedFiles([]);
-                          localStorage.removeItem("tamkeen-form-data");
-                          localStorage.removeItem("tamkeen-form-step");
-                          window.location.reload();
-                        }
-                      }}
-                      className="text-red-400 hover:text-red-600 hover:bg-red-50 rounded-xl px-4 h-10 font-bold transition-all text-xs"
-                    >
-                      إعادة تعيين
-                    </Button>
                   </div>
                 </div>
               </form>
