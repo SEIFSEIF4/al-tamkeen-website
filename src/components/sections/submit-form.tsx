@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/form";
 import { supabase } from "@/lib/supabase";
 import { Loader2, Upload, X, Send, Check } from "lucide-react";
+import { PhoneInput } from "@/components/ui/phone-input";
 
 // Convert Arabic/Persian numerals to Latin
 function toLatinNumbers(str: string): string {
@@ -613,6 +614,28 @@ export function SubmitForm() {
     />
   );
 
+  const renderPhoneInput = (name: keyof ContactFormValues, label: string) => (
+    <FormField
+      control={form.control}
+      name={name}
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel className="text-[#1E3A5F] font-bold text-xs md:text-sm leading-relaxed">
+            {label}
+          </FormLabel>
+          <FormControl>
+            <PhoneInput
+              value={field.value as string}
+              onChange={(value) => field.onChange(value || "")}
+              dir="ltr"
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
+
   const renderTextarea = (
     name: keyof ContactFormValues,
     label: string,
@@ -925,11 +948,9 @@ export function SubmitForm() {
                             "13. اسم المدير التنفيذي",
                             "",
                           )}
-                          {renderInput(
+                          {renderPhoneInput(
                             "executiveDirectorPhone",
                             "14. رقم الجوال",
-                            "",
-                            { type: "tel", dir: "ltr" },
                           )}
                           {renderRadio(
                             "hasStrategicPlan",
@@ -1120,10 +1141,7 @@ export function SubmitForm() {
                             "24. المنصب",
                             "",
                           )}
-                          {renderInput("contactPersonPhone", "25. الجوال", "", {
-                            type: "tel",
-                            dir: "ltr",
-                          })}
+                          {renderPhoneInput("contactPersonPhone", "25. الجوال")}
                           {renderRadio(
                             "boardApproval",
                             "26. هل وافق مجلس الإدارة على فكرة تأسيس ذراع استثماري أو شركة مستقلة؟",
