@@ -42,6 +42,7 @@ const contactFormSchema = z.object({
   geographicLocation: z.string().min(2, "يرجى إدخال الموقع الجغرافي للجمعية"),
   serviceScope: z.string().min(1, "يرجى إدخال النطاق الجغرافي لخدمات الجمعية"),
   headquartersAddress: z.string().min(1, "يرجى إدخال عنوان المقر الرئيس"),
+  workField: z.string().min(1, "يرجى إدخال مجال عمل الجمعية"),
   socialMediaLinks: z
     .string()
     .min(1, "يرجى إدخال الموقع الإلكتروني أو حسابات التواصل"),
@@ -116,6 +117,7 @@ const stepFields: Record<number, (keyof ContactFormValues)[]> = {
     "geographicLocation",
     "serviceScope",
     "headquartersAddress",
+    "workField",
     "socialMediaLinks",
   ],
   2: [
@@ -232,6 +234,7 @@ export function SubmitForm() {
     geographicLocation: "",
     serviceScope: "",
     headquartersAddress: "",
+    workField: "",
     socialMediaLinks: "",
     boardStartDate: "",
     boardEndDate: "",
@@ -447,6 +450,7 @@ export function SubmitForm() {
               geographic_location: data.geographicLocation,
               service_scope: data.serviceScope,
               headquarters_address: data.headquartersAddress,
+              work_field: data.workField,
               social_media_links: data.socialMediaLinks,
               // Section 2
               board_start_date: data.boardStartDate,
@@ -898,9 +902,10 @@ export function SubmitForm() {
                             "7. عنوان المقر الرئيس للجمعية",
                             "",
                           )}
+                          {renderInput("workField", "8. مجال عمل الجمعية", "")}
                           {renderTextarea(
                             "socialMediaLinks",
-                            "8. الموقع الإلكتروني للجمعية وحسابات التواصل الاجتماعي",
+                            "9. الموقع الإلكتروني للجمعية وحسابات التواصل الاجتماعي",
                             "",
                           )}
                         </div>

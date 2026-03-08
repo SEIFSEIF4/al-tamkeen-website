@@ -29,7 +29,7 @@ export function SponsorsSection() {
           <div className="bg-white rounded-2xl p-2 sm:p-4 md:p-6 h-[90px] sm:h-[130px] md:h-[180px] w-[30%] sm:w-[160px] md:w-[220px] flex flex-col items-center justify-center shadow-lg shrink-0">
             <div className="relative w-16 h-12 sm:w-24 sm:h-16 md:w-36 md:h-24">
               <Image
-                src="/ahalina_eng.svg"
+                src="/ahalinaa.svg"
                 alt="Ahalina"
                 fill
                 className="object-contain"

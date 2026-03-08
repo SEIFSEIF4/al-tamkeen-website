@@ -14,6 +14,7 @@ async function fillStep1(page: Page) {
   await page.locator('input[name="geographicLocation"]').fill("الرياض");
   await page.locator('input[name="serviceScope"]').fill("المنطقة الوسطى");
   await page.locator('input[name="headquartersAddress"]').fill("حي العليا");
+  await page.locator('input[name="workField"]').fill("التنمية الاجتماعية");
   await page
     .locator('textarea[name="socialMediaLinks"]')
     .fill("https://example.com");
@@ -67,6 +68,11 @@ test.describe("Step Navigation", () => {
       .locator('input[name="associationName"]')
       .inputValue();
     expect(name).toBe("جمعية الاختبار");
+
+    const workField = await page
+      .locator('input[name="workField"]')
+      .inputValue();
+    expect(workField).toBe("التنمية الاجتماعية");
   });
 
   test("prev button is disabled on step 1", async ({ page }) => {
@@ -95,12 +101,12 @@ test.describe("Zod Validation", () => {
     await page.getByRole("button", { name: "التالي" }).click();
     await expect(page.getByText("يرجى إدخال اسم الجمعية")).toBeVisible();
     await expect(page.getByText("يرجى إدخال رقم ترخيص الجمعية")).toBeVisible();
+    await expect(page.getByText("يرجى إدخال مجال عمل الجمعية")).toBeVisible();
   });
 
   test("blocks step advancement with non-numeric license number", async ({
     page,
   }) => {
-    // Fill all step 1 fields but put invalid data in license
     await page.locator('input[name="associationName"]').fill("جمعية");
     await page.locator('input[name="licenseNumber"]').fill("abc");
     await page.locator('input[name="foundingDate"]').fill("2020-01-01");
@@ -108,10 +114,11 @@ test.describe("Zod Validation", () => {
     await page.locator('input[name="geographicLocation"]').fill("الرياض");
     await page.locator('input[name="serviceScope"]').fill("محلي");
     await page.locator('input[name="headquartersAddress"]').fill("العليا");
+    await page.locator('input[name="workField"]').fill("تنمية");
     await page.locator('textarea[name="socialMediaLinks"]').fill("x.com");
     await page.getByRole("button", { name: "التالي" }).click();
     await page.waitForTimeout(1000);
-    // Should remain on step 1 (not advance to step 2)
+    // Should remain on step 1
     await expect(page.getByText("أولاً: البيانات التعريفية")).toBeVisible();
     await expect(
       page.getByText("ثانياً: القدرات المؤسسية والحوكمة"),
@@ -126,6 +133,7 @@ test.describe("Zod Validation", () => {
     await page.locator('input[name="geographicLocation"]').fill("الرياض");
     await page.locator('input[name="serviceScope"]').fill("محلي");
     await page.locator('input[name="headquartersAddress"]').fill("العليا");
+    await page.locator('input[name="workField"]').fill("تنمية");
     await page
       .locator('textarea[name="socialMediaLinks"]')
       .fill("https://x.com");
@@ -146,7 +154,7 @@ test.describe("Form Labels", () => {
     await page.waitForSelector("form");
   });
 
-  test("step 1 has all 8 question labels", async ({ page }) => {
+  test("step 1 has all 9 question labels", async ({ page }) => {
     const labels = [
       "1. اسم الجمعية",
       "2. رقم ترخيص الجمعية",
@@ -155,7 +163,8 @@ test.describe("Form Labels", () => {
       "5. الموقع الجغرافي للجمعية",
       "6. النطاق الجغرافي لخدمات الجمعية",
       "7. عنوان المقر الرئيس للجمعية",
-      "8. الموقع الإلكتروني للجمعية",
+      "8. مجال عمل الجمعية",
+      "9. الموقع الإلكتروني للجمعية",
     ];
     for (const label of labels) {
       await expect(page.getByText(label, { exact: false })).toBeVisible();
@@ -302,29 +311,22 @@ test.describe("File Upload — All File Types", () => {
     await fileInput.setInputFiles(path.join(TEST_FILES_DIR, "test.pdf"));
     await expect(page.getByText("test.pdf")).toBeVisible();
 
-    // Click the remove button inside the file item
     const fileItem = page.locator("text=test.pdf").locator("../..");
     await fileItem.locator("button").click();
     await page.waitForTimeout(500);
-
-    // File should be removed
     await expect(page.getByText("test.pdf")).toHaveCount(0);
   });
 
   test("uploads files to different categories independently", async ({
     page,
   }) => {
-    // Enable operational plan upload too
     await page.locator('input[name="hasOperationalPlan"][value="نعم"]').click();
     await page.waitForTimeout(300);
 
-    // Upload to strategic plan (first file input)
     const fileInputs = page.locator('input[type="file"]');
     await fileInputs
       .nth(0)
       .setInputFiles(path.join(TEST_FILES_DIR, "test.pdf"));
-
-    // Upload to operational plan (second file input)
     await fileInputs
       .nth(1)
       .setInputFiles(path.join(TEST_FILES_DIR, "test.docx"));
@@ -355,5 +357,301 @@ test.describe("Submit Button", () => {
     await fillStep1(page);
     await page.getByRole("button", { name: "التالي" }).click();
     await expect(page.getByRole("button", { name: "التالي" })).toBeVisible();
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════
+// SUPABASE SUBMISSION — JSONB PAYLOAD TESTS
+// ═══════════════════════════════════════════════════════════════
+
+test.describe("Supabase JSONB Submission", () => {
+  test("sends form_data as JSONB with all fields in the POST request", async ({
+    page,
+  }) => {
+    // Intercept the Supabase REST API call
+    const supabaseRequestPromise = page.waitForRequest(
+      (req) =>
+        req.url().includes("/rest/v1/registrations") && req.method() === "POST",
+    );
+
+    await page.goto("/submit");
+    await page.waitForSelector("form");
+
+    // ── Step 1 ──
+    await fillStep1(page);
+    await page.getByRole("button", { name: "التالي" }).click();
+    await page.waitForTimeout(500);
+
+    // ── Step 2 ── fill all required fields
+    await page.locator('input[name="boardStartDate"]').fill("2023-01-01");
+    await page.locator('input[name="boardEndDate"]').fill("2026-01-01");
+    await page.locator('input[name="boardPeriod"]').fill("3 سنوات");
+    await page.locator('input[name="fullTimeEmployees"]').fill("15");
+    await page
+      .locator('input[name="hasExecutiveDirector"][value="نعم"]')
+      .click();
+    await page.locator('input[name="executiveDirectorName"]').fill("أحمد محمد");
+    // Phone input — use input[type=tel] which is rendered by PhoneInput
+    const execPhoneInput1 = page.locator('input[type="tel"]').first();
+    await execPhoneInput1.fill("500000000");
+    await page.locator('input[name="hasStrategicPlan"][value="لا"]').click();
+    await page.locator('input[name="strategicPlanEndDate"]').fill("2025-12-31");
+    await page.locator('input[name="hasOperationalPlan"][value="لا"]').click();
+    await page.locator('input[name="governanceScore"]').fill("85");
+    await page.locator('input[name="averageBudget"]').fill("500000");
+    await page
+      .locator('textarea[name="awardsAndCertificates"]')
+      .fill("جائزة التميز");
+    await page
+      .locator('input[name="hasPerformanceReports"][value="لا"]')
+      .click();
+    await page
+      .locator('input[name="hasExternalAuditorNotes"][value="لا"]')
+      .click();
+    await page.locator('textarea[name="externalAuditorNotes"]').fill("لا يوجد");
+    await page
+      .locator('textarea[name="topPartnerships"]')
+      .fill("شراكة مع وزارة التنمية");
+    await page.getByRole("button", { name: "التالي" }).click();
+    await page.waitForTimeout(500);
+
+    // ── Step 3 ──
+    await page
+      .locator('textarea[name="physicalAssets"]')
+      .fill("مبنى إداري ومركز تدريب");
+    await page.locator('input[name="hasDebts"][value="لا"]').click();
+    await page.locator('input[name="hasEndowments"][value="لا"]').click();
+    await page.locator('input[name="endowmentRevenue"]').fill("لا يوجد");
+    await page
+      .locator('textarea[name="specializedExpertise"]')
+      .fill("خبرة في التنمية المجتمعية");
+    await page.locator('textarea[name="databaseSize"]').fill("5000 مستفيد");
+    await page.locator('input[name="hasInvestmentUnit"][value="لا"]').click();
+    await page.locator('input[name="programsCount"]').fill("12");
+    await page.locator('input[name="developmentProjectsCount"]').fill("5");
+    await page.getByRole("button", { name: "التالي" }).click();
+    await page.waitForTimeout(500);
+
+    // ── Step 4 ──
+    await page
+      .locator('textarea[name="startupReasons"]')
+      .fill("تحقيق الاستدامة المالية وتنويع مصادر الدخل");
+    // mainGoal is a radio
+    await page.locator('input[name="mainGoal"]').first().click();
+    await page
+      .locator('textarea[name="marketGaps"]')
+      .fill("نقص في خدمات التأهيل المهني للشباب");
+    await page.getByRole("button", { name: "التالي" }).click();
+    await page.waitForTimeout(500);
+
+    // ── Step 5 ──
+    await page.locator('input[name="contactPerson"]').fill("سعد العمري");
+    await page
+      .locator('input[name="contactPersonPosition"]')
+      .fill("مدير البرامج");
+    const contactPhone1 = page.locator('input[type="tel"]').first();
+    await contactPhone1.fill("500000000");
+    await page.locator('input[name="boardApproval"][value="نعم"]').click();
+    await page.locator('input[name="dedicatedTeam"][value="نعم"]').click();
+    await page
+      .locator('textarea[name="finalAspirations"]')
+      .fill("بناء شركة ناشئة مستدامة في مجال التأهيل المهني");
+
+    // Mock the Supabase response to avoid actual DB writes
+    await page.route("**/rest/v1/registrations**", async (route) => {
+      const method = route.request().method();
+      if (method === "POST") {
+        // Return a fake inserted row with an ID
+        await route.fulfill({
+          status: 201,
+          contentType: "application/json",
+          body: JSON.stringify({ id: 999 }),
+        });
+      } else if (method === "PATCH") {
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify({}),
+        });
+      } else {
+        await route.continue();
+      }
+    });
+
+    // Click submit
+    await page.getByRole("button", { name: "إرسال الطلب" }).click();
+
+    // Wait for and capture the Supabase request
+    const supabaseRequest = await supabaseRequestPromise;
+    const postData = supabaseRequest.postDataJSON();
+
+    // Verify the payload structure
+    expect(postData).toBeDefined();
+
+    // The payload is an array with one object
+    const payload = Array.isArray(postData) ? postData[0] : postData;
+
+    // Verify form_data is present and is an object (JSONB)
+    expect(payload.form_data).toBeDefined();
+    expect(typeof payload.form_data).toBe("object");
+
+    // Verify key JSONB fields
+    const formData = payload.form_data;
+    expect(formData.association_name).toBe("جمعية الاختبار");
+    expect(formData.license_number).toBe("12345");
+    expect(formData.geographic_location).toBe("الرياض");
+    expect(formData.work_field).toBe("التنمية الاجتماعية");
+    expect(formData.social_media_links).toBe("https://example.com");
+    expect(formData.headquarters_address).toBe("حي العليا");
+    expect(formData.has_strategic_plan).toBe("لا");
+    expect(formData.has_operational_plan).toBe("لا");
+    expect(formData.physical_assets).toBe("مبنى إداري ومركز تدريب");
+    expect(formData.contact_person).toBe("سعد العمري");
+    expect(formData.board_approval).toBe("نعم");
+    expect(formData.final_aspirations).toBe(
+      "بناء شركة ناشئة مستدامة في مجال التأهيل المهني",
+    );
+
+    // Verify top-level fields
+    expect(payload.user_name).toBe("سعد العمري");
+    expect(payload.phone_number).toBe("12345");
+  });
+
+  test("sends file_urls as JSONB in PATCH after file upload", async ({
+    page,
+  }) => {
+    let patchBody: Record<string, unknown> | null = null;
+
+    await page.goto("/submit");
+    await page.waitForSelector("form");
+
+    // Mock Supabase routes
+    await page.route("**/rest/v1/registrations**", async (route) => {
+      const method = route.request().method();
+      if (method === "POST") {
+        await route.fulfill({
+          status: 201,
+          contentType: "application/json",
+          body: JSON.stringify({ id: 777 }),
+        });
+      } else if (method === "PATCH") {
+        patchBody = route.request().postDataJSON();
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify({}),
+        });
+      } else {
+        await route.continue();
+      }
+    });
+
+    // Mock storage upload
+    await page.route("**/storage/v1/object/**", async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          Key: "submissions/777/strategicPlan/test.pdf",
+        }),
+      });
+    });
+
+    // ── Fill Step 1 ──
+    await fillStep1(page);
+    await page.getByRole("button", { name: "التالي" }).click();
+    await page.waitForTimeout(500);
+
+    // ── Step 2 ── fill required + enable strategic plan upload
+    await page.locator('input[name="boardStartDate"]').fill("2023-01-01");
+    await page.locator('input[name="boardEndDate"]').fill("2026-01-01");
+    await page.locator('input[name="boardPeriod"]').fill("3 سنوات");
+    await page.locator('input[name="fullTimeEmployees"]').fill("15");
+    await page
+      .locator('input[name="hasExecutiveDirector"][value="نعم"]')
+      .click();
+    await page.locator('input[name="executiveDirectorName"]').fill("أحمد");
+    const execPhoneInput2 = page.locator('input[type="tel"]').first();
+    await execPhoneInput2.fill("500000000");
+    await page.locator('input[name="hasStrategicPlan"][value="نعم"]').click();
+    await page.waitForTimeout(300);
+
+    // Upload a file to strategic plan
+    const fileInput = page.locator('input[type="file"]').first();
+    await fileInput.setInputFiles(path.join(TEST_FILES_DIR, "test.pdf"));
+    await expect(page.getByText("test.pdf")).toBeVisible();
+
+    await page.locator('input[name="strategicPlanEndDate"]').fill("2025-12-31");
+    await page.locator('input[name="hasOperationalPlan"][value="لا"]').click();
+    await page.locator('input[name="governanceScore"]').fill("85");
+    await page.locator('input[name="averageBudget"]').fill("500000");
+    await page.locator('textarea[name="awardsAndCertificates"]').fill("جائزة");
+    await page
+      .locator('input[name="hasPerformanceReports"][value="لا"]')
+      .click();
+    await page
+      .locator('input[name="hasExternalAuditorNotes"][value="لا"]')
+      .click();
+    await page.locator('textarea[name="externalAuditorNotes"]').fill("لا يوجد");
+    await page.locator('textarea[name="topPartnerships"]').fill("شراكة");
+    await page.getByRole("button", { name: "التالي" }).click();
+    await page.waitForTimeout(500);
+
+    // ── Step 3 ──
+    await page
+      .locator('textarea[name="physicalAssets"]')
+      .fill("مبنى إداري ومركز");
+    await page.locator('input[name="hasDebts"][value="لا"]').click();
+    await page.locator('input[name="hasEndowments"][value="لا"]').click();
+    await page.locator('input[name="endowmentRevenue"]').fill("لا يوجد");
+    await page
+      .locator('textarea[name="specializedExpertise"]')
+      .fill("خبرة في التنمية");
+    await page.locator('textarea[name="databaseSize"]').fill("5000");
+    await page.locator('input[name="hasInvestmentUnit"][value="لا"]').click();
+    await page.locator('input[name="programsCount"]').fill("12");
+    await page.locator('input[name="developmentProjectsCount"]').fill("5");
+    await page.getByRole("button", { name: "التالي" }).click();
+    await page.waitForTimeout(500);
+
+    // ── Step 4 ──
+    await page
+      .locator('textarea[name="startupReasons"]')
+      .fill("تحقيق الاستدامة المالية");
+    await page.locator('input[name="mainGoal"]').first().click();
+    await page
+      .locator('textarea[name="marketGaps"]')
+      .fill("نقص في خدمات التأهيل");
+    await page.getByRole("button", { name: "التالي" }).click();
+    await page.waitForTimeout(500);
+
+    // ── Step 5 ──
+    await page.locator('input[name="contactPerson"]').fill("سعد العمري");
+    await page.locator('input[name="contactPersonPosition"]').fill("مدير");
+    const contactPhone2 = page.locator('input[type="tel"]').first();
+    await contactPhone2.fill("500000000");
+    await page.locator('input[name="boardApproval"][value="نعم"]').click();
+    await page.locator('input[name="dedicatedTeam"][value="نعم"]').click();
+    await page
+      .locator('textarea[name="finalAspirations"]')
+      .fill("بناء شركة ناشئة مستدامة");
+
+    // Submit
+    await page.getByRole("button", { name: "إرسال الطلب" }).click();
+
+    // Wait for the upload + patch cycle
+    await page.waitForTimeout(3000);
+
+    // Verify the PATCH request included file_urls in form_data
+    expect(patchBody).toBeDefined();
+    if (patchBody) {
+      const patchData = patchBody as Record<string, unknown>;
+      expect(patchData.form_data).toBeDefined();
+      const updatedFormData = patchData.form_data as Record<string, unknown>;
+      expect(updatedFormData.file_urls).toBeDefined();
+      const fileUrls = updatedFormData.file_urls as Record<string, string[]>;
+      expect(fileUrls.strategicPlan).toBeDefined();
+      expect(Array.isArray(fileUrls.strategicPlan)).toBe(true);
+    }
   });
 });
